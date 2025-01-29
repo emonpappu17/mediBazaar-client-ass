@@ -1,3 +1,10 @@
 @import "tailwindcss";
-
 @plugin "daisyui";
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.nunito-font {
+    font-family: 'Nunito Sans', sans-serif;
+  }
