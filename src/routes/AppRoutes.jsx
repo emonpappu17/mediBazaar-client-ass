@@ -4,6 +4,7 @@ import NotFound from "../pages/error/NotFound";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import Navbar from "../components/layout/Navbar";
+import Footer from "../components/layout/Footer";
 
 const AppRoutes = () => {
     return (
@@ -20,6 +21,7 @@ const AppRoutes = () => {
                 {/* Error Page */}
                 <Route path="*" element={<NotFound />} />
             </Routes>
+            <Footer></Footer>
         </BrowserRouter>
     );
 };

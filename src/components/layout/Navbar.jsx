@@ -7,7 +7,7 @@ import Button from "../common/Button";
 
 const Navbar = () => {
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // Temporary state for login status
+    const [isLoggedIn, setIsLoggedIn] = useState(true); // Temporary state for login status
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isSideBarOpen, setIsSideBarOpen] = useState(false)
     const [scrollY, setScrollY] = useState(0);
@@ -50,7 +50,7 @@ const Navbar = () => {
     </>
 
     return (
-        <nav className={`${scrollY > 0 ? 'bg-white shadow-md border-b' : ''} text-white sticky top-0   `}>
+        <nav className={`${scrollY > 0 ? 'bg-white shadow-md border-b' : ''} text-white sticky top-0   z-10`}>
             <div className="container mx-auto flex justify-between items-center ">
 
                 {/* Logo & Website Name */}
@@ -76,8 +76,9 @@ const Navbar = () => {
                             <Link to="/register" className="bg-white text-blue-600 px-4 py-2 rounded hover:bg-gray-200">Sign Up</Link> */}
                         </>
                     ) : (
-                        <div className="relative">
+                        <div className="relative border ">
                             <button onClick={() => setDropdownOpen(!dropdownOpen)} className="flex items-center space-x-2 cursor-pointer text-black hover:text-[#0D6FEC] border-b-[#0D6FEC]">
+
                                 <FaUserCircle className="text-2xl" />
                                 <span>My Account</span>
                             </button>
@@ -94,11 +95,11 @@ const Navbar = () => {
                     )}
                 </div>
 
-                <div className="drawer  md:hidden w-fit  mx-3 ">
+                <div className="drawer  md:hidden w-fit  mx-3 border ">
                     <input id="my-drawer" type="checkbox" onChange={(e) => setIsSideBarOpen(e.target.checked)} className="drawer-toggle" />
                     <div className="drawer-content">
                         {/* Page content here */}
-                        <label htmlFor="my-drawer" className=" drawer-button md:hidden text-2xl p-4 cursor-pointer ">{isSideBarOpen ? <RxCross1 />
+                        <label htmlFor="my-drawer" className=" drawer-button md:hidden text-2xl p-4 cursor-pointer text-black">{isSideBarOpen ? <RxCross1 />
                             : <FaAlignJustify />}
                         </label>
                     </div>
