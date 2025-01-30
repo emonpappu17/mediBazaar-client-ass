@@ -4,6 +4,7 @@ import { Link, NavLink } from "react-router";
 import { FaAlignJustify } from "react-icons/fa";
 import { RxCross1 } from "react-icons/rx";
 import Button from "../common/Button";
+import logo from '../../assets/websiteLogo.png'
 
 const Navbar = () => {
 
@@ -55,8 +56,9 @@ const Navbar = () => {
 
                 {/* Logo & Website Name */}
                 <Link to="/" className="text-base font-bold flex items-center">
-                    <img src="https://i.ibb.co.com/3fkBCFJ/18246203-v987-18a-removebg-preview.png" alt="MediBazaar Logo" className="size-20 mr-1 " />
-                    <h1 className="text-3xl font-extrabold text-[#000000]">MediBazaar</h1>
+                    <img src={logo} alt="MediBazaar Logo" className="size-20 sm:mr-1 " />
+                    {/* <img src="https://i.ibb.co.com/3fkBCFJ/18246203-v987-18a-removebg-preview.png" alt="MediBazaar Logo" className="size-20 sm:mr-1 " /> */}
+                    <h1 className="sm:text-3xl text-[20px] font-extrabold text-[#000000]">MediBazaar</h1>
                 </Link>
 
                 {/* Navigation Links */}
@@ -76,9 +78,8 @@ const Navbar = () => {
                             <Link to="/register" className="bg-white text-blue-600 px-4 py-2 rounded hover:bg-gray-200">Sign Up</Link> */}
                         </>
                     ) : (
-                        <div className="relative border ">
+                        <div className="relative">
                             <button onClick={() => setDropdownOpen(!dropdownOpen)} className="flex items-center space-x-2 cursor-pointer text-black hover:text-[#0D6FEC] border-b-[#0D6FEC]">
-
                                 <FaUserCircle className="text-2xl" />
                                 <span>My Account</span>
                             </button>
@@ -95,7 +96,7 @@ const Navbar = () => {
                     )}
                 </div>
 
-                <div className="drawer  md:hidden w-fit  mx-3 border ">
+                <div className="drawer  md:hidden w-fit  mx-3  ">
                     <input id="my-drawer" type="checkbox" onChange={(e) => setIsSideBarOpen(e.target.checked)} className="drawer-toggle" />
                     <div className="drawer-content">
                         {/* Page content here */}
