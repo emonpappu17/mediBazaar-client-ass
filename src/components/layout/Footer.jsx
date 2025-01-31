@@ -1,6 +1,7 @@
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 import { Link } from "react-router";
 import logo from '../../assets/websiteLogo.png'
+import Button from "../common/Button";
 const Footer = () => {
 
     return (
@@ -153,12 +154,7 @@ const Footer = () => {
                             className="w-full md:w-auto p-2 rounded-md outline-none mb-4 bg-base-100"
                             required
                         />
-                        <button
-                            type="submit"
-                            className="mt-2 md:mt-0 md:ml-2 text-white py-2 px-4 rounded-md bg-primary hover:bg-secondary transition-all duration-500 cursor-pointer"
-                        >
-                            Subscribe
-                        </button>
+                        <Button className="mt-2 md:mt-0 md:ml-2 py-2 px-4 rounded-md" text="Subscribe"></Button>
                     </form>
                 </div>
             </div>

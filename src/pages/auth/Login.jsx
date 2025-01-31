@@ -1,8 +1,9 @@
 import { Link } from "react-router";
-import loginAnimation from '../../../public/loginAnimation.json'
+import loginAnimation from '../../assets/loginAnimation.json'
 import Lottie from "lottie-react";
 import { FcGoogle } from "react-icons/fc";
 import { BsGithub } from "react-icons/bs";
+import Button from "../../components/common/Button";
 
 const Login = () => {
     return (
@@ -34,9 +35,9 @@ const Login = () => {
                         required />
 
                     {/* Button */}
-                    <button className="mt-3  p-4 w-full text-white rounded bg-[#0D6FEC] hover:bg-[#35C7DF] transition-all duration-500 cursor-pointer">Signup</button>
+                    <Button className="mt-3 p-4 w-full rounded" text="Login"></Button>
 
-                    <span className="mt-3"><Link to={'/register '} className="font-bold hover:text-[#0D6FEC]">Sign up</Link>  or Login with</span>
+                    <span className="mt-3"><Link to={'/register '} className="font-bold hover:text-primary">Sign up</Link>  or Login with</span>
                     {/* Social Login */}
                     <div className="flex gap-2 mt-2">
                         <i className=" text-3xl cursor-pointer mr-2"> <FcGoogle /></i>

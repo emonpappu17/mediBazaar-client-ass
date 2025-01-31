@@ -21,14 +21,14 @@
 <body>
   <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>
-  <!-- public/index.html -->
+  <!-- For Dark Mode -->
   <script>
     try {
       const storedTheme = localStorage.getItem('theme');
       const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       const initialTheme = storedTheme || (systemDark ? 'dark' : 'light');
       document.documentElement.setAttribute('data-theme', initialTheme);
-      document.documentElement.classList.toggle('dark', initialTheme === 'dark');
+      // document.documentElement.classList.toggle('dark', initialTheme === 'dark');
     } catch (e) { }
   </script>
 </body>

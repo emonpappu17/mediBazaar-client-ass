@@ -1,10 +1,9 @@
-import ThemeToggle from "../../components/common/ThemeToggle";
 
 const Home = () => {
     return (
         <div>
             <h1>i am home</h1>
-            <ThemeToggle></ThemeToggle>
+            {/* <ThemeToggle></ThemeToggle> */}
         </div>
     );
 };

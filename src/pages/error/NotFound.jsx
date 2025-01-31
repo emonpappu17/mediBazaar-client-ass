@@ -31,7 +31,7 @@ const NotFound = () => {
                             But do not worry, you can find plenty of other things on our homepage.
                         </p>
                         <Link to={'/'}>
-                            <Button text="Back to homepage"></Button>
+                            <Button text="Back to homepage" className="md:px-4  px-3 py-2 rounded-3xl"></Button>
                         </Link>
                     </div>
                 </div>

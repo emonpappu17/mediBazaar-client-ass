@@ -5,6 +5,7 @@ import { FaAlignJustify } from "react-icons/fa";
 import { RxCross1 } from "react-icons/rx";
 import Button from "../common/Button";
 import logo from '../../assets/websiteLogo.png'
+import ThemeToggle from "../common/ThemeToggle";
 
 const Navbar = () => {
 
@@ -139,10 +140,11 @@ const Navbar = () => {
 
                 {/* Authentication / User Profile */}
                 <div className="flex items-center space-x-4 ml-auto md:ml-0">
+                <ThemeToggle className="mr-0"></ThemeToggle>
                     {!isLoggedIn ? (
                         <>
                             <Link to="/login">
-                                <Button text="Join Us"></Button>
+                                <Button text="Join Us" className="md:px-4  px-3 py-2 rounded-3xl"></Button>
                             </Link>
                         </>
                     ) : (
@@ -179,7 +181,7 @@ const Navbar = () => {
                         </div>
                     )}
                 </div>
-
+                
                 {/* Mobile Drawer */}
                 <div className="drawer md:hidden w-fit mx-3">
                     <input
@@ -191,7 +193,7 @@ const Navbar = () => {
                     <div className="drawer-content">
                         <label
                             htmlFor="my-drawer"
-                            className="drawer-button md:hidden text-2xl p-4 cursor-pointer text-base-content"
+                            className="drawer-button md:hidden text-2xl p-4 cursor-pointer text-base-content hover:text-primary"
                         >
                             {isSideBarOpen ? <RxCross1 /> : <FaAlignJustify />}
                         </label>
@@ -205,7 +207,7 @@ const Navbar = () => {
                         <ul className="menu bg-base-200 text-base-content min-h-full w-80 pr-10 pl-4 space-y-3">
                             <label
                                 htmlFor="my-drawer"
-                                className="drawer-button md:hidden text-2xl ml-auto mt-2 cursor-pointer transition duration-300 ease-in-out hover:scale-75"
+                                className="hover:text-primary drawer-button md:hidden text-2xl ml-auto mt-2 cursor-pointer transition duration-300 ease-in-out hover:scale-75"
                             >
                                 <RxCross1 />
                             </label>

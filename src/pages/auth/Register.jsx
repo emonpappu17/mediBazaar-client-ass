@@ -2,7 +2,8 @@ import { Link } from "react-router";
 import { FcGoogle } from "react-icons/fc";
 import { BsGithub } from "react-icons/bs";
 import Lottie from "lottie-react";
-import signupAnimation from '../../../public/registerAnimation.json'
+import signupAnimation from '../../assets/registerAnimation.json'
+import Button from "../../components/common/Button";
 
 const Register = () => {
 
@@ -127,12 +128,7 @@ const Register = () => {
                     </select>
 
                     {/* Button */}
-                    {/* <button className="mt-3 p-4 w-full text-white rounded bg-primary hover:bg-secondary transition-all duration-500 cursor-pointer">
-                        Signup
-                    </button> */}
-
-                    {/* Button */}
-                    <button className="mt-3  p-4 w-full text-white rounded bg-[#0D6FEC] hover:bg-[#35C7DF] transition-all duration-500 cursor-pointer">Signup</button>
+                    <Button className="mt-3 p-4 w-full rounded" text="Sign Up"></Button>
 
                     <span className="mt-3">
                         <Link to={'/login'} className="font-bold hover:text-primary">
