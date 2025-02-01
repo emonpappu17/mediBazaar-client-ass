@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
 import app from "../services/firebase";
 import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
 
@@ -10,6 +10,8 @@ const googleProvider = new GoogleAuthProvider();
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    console.log(user);
+
 
     // Creating user
     const createUser = (email, password) => {
@@ -53,10 +55,25 @@ const AuthProvider = ({ children }) => {
         return signInWithPopup(auth, googleProvider)
     }
 
+    // Memoized context value to prevent unnecessary re-renders
+    const contextValue = useMemo(() => ({
+        user,
+        loading,
+        createUser,
+        signIn,
+        updateUserProfile,
+        resetPassword,
+        logOut,
+        signInWithGoogle,
+    }), [user, loading])
+
     return (
-        <AuthContext value={{ user, loading, setLoading, createUser, signIn, updateUserProfile, resetPassword, logOut, signInWithGoogle }}>
+        <AuthContext value={contextValue}>
             {children}
         </AuthContext>
+        // <AuthContext value={{ user, loading, setLoading, createUser, signIn, updateUserProfile, resetPassword, logOut, signInWithGoogle }}>
+        //     {children}
+        // </AuthContext>
     );
 }
 
