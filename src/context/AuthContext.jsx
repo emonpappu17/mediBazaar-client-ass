@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { createContext, useEffect, useMemo, useState } from "react";
 import app from "../services/firebase";
 import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
+import { saveUserToDB } from "../services/userService";
 
 export const AuthContext = createContext();
 const auth = getAuth(app);
@@ -51,13 +52,23 @@ const AuthProvider = ({ children }) => {
     }
 
     // Google Sign-In
-    const signInWithGoogle = () => {
-        return signInWithPopup(auth, googleProvider)
+    const signInWithGoogle = async () => {
+
+
+        const result = await signInWithPopup(auth, googleProvider)
+        console.log(result);
+        const userData = {
+            email: result.user.email, name: result.displayName || "No Name", role: "user"
+        }
+        const dbData = await saveUserToDB(userData)
+        console.log(dbData);
+
     }
 
     // Memoized context value to prevent unnecessary re-renders
     const contextValue = useMemo(() => ({
         user,
+        setUser,
         loading,
         createUser,
         signIn,
