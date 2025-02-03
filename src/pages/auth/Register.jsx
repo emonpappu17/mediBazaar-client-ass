@@ -7,12 +7,12 @@ import Button from "../../components/common/Button";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import useAuth from "../../hooks/useAuth";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import uploadImageToImgBB from "../../services/imgbbService";
 import { saveUserToDB } from "../../services/userService";
 
 const Register = () => {
-    const { createUser, updateUserProfile, signInWithGoogle } = useAuth();
+    const { createUser, updateUserProfile, signInWithGoogle, signInWithGithub } = useAuth();
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const {
@@ -40,8 +40,7 @@ const Register = () => {
                 name: data.username,
                 role: data.role,
             }
-            const dbData = await saveUserToDB(userData);
-            console.log(dbData);
+            await saveUserToDB(userData);
 
             navigate('/')
             toast.success("Account created successfully!");
@@ -56,6 +55,18 @@ const Register = () => {
     const handleGoogleLogin = async () => {
         try {
             await signInWithGoogle();
+            navigate('/')
+            toast.success("Account login successfully!");
+        } catch (error) {
+            console.log(error);
+            toast.error(error.message);
+        }
+    }
+
+    // Github Login
+    const handleGithubLogin = async () => {
+        try {
+            await signInWithGithub();
             navigate('/')
             toast.success("Account login successfully!");
         } catch (error) {
@@ -161,7 +172,7 @@ const Register = () => {
                         <i className="text-3xl cursor-pointer mr-2" onClick={handleGoogleLogin}>
                             <FcGoogle />
                         </i>
-                        <i className="text-3xl cursor-pointer">
+                        <i className="text-3xl cursor-pointer" onClick={handleGithubLogin}>
                             <BsGithub />
                         </i>
                     </div>

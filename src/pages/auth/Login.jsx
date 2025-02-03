@@ -6,14 +6,17 @@ import { BsGithub } from "react-icons/bs";
 import Button from "../../components/common/Button";
 import useAuth from "../../hooks/useAuth";
 import { useState } from "react";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 
 const Login = () => {
 
-    const { signIn, signInWithGoogle } = useAuth();
+    const { signIn, signInWithGoogle, resetPassword, signInWithGithub } = useAuth();
     const [loading, setLoading] = useState(false);
+    const [email, setEmail] = useState('');
     const navigate = useNavigate();
+    console.log(email);
+
     const {
         register,
         handleSubmit,
@@ -25,7 +28,6 @@ const Login = () => {
         try {
             // User Login
             await signIn(data.email, data.password)
-
             navigate('/')
             toast.success("Account login successfully!");
         } catch (error) {
@@ -45,6 +47,31 @@ const Login = () => {
             console.log(error);
             toast.error(error.message);
         }
+    }
+
+    // Github Login
+    const handleGithubLogin = async () => {
+        try {
+            await signInWithGithub();
+            navigate('/')
+            toast.success("Account login successfully!");
+        } catch (error) {
+            console.log(error);
+            toast.error(error.message);
+        }
+    }
+
+    // Reset Password
+    const handleResetPassword = async (email) => {
+        if (!email) return toast.warn('Please write your email first!')
+        setLoading(true)
+        try {
+            await resetPassword(email)
+            toast.success('Request Success! Check your email for further process...')
+        } catch (err) {
+            console.log(err);
+        }
+        setLoading(false)
     }
 
     return (
@@ -68,6 +95,7 @@ const Login = () => {
                             {...register("email", { required: "Email is required" })}
                             type="email"
                             placeholder="Email"
+                            onChange={(e) => setEmail(e.target.value)}
                             className="mt-3 p-3 w-full bg-base-200 rounded border-0 outline-primary focus:outline-1"
                             required
                         />
@@ -90,13 +118,21 @@ const Login = () => {
                             spinner={loading}
                             disabled={loading}
                         />
+
                     </form>
+
+                    {/* Forgot password */}
+                    <div className='space-y-1'>
+                        <button onClick={() => handleResetPassword(email)} className='cursor-pointer text-xs hover:underline text-base-content hover:text-primary'>
+                            Forgot password?
+                        </button>
+                    </div>
 
                     <span className="mt-3"><Link to={'/register '} className="font-bold hover:text-primary">Sign up</Link>  or Login with</span>
                     {/* Social Login */}
                     <div className="flex gap-2 mt-2">
                         <i className=" text-3xl cursor-pointer mr-2" onClick={handleGoogleLogin}> <FcGoogle /></i>
-                        <i className=" text-3xl cursor-pointer"> <BsGithub /></i>
+                        <i className=" text-3xl cursor-pointer" onClick={handleGithubLogin}> <BsGithub /></i>
                     </div>
                 </div>
             </div>
