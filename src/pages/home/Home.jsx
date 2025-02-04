@@ -1,8 +1,10 @@
+import BannerSlider from "./BannerSlider";
 
 const Home = () => {
     return (
         <div>
-            <h1>i am home</h1>
+            <BannerSlider />
+
             {/* <ThemeToggle></ThemeToggle> */}
         </div>
     );
