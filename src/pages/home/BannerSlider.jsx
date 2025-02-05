@@ -3,11 +3,12 @@
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
+// import "swiper/css";
+// import "swiper/css/pagination";
+// import "swiper/css/navigation";
 import 'swiper/css/bundle';
 import { useBanners } from "../../services/bannerService";
+import Button from "../../components/common/Button";
 
 const BannerSlider = () => {
     const { data: banners, isLoading, error } = useBanners();
@@ -18,53 +19,30 @@ const BannerSlider = () => {
     if (error) return <p className="text-center text-red-500">Failed to load banners</p>;
 
     return (
-        // <div className='w-full h-[400px] md:h-[500px] '>
-        //     <Swiper
-
-        //         modules={[Autoplay, Pagination, Navigation]}
-        //         spaceBetween={50}
-        //         slidesPerView={1}
-        //         loop={true}
-        //         autoplay={{ delay: 4000, disableOnInteraction: false }}
-        //         pagination={{ clickable: true }}
-        //         navigation
-        //         className="w-full h-full"
-        //     >
-        //         {banners.map(banner => (
-        //             <SwiperSlide key={banner._id} className='relative'>
-        //                 <img
-        //                     src={banner.image}
-        //                     alt={banner.title}
-        //                     className='w-full h-full object-cover rounded-lg border'
-        //                 // loading='lazy'
-        //                 />
-        //                 <div className="absolute  inset-0 flex items-center justify-center bg-black bg-opacity-40">
-        //                     <h2 className="text-white text-3xl md:text-5xl font-bold">{banner.name}</h2>
-        //                 </div>
-        //             </SwiperSlide>
-        //         ))}
-
-        //     </Swiper>
-        // </div>
-        <div className="container mx-auto my-6">
+        <div className=' container mx-auto  h-[400px] md:h-[500px] overflow-hidden rounded-4xl'>
             <Swiper
-                spaceBetween={20}
+                modules={[Autoplay, Pagination, Navigation]}
+                spaceBetween={50}
                 slidesPerView={1}
-                navigation
+                loop={true}
+                autoplay={{ delay: 4000, disableOnInteraction: false }}
                 pagination={{ clickable: true }}
-                breakpoints={{
-                    640: { slidesPerView: 2 },
-                    1024: { slidesPerView: 3 },
-                }}
+                navigation
+                className="w-full h-full"
             >
-                {banners.map((slide) => (
-                    <SwiperSlide key={slide._id} className="p-4">
-                        <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-                            <img src={slide.image} alt={slide.name} className="w-full h-52 object-cover" />
-                            <div className="p-4">
-                                <h2 className="text-lg font-semibold">{slide.name}</h2>
-                                <p className="text-gray-500">{slide.description}</p>
-                                <p className="text-primary font-bold">${slide.price}</p>
+                {banners.map(banner => (
+                    <SwiperSlide key={banner._id} className='relative'>
+                        <img
+                            src={banner.image}
+                            alt={banner.title}
+                            className='w-full h-full object-cover rounded-lg opacity-70'
+                        // loading='lazy'
+                        />
+                        <div className="absolute  inset-0 flex items-center pl-15 md:pl-28 ">
+                            <div className="max-w-[400px] space-y-3  ">
+                                <h2 className="text-white text-3xl md:text-5xl font-bold nunito-font">{banner.name}</h2>
+                                <p className="text-gray-200 ">{banner.description}</p>
+                                <Button text="Button" className="md:px-4  px-3 py-2 rounded-3xl"></Button>
                             </div>
                         </div>
                     </SwiperSlide>
