@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Button from "../../components/common/Button";
-import SkeletonCategoryCard from "../../components/home/SkeletonCategoryCard";
+import Button from "../common/Button";
+import SkeletonCategoryCard from "./SkeletonCategoryCard";
 import { useCategories } from "../../services/categoryService";
 import CategoryCard from "./CategoryCard";
 

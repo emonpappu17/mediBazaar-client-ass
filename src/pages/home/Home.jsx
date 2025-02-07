@@ -1,5 +1,5 @@
 import BannerSlider from "./BannerSlider";
-import CategoryList from "./CategoryList";
+import CategoryList from "../../components/home/CategoryList";
 
 const Home = () => {
     return (
