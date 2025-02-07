@@ -6,8 +6,6 @@ const Home = () => {
         <div>
             <BannerSlider />
             <CategoryList></CategoryList>
-
-            {/* <ThemeToggle></ThemeToggle> */}
         </div>
     );
 };

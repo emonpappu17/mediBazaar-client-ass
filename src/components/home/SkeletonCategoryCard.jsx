@@ -1,5 +1,3 @@
-
-
 const SkeletonCategoryCard = () => {
     return (
         <div className="relative overflow-hidden rounded-xl shadow-md bg-gray-200 animate-pulse">

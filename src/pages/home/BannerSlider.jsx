@@ -1,11 +1,5 @@
-// import { Swiper, SwiperSlide } from 'swiper/react';
-// import { Navigation, Pagination, Autoplay } from 'swiper/modules';
-
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation, EffectFade } from "swiper/modules";
-// import "swiper/css";
-// import "swiper/css/pagination";
-// import "swiper/css/navigation";
 import 'swiper/css/bundle';
 import { useBanners } from "../../services/bannerService";
 import Button from "../../components/common/Button";
@@ -14,7 +8,7 @@ const BannerSlider = () => {
     const { data: banners, isLoading, error } = useBanners();
 
     if (isLoading) return <p className="text-center text-lg">Loading banners...</p>;
-    console.log(banners);
+    // console.log(banners);
 
     if (error) return <p className="text-center text-red-500">Failed to load banners</p>;
 
@@ -30,7 +24,6 @@ const BannerSlider = () => {
                 pagination={{ clickable: true }}
                 navigation
                 className="w-full h-full "
-
             >
                 {banners.map(banner => (
                     <SwiperSlide key={banner._id} className='relative'>
