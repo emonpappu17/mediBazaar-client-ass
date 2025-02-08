@@ -8,9 +8,6 @@ const CategoryList = () => {
     const { data: categories, isLoading, error } = useCategories();
     const [showAll, setShowAll] = useState(false);
 
-
-    // if (isLoading) return <p className="text-center text-lg">Loading categories...</p>;
-
     if (error) return <p className="text-center text-red-500">Failed to load categories</p>;
     console.log(categories);
 
