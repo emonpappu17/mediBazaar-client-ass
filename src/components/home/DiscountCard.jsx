@@ -3,12 +3,12 @@ import PropTypes from "prop-types";
 const DiscountCard = ({ medicine }) => {
 
     return (
-        <div className="relative group overflow-hidden rounded-xl hover:shadow-2xl transition duration-500 bg-base-200 p-4 border cursor-pointer border-base-300">
+        <div className="relative hover:scale-110  overflow-hidden rounded-xl hover:shadow-2xl transition duration-500 bg-base-200 p-4 border cursor-pointer border-base-300">
             <img
                 src={medicine.medicineImage
                 }
                 alt={medicine.medicineName}
-                className="w-full h-full object-cover rounded-lg transform group-hover:scale-110 transition duration-500"
+                className="w-full h-full object-cover rounded-lg transform  transition duration-500"
                 loading="lazy"
             />
 

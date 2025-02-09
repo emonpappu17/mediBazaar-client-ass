@@ -27,6 +27,16 @@ const CategoryList = () => {
                     </div>
                 )
             }
+            {/* 
+            <div className="mt-6">
+                <iframe
+                    title="Google Map"
+                    className="w-full h-72 rounded-lg shadow-lg"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.8354345093745!2d144.9537353153165!3d-37.81627974202192!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf577b7aaf30d7b4!2sMediBazaar!5e0!3m2!1sen!2sus!4v1632861102995!5m2!1sen!2sus"
+                    allowFullScreen=""
+                    loading="lazy"
+                ></iframe>
+            </div> */}
         </div>
     );
 };

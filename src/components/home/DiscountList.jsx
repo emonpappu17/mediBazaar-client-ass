@@ -17,7 +17,7 @@ const DiscountList = () => {
             <h2 className="text-3xl font-bold text-center mb-8 text-base-content nunito-font">Discounted Medicines</h2>
             <Swiper
                 modules={[Autoplay, Pagination, Navigation]}
-                spaceBetween={20}
+                spaceBetween={50}
                 slidesPerView={1}
                 breakpoints={{
                     640: { slidesPerView: 2 },

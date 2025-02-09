@@ -4,6 +4,7 @@ import DiscountList from "../../components/home/DiscountList";
 import FeaturedBrands from "../../components/home/FeaturedBrands";
 import WhyChooseUs from "../../components/home/WhyChooseUs";
 import ParallaxSection from "../../components/home/ParallaxSection";
+import Testimonials from "../../components/home/Testimonials";
 
 const Home = () => {
     return (
@@ -14,6 +15,7 @@ const Home = () => {
             {/* <FeaturedBrands></FeaturedBrands>
             <WhyChooseUs></WhyChooseUs> */}
             <ParallaxSection></ParallaxSection>
+            <Testimonials></Testimonials>
         </div>
     );
 };
