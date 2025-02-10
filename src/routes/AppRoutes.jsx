@@ -5,6 +5,7 @@ import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
+import Shop from "../pages/shop/Shop";
 
 const AppRoutes = () => {
     return (
@@ -13,6 +14,7 @@ const AppRoutes = () => {
             <Routes>
                 {/* Public Routes */}
                 <Route path="/" element={<Home />} />
+                <Route path="/shop" element={<Shop />}></Route>
 
                 {/* Authentication */}
                 <Route path="/login" element={<Login />} />
