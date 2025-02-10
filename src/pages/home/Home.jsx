@@ -1,10 +1,9 @@
 import BannerSlider from "./BannerSlider";
 import CategoryList from "../../components/home/CategoryList";
 import DiscountList from "../../components/home/DiscountList";
-import FeaturedBrands from "../../components/home/FeaturedBrands";
-import WhyChooseUs from "../../components/home/WhyChooseUs";
 import ParallaxSection from "../../components/home/ParallaxSection";
 import Testimonials from "../../components/home/Testimonials";
+import BackToTop from "../../components/common/BackToTop";
 
 const Home = () => {
     return (
@@ -12,10 +11,9 @@ const Home = () => {
             <BannerSlider />
             <CategoryList></CategoryList>
             <DiscountList></DiscountList>
-            {/* <FeaturedBrands></FeaturedBrands>
-            <WhyChooseUs></WhyChooseUs> */}
             <ParallaxSection></ParallaxSection>
             <Testimonials></Testimonials>
+            <BackToTop></BackToTop>
         </div>
     );
 };

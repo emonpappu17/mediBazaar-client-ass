@@ -155,7 +155,7 @@ const Navbar = () => {
                 </div>
 
                 {/* Mobile Drawer */}
-                <div className="drawer md:hidden w-fit mx-3">
+                <div className="drawer md:hidden w-fit mx-3 ">
                     <input
                         id="my-drawer"
                         type="checkbox"
@@ -170,7 +170,7 @@ const Navbar = () => {
                             {isSideBarOpen ? <RxCross1 /> : <FaAlignJustify />}
                         </label>
                     </div>
-                    <div className="drawer-side order">
+                    <div className="drawer-side order" >
                         <label
                             htmlFor="my-drawer"
                             aria-label="close sidebar"
