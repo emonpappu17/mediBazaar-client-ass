@@ -31,13 +31,13 @@ const ThemeToggle = () => {
         //     {theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
         // </button>
        
-        <label className="swap swap-rotate hover:text-primary">
+        <label className="swap swap-rotate hover:text-[#0D6FEC]">
             {/* this hidden checkbox controls the state */}
             <input checked={theme === 'dark'}  onChange={toggleTheme} type="checkbox" className="theme-controller" value="synthwave" />
 
             {/* sun icon */}
             <svg
-                className="swap-off size-7 fill-current hover:text-primary"
+                className="swap-off size-7 fill-current hover:text-[#0D6FEC]"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24">
                 <path
@@ -46,7 +46,7 @@ const ThemeToggle = () => {
 
             {/* moon icon */}
             <svg
-                className="swap-on size-7 fill-current hover:text-primary"
+                className="swap-on size-7 fill-current hover:text-[#0D6FEC]"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24">
                 <path

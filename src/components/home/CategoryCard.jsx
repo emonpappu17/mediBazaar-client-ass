@@ -32,7 +32,7 @@ const CategoryCard = ({ category }) => {
 
             {/* Icon & Text Content */}
             <div className="absolute bottom-4 left-4 flex items-center gap-3 ">
-                <div className="bg-primary p-3 rounded-full">{categoryIcons[category.categoryName] || <FaPills className="text-white text-3xl" />}</div>
+                <div className="bg-[#0D6FEC] p-3 rounded-full">{categoryIcons[category.categoryName] || <FaPills className="text-white text-3xl" />}</div>
                 <div>
                     <h3 className="text-white text-xl font-bold">{category.categoryName}</h3>
                     <p className="text-gray-300 text-sm">{category.medicineCount} Medicines Available</p>

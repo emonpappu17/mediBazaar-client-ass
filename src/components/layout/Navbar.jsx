@@ -59,8 +59,8 @@ const Navbar = () => {
             to="/"
             className={({ isActive }) =>
                 isActive
-                    ? "text-primary border-b-primary border-b" // Active state
-                    : "text-base-content hover:text-primary border-b-transparent hover:border-b-primary" // Inactive state
+                    ? "text-[#0D6FEC] border-b-[#0D6FEC] border-b" // Active state
+                    : "text-base-content hover:text-[#0D6FEC] border-b-transparent hover:border-b-[#0D6FEC]" // Inactive state
             }
         >
             Home
@@ -70,8 +70,8 @@ const Navbar = () => {
             to="/shop"
             className={({ isActive }) =>
                 isActive
-                    ? "text-primary border-b-primary border-b" // Active state
-                    : "text-base-content hover:text-primary border-b-transparent hover:border-b-primary" // Inactive state
+                    ? "text-[#0D6FEC] border-b-[#0D6FEC] border-b" // Active state
+                    : "text-base-content hover:text-[#0D6FEC] border-b-transparent hover:border-b-[#0D6FEC]" // Inactive state
             }
         >
             Shop
@@ -81,12 +81,12 @@ const Navbar = () => {
             to="/cart"
             className={({ isActive }) =>
                 isActive
-                    ? "text-primary border-b-primary border-b relative" // Active state
-                    : "text-base-content hover:text-primary border-b-transparent hover:border-b-primary relative" // Inactive state
+                    ? "text-[#0D6FEC] border-b-[#0D6FEC] border-b relative" // Active state
+                    : "text-base-content hover:text-[#0D6FEC] border-b-transparent hover:border-b-[#0D6FEC] relative" // Inactive state
             }
         >
             <FaShoppingCart className="text-xl" />
-            <span className="bg-primary text-white text-xs rounded-full px-2 absolute -top-2 -right-4">
+            <span className="bg-[#0D6FEC] text-white text-xs rounded-full px-2 absolute -top-2 -right-4">
                 2
             </span>
         </NavLink>
@@ -117,7 +117,7 @@ const Navbar = () => {
                         <div className="relative">
                             <button
                                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                                className="flex items-center space-x-2 cursor-pointer text-base-content hover:text-primary"
+                                className="flex items-center space-x-2 cursor-pointer text-base-content hover:text-[#0D6FEC]"
                             >
                                 {/* <FaUserCircle className="text-2xl" /> */}
                                 <img
@@ -132,18 +132,18 @@ const Navbar = () => {
                                 <div className="absolute right-0 mt-2 w-40 bg-base-100 text-base-content shadow-md rounded">
                                     <Link
                                         to="/dashboard/user"
-                                        className="block px-4 py-2 hover:bg-base-200 hover:text-primary"
+                                        className="block px-4 py-2 hover:bg-base-200 hover:text-[#0D6FEC]"
                                     >
                                         Update Profile
                                     </Link>
                                     <Link
                                         to="/dashboard/user"
-                                        className="block px-4 py-2 hover:bg-base-200 hover:text-primary"
+                                        className="block px-4 py-2 hover:bg-base-200 hover:text-[#0D6FEC]"
                                     >
                                         Dashboard
                                     </Link>
                                     <button
-                                        className="block px-4 py-2 w-full text-left hover:bg-base-200 hover:text-primary"
+                                        className="block px-4 py-2 w-full text-left hover:bg-base-200 hover:text-[#0D6FEC]"
                                         onClick={handleLogout}
                                     >
                                         Logout
@@ -165,7 +165,7 @@ const Navbar = () => {
                     <div className="drawer-content">
                         <label
                             htmlFor="my-drawer"
-                            className="drawer-button md:hidden text-2xl p-4 cursor-pointer text-base-content hover:text-primary"
+                            className="drawer-button md:hidden text-2xl p-4 cursor-pointer text-base-content hover:text-[#0D6FEC]"
                         >
                             {isSideBarOpen ? <RxCross1 /> : <FaAlignJustify />}
                         </label>
@@ -187,7 +187,7 @@ const Navbar = () => {
                                 </div>
                                 <label
                                     htmlFor="my-drawer"
-                                    className="hover:text-primary drawer-button md:hidden text-2xl ml-auto mt-2 cursor-pointer transition duration-300 ease-in-out hover:scale-75 "
+                                    className="hover:text-[#0D6FEC] drawer-button md:hidden text-2xl ml-auto mt-2 cursor-pointer transition duration-300 ease-in-out hover:scale-75 "
                                 >
                                     <RxCross1 />
                                 </label>

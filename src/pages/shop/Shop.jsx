@@ -64,7 +64,7 @@ const Shop = () => {
                     </select>
                 </div>
             </div> */}
-            {/* <SearchFilterSort setSearch={setSearch} setCategory={setCategory} setSortBy={setSortBy} /> */}
+            <SearchFilterSort setSearch={setSearch} setCategory={setCategory} setSortBy={setSortBy} />
 
             {/* Layout Switcher */}
             {/* <div className="flex justify-end mb-6">
@@ -81,7 +81,7 @@ const Shop = () => {
                     <FaList className="text-lg" /> List
                 </button>
             </div> */}
-            {/* <LayoutToggle layout={layout} setLayout={setLayout} /> */}
+            <LayoutToggle layout={layout} setLayout={setLayout} />
 
             {/* Product Listing */}
             <div

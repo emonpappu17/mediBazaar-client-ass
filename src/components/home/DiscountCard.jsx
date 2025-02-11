@@ -21,7 +21,7 @@ const DiscountCard = ({ medicine }) => {
                 <h3 className="text-lg font-semibold text-base-content">{medicine.medicineName}</h3>
                 <p className="text-sm text-gray-500">
                     <span className="line-through">${medicine.originalPrice}</span>
-                    <span className="text-primary font-bold ml-2">${medicine.discountPrice}</span>
+                    <span className="text-[#0D6FEC] font-bold ml-2">${medicine.discountPrice}</span>
                 </p>
             </div>
         </div>

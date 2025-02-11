@@ -78,7 +78,7 @@ const Register = () => {
     // console.log(watch("role"))
 
     return (
-        <div className="flex h-auto items-center justify-center bg-base-200">
+        <div className="flex h-auto items-center justify-center bg-base-200 ">
             <div className="md:flex flex-row my-10 md:my-20 rounded-3xl overflow-hidden">
                 {/* Animation side */}
                 <div className="bg-primary flex items-center">

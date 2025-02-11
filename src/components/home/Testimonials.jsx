@@ -55,7 +55,7 @@ const Testimonials = () => {
 
                                 <li className="flex flex-col -m-0.5 p-4 sm:p-8">
                                     <div className="flex items-end gap-x-2 text-3xl sm:text-5xl font-bold text-base-content mb-2">
-                                        <svg className="shrink-0 size-5 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 7-7 7 7" /><path d="M12 19V5" /></svg>
+                                        <svg className="shrink-0 size-5 text-[#0D6FEC]" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 7-7 7 7" /><path d="M12 19V5" /></svg>
                                         95%
                                     </div>
                                     <p className="text-sm sm:text-base text-base-content/70">
@@ -65,7 +65,7 @@ const Testimonials = () => {
 
                                 <li className="flex flex-col -m-0.5 p-4 sm:p-8">
                                     <div className="flex items-end gap-x-2 text-3xl sm:text-5xl font-bold text-base-content mb-2">
-                                        <svg className="shrink-0 size-5 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 7-7 7 7" /><path d="M12 19V5" /></svg>
+                                        <svg className="shrink-0 size-5 text-[#0D6FEC]" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 7-7 7 7" /><path d="M12 19V5" /></svg>
                                         4.8/5
                                     </div>
                                     <p className="text-sm sm:text-base text-base-content/70">
