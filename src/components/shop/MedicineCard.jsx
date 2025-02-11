@@ -1,39 +1,78 @@
 import { motion } from 'framer-motion';
-import { FaCartPlus, FaEye } from 'react-icons/fa';
+import { FaCartPlus, FaEye, FaSearch } from 'react-icons/fa';
+import Button from '../common/Button';
 
 const MedicineCard = ({ medicine, layout }) => {
-    const cardVariants = {
-        hidden: { opacity: 0, y: 50 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-    };
+
 
     return (
+        // <>
+        //     <img
+        //         src={medicine.image}
+        //         alt={medicine.name}
+        //         className={
+        //             layout === "grid"
+        //                 ? "w-full h-40 object-cover rounded-lg"
+        //                 : "md:w-40 md:h-40 size-32 object-cover rounded-lg"
+        //         }
+        //     />
+        //     <div className={layout === "list" ? "flex-1" : "text-center mt-2"}>
+        //         <h3 className="text-lg font-semibold">{medicine.name}</h3>
+        //         <p className="text-gray-600">{medicine.category}</p>
+        //         <p className="text-primary font-bold mt-1">${medicine.price.toFixed(2)}</p>
+        //         <div className="flex gap-2 mt-3">
+        //             <button className="btn btn-primary flex-1">Select</button>
+        //             <button className="btn btn-outline flex-1">View</button>
+        //         </div>
+        //     </div>
+        // </>
+
         <motion.div
-            variants={cardVariants}
-            initial="hidden"
-            animate="visible"
-            whileHover={{ scale: 1.05 }} // Add hover effect
-            className={`card bg-base-100 shadow-xl ${layout === 'grid' ? 'w-full' : 'w-96'
+            // key={index}
+            className={`bg-base-100   p-4 rounded-lg shadow-lg transition duration-200 overflow-hidden ${layout === "list" ? "flex items-center gap-4" : ""
                 }`}
+            whileHover={{ scale: 1.05 }}
         >
-            <figure className="px-4 pt-4">
-                <img
-                    src={medicine.image}
-                    alt={medicine.name}
-                    className="rounded-xl h-48 w-full object-cover"
-                />
-            </figure>
-            <div className="card-body">
-                <h2 className="card-title">{medicine.name}</h2>
-                <p className="text-sm text-gray-500">{medicine.genericName}</p>
-                <p className="text-lg font-bold">${medicine.price}</p>
-                <div className="card-actions justify-end mt-4">
-                    <button className="btn btn-primary">
-                        <FaCartPlus className="mr-2" /> Add to Cart
-                    </button>
-                    <button className="btn btn-secondary">
-                        <FaEye className="mr-2" /> View Details
-                    </button>
+            <img
+                src={medicine.image}
+                alt={medicine.name}
+                className={
+                    layout === "grid"
+                        ? "w-full h-48 object-cover rounded-lg "
+                        : "md:size-40 size-32 object-cover rounded-lg"
+                }
+            />
+            <div className={layout === "list" ? "flex-1" : "text-center mt-2 "}>
+                <h3 className="text-lg font-semibold">{medicine.name}</h3>
+                <p className="text-gray-600">{medicine.category}</p>
+                <p className="text-[#0D6FEC] font-bold mt-1">${medicine.price.toFixed(2)}</p>
+                {/* <p className="text-primary font-bold mt-1">${medicine.price.toFixed(2)}</p> */}
+                <div className="flex gap-2 mt-3">
+                    {/* <button className="btn btn-primary flex-1">Select</button> */}
+                    {/* <button className="btn btn-primary flex-1">Select</button> */}
+                    <Button className='flex-1 rounded-[10px] py-3 mr-3' text='Select'></Button>
+                    <Button className='flex-1 rounded-[10px] relative' doubleBtn={true} text='View' hoverIcon={FaSearch}></Button>
+                    {/* <Button className='flex-1 rounded-[10px] relative' doubleBtn={true} text='View'></Button> */}
+
+
+
+                    {/* <button className="relative w-32 h-12 bg-blue-600 text-white rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:bg-blue-700 group">
+                        <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-300 group-hover:-translate-y-2">
+                            Select
+                        </span>
+
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="absolute left-1/2 top-3 opacity-0 w-6 h-6 text-white transition-all duration-300 group-hover:opacity-100 group-hover:top-1/2 -translate-x-1/2 -translate-y-1/2"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </button> */}
+                    {/* <button className="btn btn-outline flex-1">View</button> */}
                 </div>
             </div>
         </motion.div>
