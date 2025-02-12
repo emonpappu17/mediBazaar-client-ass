@@ -93,7 +93,7 @@ const Navbar = () => {
     </>
 
     return (
-        <nav className={`${scrollY > 0 ? 'bg-base-100 shadow-md ' : ''} sticky top-0 z-10`}>
+        <nav className={`${scrollY > 0 ? ' shadow-md ' : ''} bg-base-100 sticky top-0 z-10`}>
             <div className="container mx-auto flex justify-between items-center">
                 {/* Logo & Website Name */}
                 <Link to="/" className="text-base font-bold flex items-center">

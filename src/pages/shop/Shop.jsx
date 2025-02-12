@@ -11,9 +11,13 @@ import Pagination from '../../components/common/Pagination';
 const Shop = () => {
     const [layout, setLayout] = useState("grid"); // Toggle between 'grid' & 'list'
     const [search, setSearch] = useState("");
-    const [category, setCategory] = useState("");
+    // const [category, setCategory] = useState("");
+    const [category, setCategory] = useState('All Categories')
     const [sortBy, setSortBy] = useState("");
     const [selectedMedicine, setSelectedMedicine] = useState(null);
+
+    console.log('from shop page', category, sortBy);
+
 
     const { data, isLoading, error } = useMedicines();
     if (isLoading) return <p className="text-center text-lg">Loading shopping...</p>;
@@ -64,7 +68,7 @@ const Shop = () => {
                     </select>
                 </div>
             </div> */}
-            <SearchFilterSort setSearch={setSearch} setCategory={setCategory} setSortBy={setSortBy} />
+            <SearchFilterSort search={search} setSearch={setSearch} category={category} setCategory={setCategory} sortBy={sortBy} setSortBy={setSortBy} />
 
             {/* Layout Switcher */}
             {/* <div className="flex justify-end mb-6">

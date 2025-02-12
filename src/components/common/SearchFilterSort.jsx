@@ -1,31 +1,49 @@
-import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react';
+import { Combobox, ComboboxInput, Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { FaFilter, FaSearch, FaSortAmountDown } from 'react-icons/fa';
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid'
 
-const people = [
-    { id: 1, name: 'All Categories' },
-    { id: 2, name: 'Tablet' },
-    { id: 3, name: 'Capsule' },
-    { id: 4, name: 'Syrup' },
-    { id: 5, name: 'Injection' },
-    { id: 6, name: 'Drops' },
-    { id: 7, name: 'Inhaler' },
-    { id: 8, name: 'Powder' },
-    { id: 9, name: 'Ointment' },
-    { id: 10, name: 'Other' },
+const categories = [
+    'All Categories',
+    'Tablet',
+    'Capsule',
+    'Syrup',
+    'Injection',
+    'Drops', 'Inhaler',
+    'Powder',
+    'Ointment',
+    'Other',
 ]
+// const people = [
+//     { id: 1, name: 'All Categories' },
+//     { id: 2, name: 'Tablet' },
+//     { id: 3, name: 'Capsule' },
+//     { id: 4, name: 'Syrup' },
+//     { id: 5, name: 'Injection' },
+//     { id: 6, name: 'Drops' },
+//     { id: 7, name: 'Inhaler' },
+//     { id: 8, name: 'Powder' },
+//     { id: 9, name: 'Ointment' },
+//     { id: 10, name: 'Other' },
+// ]
 
-const SearchFilterSort = ({ setSearch, setCategory, setSortBy }) => {
 
-    const [selectedPerson, setSelectedPerson] = useState(people[0])
+const sortOptions = [
+    { value: '', label: 'Sort By' },
+    { value: 'priceLow', label: 'Price: Low to High' },
+    { value: 'priceHigh', label: 'Price: High to Low' },
+];
 
+const SearchFilterSort = ({ search, setSearch, category, setCategory, sortBy, setSortBy }) => {
+
+
+    console.log(category);
     return (
         <div className="flex flex-wrap justify-between mb-6 gap-4 bg-base-100 p-4 rounded-lg drop-shadow-md">
             {/* Search Bar */}
-            <div className="relative w-full md:w-1/4 ">
+            <div className="relative w-full lg:w-1/4 ">
                 <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
                 <input
                     type="text"
@@ -37,15 +55,33 @@ const SearchFilterSort = ({ setSearch, setCategory, setSortBy }) => {
                 />
             </div>
 
+
+            {/* <div className="w-full md:w-1/4">
+                <Combobox value={search} onChange={setSearch}>
+                    <div className="relative">
+                        <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+                        <ComboboxInput
+                            type="text"
+                            placeholder="Search for medicine..."
+                            className={clsx(
+                                'input input-bordered pl-10 w-full bg-base-200 rounded border-0 focus:outline-1'
+                            )}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                    </div>
+                </Combobox>
+            </div> */}
+
+
             {/* Category Filter */}
             {/* <div className="relative w-full md:w-1/4 ">
                 <FaFilter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
                 <select
-                    className="select select-bordered pl-10 w-full bg-base-200 rounded border-0  focus:outline-1"
+                    className="select select-bordered pl-10 w-full bg-base-200 rounded border-0  focus:outline-1 "
                     onChange={(e) => setCategory(e.target.value)}
                 >
                     <option value="" >All Categories</option>
-                    <option value="Tablet" >Tablet</option>
+                    <option value="Tablet" className='focus:bg-amber-400'>Tablet</option>
                     <option value="Capsule">Capsule</option>
                     <option value="Syrup">Syrup</option>
                     <option value="Injection">Injection</option>
@@ -57,50 +93,38 @@ const SearchFilterSort = ({ setSearch, setCategory, setSortBy }) => {
                 </select>
             </div> */}
 
-
-            {/* <Listbox value={selectedPerson} onChange={setSelectedPerson}>
-                <ListboxButton className={'border'}>{selectedPerson.name}</ListboxButton>
-                <ListboxOptions modal={false}  transition={true} anchor="bottom">
-                    {people.map((person) => (
-                        <ListboxOption key={person.id} value={person} className="data-[focus]:bg-[#0D6FEC] hover:text-white text-base-content bg-base-100 ">
-                            {person.name}
-                        </ListboxOption>
-                    ))}
-                </ListboxOptions>
-            </Listbox> */}
-
-
-
-            <div className='  w-full md:w-1/4'>
-                <Listbox value={selectedPerson} onChange={setSelectedPerson}>
+            {/* Category Filter */}
+            <div className=' w-full lg:w-1/4'>
+                <Listbox value={category} onChange={setCategory}>
                     <ListboxButton
                         className={clsx(
-                            'relative block w-full rounded-lg  py-1.5 pr-8 pl-3 text-left text-sm/6 text-base-content  bg-base-200',
+                            'relative block w-full rounded-lg cursor-pointer py-2 pr-8 pl-10 text-left text-sm/6  bg-[#0D6FEC] text-white',
                             'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
                         )}
                     >
-                        {selectedPerson.name}
-                        <ChevronDownIcon
-                            className="group pointer-events-none absolute top-2.5 right-2.5 size-4 fill-base-content"
+                        <FaFilter
+                            className="group pointer-events-none absolute top-3 left-2.5 size-4 fill-white "
                             aria-hidden="true"
                         />
+                        {category}
                     </ListboxButton>
                     <ListboxOptions
+                        modal={false}
                         anchor="bottom"
                         transition
                         className={clsx(
                             'w-[var(--button-width)] rounded-xl border border-base-300 bg-base-200 p-1 [--anchor-gap:var(--spacing-1)] focus:outline-none',
-                            'transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0'
+                            'transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0 '
                         )}
                     >
-                        {people.map((person) => (
+                        {categories.map((category, index) => (
                             <ListboxOption
-                                key={person.name}
-                                value={person}
-                                className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-[#0D6FEC]"
+                                key={index}
+                                value={category}
+                                className="group flex cursor-pointer items-center gap-2 rounded-lg py-1.5 px-3  data-[focus]:bg-[#0D6FEC] "
                             >
-                                <CheckIcon className="invisible size-4 fill-white group-data-[selected]:visible" />
-                                <div className="text-sm/6 text-base-content group-hover:text-white">{person.name}</div>
+                                <CheckIcon className="invisible size-4 group-hover:fill-white fill-base-content group-data-[selected]:visible " />
+                                <div className="text-sm/6 text-base-content group-hover:text-white ">{category}</div>
                             </ListboxOption>
                         ))}
                     </ListboxOptions>
@@ -109,7 +133,7 @@ const SearchFilterSort = ({ setSearch, setCategory, setSortBy }) => {
 
 
             {/* Sort Options */}
-            <div className="relative w-full md:w-1/4 ">
+            {/* <div className="relative w-full md:w-1/4 ">
                 <FaSortAmountDown className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
                 <select
                     className="select select-bordered pl-10 w-full bg-base-200 rounded border-0  focus:outline-1"
@@ -119,6 +143,42 @@ const SearchFilterSort = ({ setSearch, setCategory, setSortBy }) => {
                     <option value="priceLow">Price: Low to High</option>
                     <option value="priceHigh">Price: High to Low</option>
                 </select>
+            </div> */}
+
+
+            <div className="w-full lg:w-1/4">
+                <Listbox value={sortBy} onChange={setSortBy}>
+                    <ListboxButton
+                        className={clsx(
+                            'relative block w-full rounded-lg cursor-pointer py-2 pr-8 pl-10 text-left text-sm/6  bg-[#0D6FEC] text-white',
+                            'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
+                        )}
+                    >
+                        <FaSortAmountDown className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white" />
+                        {sortOptions.find(option => option.value === sortBy)?.label || 'Sort By'}
+                    </ListboxButton>
+                    <ListboxOptions
+                        modal={false}
+                        anchor="bottom"
+                        transition
+                        className={clsx(
+                            'w-[var(--button-width)] rounded-xl border border-base-300 bg-base-200 p-1 [--anchor-gap:var(--spacing-1)] focus:outline-none',
+                            'transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0'
+                        )}
+                    >
+                        {sortOptions.map((option, index) => (
+                            <ListboxOption
+                                key={index}
+                                value={option.value}
+                                className="group flex cursor-pointer items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-[#0D6FEC]"
+                            >
+                                <div className="text-sm/6 text-base-content group-hover:text-white">
+                                    {option.label}
+                                </div>
+                            </ListboxOption>
+                        ))}
+                    </ListboxOptions>
+                </Listbox>
             </div>
         </div>
     );
@@ -126,9 +186,12 @@ const SearchFilterSort = ({ setSearch, setCategory, setSortBy }) => {
 
 // Prop Validation
 SearchFilterSort.propTypes = {
+    search: PropTypes.string.isRequired,
     setSearch: PropTypes.string.isRequired,
     setCategory: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
     setSortBy: PropTypes.string.isRequired,
+    sortBy: PropTypes.string.isRequired,
 };
 
 export default SearchFilterSort;
