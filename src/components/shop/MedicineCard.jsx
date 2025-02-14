@@ -1,13 +1,18 @@
 import { motion } from 'framer-motion';
-import { FaCartPlus,  FaSearch } from 'react-icons/fa';
+import { FaCartPlus, FaSearch } from 'react-icons/fa';
 
 
 import Button from '../common/Button';
 import PropTypes from 'prop-types';
+import SkeletonMedicineCard from './SkeletonMedicineCard';
 
-const MedicineCard = ({ medicine, layout }) => {
+const MedicineCard = ({ medicine, layout, isLoading }) => {
+    console.log('medicine loading ', isLoading);
 
 
+    if (isLoading) {
+        return <SkeletonMedicineCard layout={layout} />;
+    }
     return (
         // <>
         //     <img
@@ -77,8 +82,10 @@ MedicineCard.propTypes = {
         name: PropTypes.string.isRequired,
         category: PropTypes.string.isRequired,
         price: PropTypes.number.isRequired,
+
     }).isRequired,
     layout: PropTypes.oneOf(["grid", "list"]).isRequired,
+    isLoading: PropTypes.bool.isRequired
 };
 
 export default MedicineCard;

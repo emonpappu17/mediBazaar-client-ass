@@ -16,19 +16,6 @@ const categories = [
     'Ointment',
     'Other',
 ]
-// const people = [
-//     { id: 1, name: 'All Categories' },
-//     { id: 2, name: 'Tablet' },
-//     { id: 3, name: 'Capsule' },
-//     { id: 4, name: 'Syrup' },
-//     { id: 5, name: 'Injection' },
-//     { id: 6, name: 'Drops' },
-//     { id: 7, name: 'Inhaler' },
-//     { id: 8, name: 'Powder' },
-//     { id: 9, name: 'Ointment' },
-//     { id: 10, name: 'Other' },
-// ]
-
 
 const sortOptions = [
     { value: '', label: 'Sort By' },
@@ -38,19 +25,18 @@ const sortOptions = [
 
 const SearchFilterSort = ({ search, setSearch, category, setCategory, sortBy, setSortBy }) => {
 
+    console.log('from category', category);
+    console.log(sortOptions.find(option => option.value === sortBy)?.label || 'Sort By');
 
-    console.log(category);
     return (
-        <div className="flex flex-wrap justify-between mb-6 gap-4 bg-base-100 p-4 rounded-lg drop-shadow-md">
+        <div className="flex flex-wrap md:flex-nowrap justify-between mb-6 gap-4 bg-base-100 p-4 rounded-lg drop-shadow-md">
             {/* Search Bar */}
-            <div className="relative w-full lg:w-1/4 ">
+            <div className="relative w-full  ">
                 <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
                 <input
                     type="text"
                     placeholder="Search for medicine..."
-                    // className="mt-3 h-full w-full p-3 bg-base-200 rounded  outline-primary focus:outline-1 border-red-600 border"
                     className="input input-bordered pl-10 w-full bg-base-200 rounded border-0  focus:outline-1"
-                    // className="input input-bordered pl-10 w-full "
                     onChange={(e) => setSearch(e.target.value)}
                 />
             </div>
@@ -94,7 +80,7 @@ const SearchFilterSort = ({ search, setSearch, category, setCategory, sortBy, se
             </div> */}
 
             {/* Category Filter */}
-            <div className=' w-full lg:w-1/4'>
+            <div className=' w-full '>
                 <Listbox value={category} onChange={setCategory}>
                     <ListboxButton
                         className={clsx(
@@ -103,10 +89,11 @@ const SearchFilterSort = ({ search, setSearch, category, setCategory, sortBy, se
                         )}
                     >
                         <FaFilter
-                            className="group pointer-events-none absolute top-3 left-2.5 size-4 fill-white "
+                            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white"
                             aria-hidden="true"
                         />
-                        {category}
+                        {category === '' ? 'All Categories' : category}
+                        {/* {category} */}
                     </ListboxButton>
                     <ListboxOptions
                         modal={false}
@@ -145,8 +132,8 @@ const SearchFilterSort = ({ search, setSearch, category, setCategory, sortBy, se
                 </select>
             </div> */}
 
-
-            <div className="w-full lg:w-1/4">
+            {/* Sort Options */}
+            <div className="w-full ">
                 <Listbox value={sortBy} onChange={setSortBy}>
                     <ListboxButton
                         className={clsx(

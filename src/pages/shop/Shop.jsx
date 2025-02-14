@@ -11,16 +11,19 @@ import Pagination from '../../components/common/Pagination';
 const Shop = () => {
     const [layout, setLayout] = useState("grid"); // Toggle between 'grid' & 'list'
     const [search, setSearch] = useState("");
-    // const [category, setCategory] = useState("");
-    const [category, setCategory] = useState('All Categories')
+    const [category, setCategory] = useState('')
     const [sortBy, setSortBy] = useState("");
-    const [selectedMedicine, setSelectedMedicine] = useState(null);
+    // const [selectedMedicine, setSelectedMedicine] = useState(null);
 
-    console.log('from shop page', category, sortBy);
+    console.log('from shop page', category, sortBy, search);
 
 
-    const { data, isLoading, error } = useMedicines();
-    if (isLoading) return <p className="text-center text-lg">Loading shopping...</p>;
+    const { data, isLoading, error } = useMedicines(sortBy, category, search);
+    // const { data, isLoading, error } = useMedicines();
+    // if (isLoading) return <p className="text-center text-lg">Loading shopping...</p>;
+    // if (isLoading) return <p className="text-center text-lg">Loading shopping...</p>;
+    console.log(isLoading);
+
 
     if (error) return <p className="text-center text-red-500">Failed to load shopping</p>;
 
@@ -69,7 +72,11 @@ const Shop = () => {
                 </div>
             </div> */}
             <SearchFilterSort search={search} setSearch={setSearch} category={category} setCategory={setCategory} sortBy={sortBy} setSortBy={setSortBy} />
-
+            {/* {
+                isLoading && <div className='w-full h-full'>
+                    < p className="text-center text-lg">Loading shopping...</p>
+                </div>
+            } */}
             {/* Layout Switcher */}
             {/* <div className="flex justify-end mb-6">
                 <button
@@ -123,7 +130,7 @@ const Shop = () => {
                     //     {/* <Shop medicine={medicine} layout={layout}></Shop> */}
                     //     <MedicineCard medicine={medicine} layout={layout}></MedicineCard>
                     // </motion.div>
-                    <MedicineCard key={index} medicine={medicine} layout={layout}></MedicineCard>
+                    <MedicineCard key={index} medicine={medicine} layout={layout} isLoading={isLoading}></MedicineCard>
                 ))}
             </div>
 
@@ -135,7 +142,7 @@ const Shop = () => {
                 <button className="btn btn-outline mx-2">Next »</button>
             </div> */}
             {/* <Pagination></Pagination> */}
-        </div>
+        </div >
     );
 };
 
