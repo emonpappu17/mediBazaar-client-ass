@@ -6,6 +6,7 @@ import MedicineCard from '../../components/shop/MedicineCard';
 import LayoutToggle from '../../components/common/LayoutToggle';
 import SearchFilterSort from '../../components/common/SearchFilterSort';
 import Pagination from '../../components/common/Pagination';
+import SkeletonMedicineCard from '../../components/shop/SkeletonMedicineCard';
 
 
 const Shop = () => {
@@ -13,19 +14,19 @@ const Shop = () => {
     const [search, setSearch] = useState("");
     const [category, setCategory] = useState('')
     const [sortBy, setSortBy] = useState("");
+    const [page, setPage] = useState(1);
     // const [selectedMedicine, setSelectedMedicine] = useState(null);
 
     console.log('from shop page', category, sortBy, search);
 
 
-    const { data, isLoading, error } = useMedicines(sortBy, category, search);
+    const { data = [], isLoading, error } = useMedicines(page, sortBy, category, search);
     // const { data, isLoading, error } = useMedicines();
     // if (isLoading) return <p className="text-center text-lg">Loading shopping...</p>;
     // if (isLoading) return <p className="text-center text-lg">Loading shopping...</p>;
-    console.log(isLoading);
 
 
-    if (error) return <p className="text-center text-red-500">Failed to load shopping</p>;
+    // if (error) return <p className="text-center text-red-500">Failed to load shopping</p>;
 
     return (
         <div className="container mx-auto px-4 py-12 max-w-[1300px] ">
@@ -102,37 +103,18 @@ const Shop = () => {
                         : "space-y-6"
                 }
             >
-                {data?.map((medicine, index) => (
-                    // <motion.div
-                    //     key={index}
-                    //     className={`bg-base-100 p-4 rounded-lg shadow-lg transition duration-300 overflow-hidden ${layout === "list" ? "flex items-center gap-4" : ""
-                    //         }`}
-                    //     whileHover={{ scale: 1.05 }}
-                    // >
-                    //     {/* <img
-                    //         src={medicine.image}
-                    //         alt={medicine.name}
-                    //         className={
-                    //             layout === "grid"
-                    //                 ? "w-full h-40 object-cover rounded-lg"
-                    //                 : "md:w-40 md:h-40 size-32 object-cover rounded-lg"
-                    //         }
-                    //     />
-                    //     <div className={layout === "list" ? "flex-1" : "text-center mt-2"}>
-                    //         <h3 className="text-lg font-semibold">{medicine.name}</h3>
-                    //         <p className="text-gray-600">{medicine.category}</p>
-                    //         <p className="text-primary font-bold mt-1">${medicine.price.toFixed(2)}</p>
-                    //         <div className="flex gap-2 mt-3">
-                    //             <button className="btn btn-primary flex-1">Select</button>
-                    //             <button className="btn btn-outline flex-1">View</button>
-                    //         </div>
-                    //     </div> */}
-                    //     {/* <Shop medicine={medicine} layout={layout}></Shop> */}
-                    //     <MedicineCard medicine={medicine} layout={layout}></MedicineCard>
-                    // </motion.div>
-                    <MedicineCard key={index} medicine={medicine} layout={layout} isLoading={isLoading}></MedicineCard>
-                ))}
+                {isLoading
+                    ? Array.from({ length: 6 }).map((_, index) => <SkeletonMedicineCard key={index} layout={layout}></SkeletonMedicineCard>)
+                    : data?.medicines?.map((medicine, index) => (<MedicineCard key={index} medicine={medicine} layout={layout} ></MedicineCard>))
+                }
             </div>
+
+            {/* If no medicines found */}
+            {!isLoading && data.length === 0 &&
+                <div className="text-center text-gray-500 my-32">
+                    No match found
+                </div>}
+
 
             {/* Pagination UI */}
             {/* <div className="flex justify-center mt-8">
@@ -141,7 +123,9 @@ const Shop = () => {
                 <button className="btn btn-outline mx-2">2</button>
                 <button className="btn btn-outline mx-2">Next »</button>
             </div> */}
-            {/* <Pagination></Pagination> */}
+            <Pagination currentPage={page} totalPages={data?.totalPages || 1} onPageChange={setPage}></Pagination>
+            {/* If error occur */}
+            {error && <p className="text-red-500 text-center mt-4">Failed to load Medicines</p>}
         </div >
     );
 };

@@ -3,7 +3,7 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
     return (
-        <div className="flex items-center justify-center mt-8 space-x-2 border">
+        <div className="flex items-center justify-center mt-8 space-x-2 ">
             <button
                 className={`btn btn-outline px-4 py-2 flex items-center ${currentPage === 1 ? "btn-disabled" : ""}`}
                 onClick={() => onPageChange(currentPage - 1)}

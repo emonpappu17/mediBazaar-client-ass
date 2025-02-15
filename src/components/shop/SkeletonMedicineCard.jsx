@@ -1,9 +1,6 @@
 import PropTypes from 'prop-types';
 
-
-
 const SkeletonMedicineCard = ({ layout }) => {
-    console.log('from skeleton card', layout);
 
     return (
         <div className={`bg-base-100 p-4 rounded-lg shadow-lg animate-pulse ${layout === "list" ? "flex items-center gap-4" : ""}`}>
@@ -24,6 +21,5 @@ const SkeletonMedicineCard = ({ layout }) => {
 SkeletonMedicineCard.propTypes = {
     layout: PropTypes.oneOf(["grid", "list"]).isRequired,
 };
-
 
 export default SkeletonMedicineCard;
