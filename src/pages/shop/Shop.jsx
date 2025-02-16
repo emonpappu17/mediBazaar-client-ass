@@ -12,7 +12,7 @@ import SkeletonMedicineCard from '../../components/shop/SkeletonMedicineCard';
 const Shop = () => {
     const [layout, setLayout] = useState("grid"); // Toggle between 'grid' & 'list'
     const [search, setSearch] = useState("");
-    const [category, setCategory] = useState('')
+    const [category, setCategory] = useState("")
     const [sortBy, setSortBy] = useState("");
     const [page, setPage] = useState(1);
     // const [selectedMedicine, setSelectedMedicine] = useState(null);
@@ -20,7 +20,7 @@ const Shop = () => {
     console.log('from shop page', category, sortBy, search);
 
 
-    const { data = [], isLoading, error } = useMedicines(page, sortBy, category, search);
+    const { data = [], isLoading, error } = useMedicines(page, 6, sortBy, category, search);
     // const { data, isLoading, error } = useMedicines();
     // if (isLoading) return <p className="text-center text-lg">Loading shopping...</p>;
     // if (isLoading) return <p className="text-center text-lg">Loading shopping...</p>;
@@ -105,12 +105,12 @@ const Shop = () => {
             >
                 {isLoading
                     ? Array.from({ length: 6 }).map((_, index) => <SkeletonMedicineCard key={index} layout={layout}></SkeletonMedicineCard>)
-                    : data?.medicines?.map((medicine, index) => (<MedicineCard key={index} medicine={medicine} layout={layout} ></MedicineCard>))
+                    : data?.data?.map((medicine, index) => (<MedicineCard key={index} medicine={medicine} layout={layout} ></MedicineCard>))
                 }
             </div>
 
             {/* If no medicines found */}
-            {!isLoading && data.length === 0 &&
+            {!isLoading && data.data.length === 0 &&
                 <div className="text-center text-gray-500 my-32">
                     No match found
                 </div>}
