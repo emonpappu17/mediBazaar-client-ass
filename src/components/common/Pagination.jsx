@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+    console.log('total page', totalPages, 'currentPage', currentPage, );
+
     return (
         <div className="flex items-center justify-center mt-8 space-x-2 ">
             <button
@@ -25,7 +27,9 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
             <button
                 className={`btn btn-outline px-4 py-2 flex items-center ${currentPage === totalPages ? "btn-disabled" : ""}`}
                 onClick={() => onPageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
+
+                // disabled={currentPage === totalPages}
+                disabled={currentPage >= totalPages} // Prevent going beyond total pages
             >
                 Next <FaChevronRight className="ml-1" />
             </button>

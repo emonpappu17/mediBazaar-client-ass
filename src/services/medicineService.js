@@ -22,46 +22,6 @@ export const useMedicines = (page = 1, limit = 6, sortBy = "", category = "", se
 
 
 
-// const fetchMedicines = async ({ queryKey }) => {
-//     const [, page, limit, sortBy, category, search] = queryKey; // Skipped unused `_`
-//     console.log('Got the query key:', queryKey);
-
-//     // Construct URL with only defined parameters
-//     const params = new URLSearchParams();
-//     params.append("page", page);
-//     params.append("limit", limit);
-//     if (sortBy) params.append("sortBy", sortBy);
-//     if (category) params.append("category", category);
-//     if (search) params.append("search", encodeURIComponent(search));
-
-//     const { data } = await axiosCommon(`/medicines?${params.toString()}`);
-
-//     console.log('Fetched medicines:', data);
-//     return data;
-// };
-
-// export const useMedicines = (page = 1, limit = 6, sortBy = "", category = "", search = "") => {
-//     return useQuery({
-//         queryKey: ['medicines', page, limit, sortBy, category, search],
-//         queryFn: fetchMedicines,
-//         keepPreviousData: true, // Keeps previous data while fetching new
-//     });
-// };
-
-
-
-
-// export const useMedicines = (page = 1, limit = 6, sortBy, category, search) => {
-//     return useQuery({
-//         queryKey: ['medicines', page, limit, sortBy, category, search],
-//         queryFn: fetchMedicines,
-//         keepPreviousData: true,
-//     })
-// }
-
-
-
-
 // const fetchMedicines = async () => {
 //     const { data } = await axiosCommon('/medicines')
 //     return data;
