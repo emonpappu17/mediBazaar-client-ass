@@ -23,10 +23,7 @@ const sortOptions = [
     { value: 'priceHigh', label: 'Price: High to Low' },
 ];
 
-const SearchFilterSort = ({ search, setSearch, category, setCategory, sortBy, setSortBy }) => {
-
-    console.log('from category', category);
-    console.log(sortOptions.find(option => option.value === sortBy)?.label || 'Sort By');
+const SearchFilterSort = ({ setSearch, category, setCategory, sortBy, setSortBy }) => {
 
     return (
         <div className="flex flex-wrap md:flex-nowrap justify-between mb-6 gap-4 bg-base-100 p-4 rounded-lg drop-shadow-md">
@@ -173,7 +170,6 @@ const SearchFilterSort = ({ search, setSearch, category, setCategory, sortBy, se
 
 // Prop Validation
 SearchFilterSort.propTypes = {
-    search: PropTypes.string.isRequired,
     setSearch: PropTypes.string.isRequired,
     setCategory: PropTypes.string.isRequired,
     category: PropTypes.string.isRequired,

@@ -6,20 +6,19 @@ const LayoutToggle = ({ layout, setLayout }) => {
         <div className="flex justify-end mb-6">
             <button
                 onClick={() => setLayout("grid")}
-                className={`btn btn-sm mr-2 ${layout === "grid" ? "btn-primary bg-[#0D6FEC]" : "btn-outline"}`}
+                className={`btn btn-sm mr-2 ${layout === "grid" ? "btn-primary bg-[#0D6FEC] border-0" : "btn-outline"}`}
             >
                 <FaThLarge className="text-lg" /> Grid
             </button>
             <button
                 onClick={() => setLayout("list")}
-                className={`btn btn-sm ${layout === "list" ? "btn-primary bg-[#0D6FEC]" : "btn-outline"}`}
+                className={`btn btn-sm ${layout === "list" ? "btn-primary bg-[#0D6FEC] border-0" : "btn-outline"}`}
             >
                 <FaList className="text-lg" /> List
             </button>
         </div>
     );
 };
-
 
 // Prop Validation
 LayoutToggle.propTypes = {

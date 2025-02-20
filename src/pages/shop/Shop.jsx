@@ -1,5 +1,3 @@
-import { FaFilter, FaList, FaSearch, FaSortAmountDown, FaThLarge, FaTimes } from 'react-icons/fa';
-import { motion } from "framer-motion";
 import { useMedicines } from '../../services/medicineService';
 import { useEffect, useState } from 'react';
 import MedicineCard from '../../components/shop/MedicineCard';
@@ -16,14 +14,13 @@ const Shop = () => {
     const [sortBy, setSortBy] = useState("");
     const [page, setPage] = useState(1);
 
-    console.log('from shop page', category, sortBy, search);
-
     const { data = [], isLoading, error } = useMedicines(page, 6, sortBy, category, search);
 
     // 🔥 FIX: Reset `page` to 1 when category, search, or sort changes
+
     useEffect(() => {
         setPage(1);
-    }, [category, search, sortBy]);
+    }, [category, search, sortBy])
 
     return (
         <div className="container mx-auto px-4 py-12 max-w-[1300px] ">
@@ -33,7 +30,6 @@ const Shop = () => {
 
             {/* Search, Filter & Sort UI */}
             <SearchFilterSort
-                search={search}
                 setSearch={setSearch}
                 category={category}
                 setCategory={setCategory}
@@ -57,7 +53,7 @@ const Shop = () => {
             >
                 {isLoading
                     ? Array.from({ length: 6 }).map((_, index) => <SkeletonMedicineCard key={index} layout={layout}></SkeletonMedicineCard>)
-                    : data?.data?.map((medicine, index) => (<MedicineCard key={index} medicine={medicine} layout={layout} ></MedicineCard>))
+                    : data?.data.map((medicine, index) => (<MedicineCard key={index} medicine={medicine} layout={layout} ></MedicineCard>))
                 }
             </div>
 
@@ -67,16 +63,9 @@ const Shop = () => {
                     No match found
                 </div>}
 
-
             {/* Pagination UI */}
-            {/* <div className="flex justify-center mt-8">
-                <button className="btn btn-outline mx-2">« Prev</button>
-                <button className="btn btn-primary mx-2">1</button>
-                <button className="btn btn-outline mx-2">2</button>
-                <button className="btn btn-outline mx-2">Next »</button>
-            </div> */}
-
             <Pagination currentPage={page} totalPages={data?.totalPages || 1} onPageChange={setPage}></Pagination>
+
             {/* If error occur */}
             {error && <p className="text-red-500 text-center mt-4">Failed to load Medicines</p>}
         </div >
