@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { TbFidgetSpinner } from "react-icons/tb";
 
 const Button = ({ text = '', onclick, className = '', type = "button", disabled = false, spinner = false, icon: Icon, doubleBtn = false, hoverIcon: HoverIcon }) => {
+
     return (
         <button
             onClick={onclick}

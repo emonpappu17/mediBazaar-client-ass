@@ -5,7 +5,8 @@ import LayoutToggle from '../../components/common/LayoutToggle';
 import SearchFilterSort from '../../components/common/SearchFilterSort';
 import Pagination from '../../components/common/Pagination';
 import SkeletonMedicineCard from '../../components/shop/SkeletonMedicineCard';
-
+import Lottie from 'lottie-react';
+import emptyAnimation from '../../assets/empty.json'
 
 const Shop = () => {
     const [layout, setLayout] = useState("grid");
@@ -59,8 +60,9 @@ const Shop = () => {
 
             {/* If no medicines found */}
             {!isLoading && data.data.length === 0 &&
-                <div className="text-center text-gray-500 my-32">
-                    No match found
+                <div className="w-90 mx-auto">
+                    {/* No match found */}
+                    <Lottie animationData={emptyAnimation} loop={false}></Lottie>
                 </div>}
 
             {/* Pagination UI */}
