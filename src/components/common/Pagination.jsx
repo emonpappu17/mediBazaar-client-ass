@@ -33,21 +33,21 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         //     </button>
         // </div>
         <div className='flex justify-center items-center mt-8 space-x-2' >
-            <button className='btn btn-outline' onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
+            <button className='btn ' onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
                 <FaChevronLeft></FaChevronLeft> Prev
             </button>
             {
                 [...Array(totalPages)].map((_, index) => (
                     <button
                         key={index}
-                        className={`btn ${currentPage === index + 1 ? 'btn-primary bg-[#0D6FEC] border-0' : 'btn-outline'}`}
+                        className={`btn ${currentPage === index + 1 ? 'btn-primary bg-[#0D6FEC] border-0' : ''}`}
                         onClick={() => onPageChange(index + 1)}
                     >
                         {index + 1}
                     </button>
                 ))
             }
-            <button className='btn btn-outline' onClick={() => onPageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+            <button className='btn ' onClick={() => onPageChange(currentPage + 1)} disabled={currentPage === totalPages}>
                 Next<FaChevronRight></FaChevronRight>
             </button>
         </div>
