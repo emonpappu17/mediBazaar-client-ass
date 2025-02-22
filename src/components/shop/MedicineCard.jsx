@@ -7,18 +7,7 @@ import MedicineModal from '../common/MedicineModal';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 
 const MedicineCard = ({ medicine, layout, }) => {
-    // const [isModalOpen, setIsModalOpen] = useState(false);
-
-
-    let [isOpen, setIsOpen] = useState(true)
-
-    // function open() {
-    //     setIsOpen(true)
-    // }
-
-    // function close() {
-    //     setIsOpen(false)
-    // }
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
         <>
@@ -52,7 +41,8 @@ const MedicineCard = ({ medicine, layout, }) => {
                             doubleBtn={true}
                             text='View'
                             hoverIcon={FaSearch}
-                            onClick={() => setIsOpen(true)}
+                            // onClick={() => setIsOpen(true)}
+                            onclick={() => setIsModalOpen(true)}
                         >
                         </Button>
                     </div>
@@ -60,7 +50,7 @@ const MedicineCard = ({ medicine, layout, }) => {
             </motion.div>
 
 
-            <Dialog open={isOpen} as="div" className="relative z-10 focus:outline-none" onClose={() => setIsOpen(false)}>
+            {/* <Dialog open={isModalOpen} as="div" className="relative z-10 focus:outline-none" onClose={() => setIsModalOpen(false)}>
                 <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
                     <div className="flex min-h-full items-center justify-center p-4">
                         <DialogPanel
@@ -75,17 +65,12 @@ const MedicineCard = ({ medicine, layout, }) => {
                                 order.
                             </p>
                             <div className="mt-4">
-                                <Button
-                                    className="inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-gray-700"
-                                    onClick={() => setIsOpen(false)}
-                                >
-                                    Got it, thanks!
-                                </Button>
+                                <Button text='modal' onclick={() => setIsModalOpen(false)}></Button>
                             </div>
                         </DialogPanel>
                     </div>
                 </div>
-            </Dialog>
+            </Dialog> */}
 
 
 
@@ -110,7 +95,7 @@ const MedicineCard = ({ medicine, layout, }) => {
             </motion.div> */}
 
             {/* Medicine Modal */}
-            {/* <MedicineModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} medicine={medicine} /> */}
+            <MedicineModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} medicine={medicine} />
         </>
     );
 };
