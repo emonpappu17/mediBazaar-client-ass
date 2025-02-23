@@ -23,6 +23,9 @@ const Shop = () => {
         setPage(1);
     }, [category, search, sortBy])
 
+    {/* If error occur */ }
+    { error && <p className="text-red-500 text-center mt-4">Failed to load Medicines</p> }
+
     return (
         <div className="container mx-auto px-4 py-12 max-w-[1300px] ">
             <h2 className="text-4xl font-bold text-center mb-8 text-base-content  nunito-font">
@@ -54,12 +57,12 @@ const Shop = () => {
             >
                 {isLoading
                     ? Array.from({ length: 6 }).map((_, index) => <SkeletonMedicineCard key={index} layout={layout}></SkeletonMedicineCard>)
-                    : data?.data.map((medicine, index) => (<MedicineCard key={index} medicine={medicine} layout={layout} ></MedicineCard>))
+                    : data?.data?.map((medicine, index) => (<MedicineCard key={index} medicine={medicine} layout={layout} ></MedicineCard>))
                 }
             </div>
 
             {/* If no medicines found */}
-            {!isLoading && data.data.length === 0 &&
+            {!isLoading && data?.data?.length === 0 &&
                 <div className="w-90 mx-auto">
                     {/* No match found */}
                     <Lottie animationData={emptyAnimation} loop={false}></Lottie>
@@ -67,9 +70,6 @@ const Shop = () => {
 
             {/* Pagination UI */}
             <Pagination currentPage={page} totalPages={data?.totalPages || 1} onPageChange={setPage}></Pagination>
-
-            {/* If error occur */}
-            {error && <p className="text-red-500 text-center mt-4">Failed to load Medicines</p>}
         </div >
     );
 };

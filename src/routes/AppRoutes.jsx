@@ -6,6 +6,7 @@ import Register from "../pages/auth/Register";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 import Shop from "../pages/shop/Shop";
+import Cart from "../pages/cart/Cart";
 
 const AppRoutes = () => {
     return (
@@ -15,6 +16,7 @@ const AppRoutes = () => {
                 {/* Public Routes */}
                 <Route path="/" element={<Home />} />
                 <Route path="/shop" element={<Shop />}></Route>
+                <Route path="/cart" element={<Cart />}></Route>
 
                 {/* Authentication */}
                 <Route path="/login" element={<Login />} />
