@@ -4,14 +4,67 @@ import PropTypes from 'prop-types';
 import Button from '../common/Button';
 import { motion } from 'framer-motion';
 import { RxCross1 } from 'react-icons/rx';
+import { useAddToCart } from '../../services/cartService';
+import useAuth from '../../hooks/useAuth';
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router';
+import toast from 'react-hot-toast';
 
 
 const MedicineModal = ({ isOpen, closeModal, medicine }) => {
+    const { user } = useAuth();
     const [quantity, setQuantity] = useState(1);
+    const { mutate: addToCart, isPending } = useAddToCart();
+    const navigate = useNavigate();
 
-    if (!medicine) return null; // Prevent rendering if no medicine is selected
+    console.log('is data done to go to bd', isPending);
 
+    // if (!medicine) return null; // Prevent rendering if no medicine is selected
 
+    const handleAddToCart = () => {
+        if (user && user.email) {
+            const cartItem = {
+                email: user.email,
+                medicineId: medicine._id,
+                name: medicine.name,
+                image: medicine.image,
+                price: medicine.price,
+                discount: medicine.discount,
+                quantity,
+            }
+
+            //adding to db
+            addToCart(cartItem, {
+                onSuccess: () => {
+                    console.log('i am in onSuccess');
+
+                    toast.success("Item added to cart!");
+                    closeModal();
+                },
+                onError: () => {
+                    toast.error("Failed to add item to cart.");
+                    console.log('i am in onError');
+                }
+            })
+        }
+        else {
+            Swal.fire({
+                title: "You are not Logged In",
+                text: "Please login to add to the cart",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, login!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    //redirect to login page
+                    navigate('/login')
+                }
+            })
+        }
+    }
 
     return (
         // <Transition appear={true} show={isOpen} as={Fragment}>
@@ -190,7 +243,7 @@ const MedicineModal = ({ isOpen, closeModal, medicine }) => {
                                 </div>
 
                                 <div>
-                                    <Button text='Add to cart' className='px-4 py-[10px] rounded-[5px]'></Button>
+                                    <Button onclick={handleAddToCart} text='Add to cart' className='px-4 py-[10px] rounded-[5px]'></Button>
                                 </div>
                             </div>
 
