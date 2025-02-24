@@ -9,6 +9,7 @@ import ThemeToggle from "../common/ThemeToggle";
 import useAuth from "../../hooks/useAuth";
 import avatarImg from "../../assets/placeholder.jpg"
 import Swal from "sweetalert2";
+import { useCart } from "../../services/cartService";
 
 const Navbar = () => {
     const { user, logOut } = useAuth();
@@ -16,6 +17,7 @@ const Navbar = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isSideBarOpen, setIsSideBarOpen] = useState(false)
     const [scrollY, setScrollY] = useState(0);
+    const { data } = useCart();
 
     const handleScroll = () => {
         setScrollY(window.scrollY);
@@ -86,8 +88,8 @@ const Navbar = () => {
             }
         >
             <FaShoppingCart className="text-xl" />
-            <span className="bg-[#0D6FEC] text-white text-xs rounded-full px-2 absolute -top-2 -right-4">
-                2
+            <span className="bg-[#0D6FEC] text-white text-xs rounded-full px-2 absolute -top-2 -right-5">
+                {data?.totalQuantity}
             </span>
         </NavLink>
     </>

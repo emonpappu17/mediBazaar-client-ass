@@ -256,96 +256,21 @@ const MedicineModal = ({ isOpen, closeModal, medicine }) => {
                                 <p className="text-gray-400 "><strong>Discount:</strong> {medicine.discount}</p>
                             </div>
                             <div className='flex justify-end'>
-                                <button onClick={closeModal} className='text-3xl cursor-pointer hover:text-red-600'><RxCross1 /></button>
+                                {/* <button onClick={closeModal} className='text-3xl cursor-pointer hover:text-red-600'><RxCross1 /></button> */}
+                                <button
+                                    onClick={closeModal}
+                                    className="p-2 rounded-full transition-all duration-300 bg-red-100 hover:bg-red-500 text-red-500 hover:text-white shadow-md hover:shadow-lg cursor-pointer"
+                                // onClick={() => removeItem.mutate({ userId, medicineId: item.medicineId })}
+                                >
+                                    {/* <FaTrashAlt className="text-lg" /> */}
+                                    <RxCross1 className='text-lg'></RxCross1>
+                                </button>
                             </div>
                         </div>
                     </motion.div>
                 </DialogPanel>
             </div>
         </Dialog >
-
-
-        // <Transition appear show={isOpen} as={Fragment}>
-        //     <Dialog as="div" className="relative z-50" onClose={closeModal}>
-        //         {/* Background Overlay */}
-        //         {/* <TransitionChild
-        //             as={Fragment}
-        //             enter="ease-out duration-300"
-        //             enterFrom="opacity-0"
-        //             enterTo="opacity-100"
-        //             leave="ease-in duration-300"
-        //             leaveFrom="opacity-100"
-        //             leaveTo="opacity-0"
-        //         >
-        //             <div className="fixed inset-0 bg-black opacity-50 backdrop-blur-md" />
-        //         </TransitionChild> */}
-        //         <div className="fixed inset-0 bg-black opacity-50" />
-
-        //         {/* Modal Content */}
-        //         <div className="fixed inset-0 flex items-center justify-center p-4">
-        //             <TransitionChild
-        //                 as={Fragment}
-        //                 enter="ease-out duration-500"
-        //                 enterFrom="opacity-0 scale-95"
-        //                 enterTo="opacity-100 scale-100"
-        //                 leave="ease-in duration-300"
-        //                 leaveFrom="opacity-100 scale-100"
-        //                 leaveTo="opacity-0 scale-95"
-        //             >
-        //                 <DialogPanel className="max-w-[1000px] bg-base-100 p-6 md:p-12 rounded-2xl max-h-[90vh] overflow-y-auto">
-        //                     {/* Animated Container */}
-        //                     <motion.div
-        //                         initial={{ opacity: 0, scale: 0.9 }}
-        //                         animate={{ opacity: 1, scale: 1 }}
-        //                         exit={{ opacity: 0, scale: 0.9 }}
-        //                         transition={{ duration: 0.4, ease: "easeOut" }}
-        //                         className="md:flex gap-4"
-        //                     >
-        //                         {/* Image side */}
-        //                         <div>
-        //                             <img src={medicine.image} alt={medicine.name} className="size-80 object-cover rounded-lg" />
-        //                         </div>
-
-        //                         {/* Content side */}
-        //                         <div className="space-y-4">
-        //                             <DialogTitle className="text-4xl">{medicine.name}</DialogTitle>
-        //                             <p className="text-[#0D6FEC] font-extrabold text-3xl">${medicine.price}</p>
-        //                             <Description className="text-gray-400">{medicine.description}</Description>
-
-        //                             {/* Quantity and Add to Cart */}
-        //                             <div className="flex gap-3 items-center">
-        //                                 <div className="flex">
-        //                                     <div className="px-4 py-2 group hover:bg-[#35C7DF] border-gray-300 border w-fit cursor-pointer font-bold">
-        //                                         <p className="group-hover:text-white">-</p>
-        //                                     </div>
-        //                                     <div className="px-4 py-2 w-fit border-gray-300 border-y font-bold">1</div>
-        //                                     <div className="px-4 py-2 group hover:bg-[#35C7DF] border-gray-300 border w-fit cursor-pointer font-bold">
-        //                                         <p className="group-hover:text-white">+</p>
-        //                                     </div>
-        //                                 </div>
-        //                                 <Button text="Add to cart" className="px-4 py-[10px] rounded-[5px]" />
-        //                             </div>
-
-        //                             {/* Medicine Info */}
-        //                             <div>
-        //                                 <p className="text-gray-400"><strong>Category:</strong> {medicine.category}</p>
-        //                                 <p className="text-gray-400"><strong>Company:</strong> {medicine.company}</p>
-        //                                 <p className="text-gray-400"><strong>Dosage:</strong> {medicine.massUnit}</p>
-        //                                 <p className="text-gray-400"><strong>Stock:</strong> {medicine.stock}</p>
-        //                             </div>
-
-        //                             {/* Close Button */}
-        //                             <div className="flex justify-end">
-        //                                 <Button text="Close" className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-md" onclick={closeModal} />
-        //                             </div>
-        //                         </div>
-        //                     </motion.div>
-        //                 </DialogPanel>
-        //             </TransitionChild>
-        //         </div>
-        //     </Dialog>
-        // </Transition>
-
     );
 };
 
