@@ -21,7 +21,7 @@ export const useAddToCart = () => {
 
 
 const fetchCart = async (email) => {
-    const { data } = await axiosCommon(`/cart:${email}`)
+    const { data } = await axiosCommon(`/cart/${email}`)
     console.log('cart all data', data);
 
     return data;

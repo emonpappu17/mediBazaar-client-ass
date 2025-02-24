@@ -15,6 +15,6 @@ export const useMedicines = (page = 1, limit = 6, sortBy = "", category = "", se
     return useQuery({
         queryKey: ['medicines', page, limit, sortBy, category, search],
         queryFn: fetchMedicines,
-        keepPreviousData: true,
+        // keepPreviousData: true,
     })
 }

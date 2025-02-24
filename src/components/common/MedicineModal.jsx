@@ -225,18 +225,18 @@ const MedicineModal = ({ isOpen, closeModal, medicine }) => {
                                     {/* Decrease Button */}
                                     <div
                                         onClick={() => quantity > 1 && setQuantity(quantity - 1)}
-                                        className={`select-none px-4 py-2 border-gray-300 border w-fit cursor-pointer font-bold ${quantity === 1 ? 'cursor-not-allowed opacity-50' : 'hover:bg-[#35C7DF] hover:text-white'}`}
+                                        className={`select-none px-4 py-2 border-base-300 border w-fit cursor-pointer font-bold ${quantity === 1 ? 'cursor-not-allowed opacity-50' : 'hover:bg-[#35C7DF] hover:text-white'}`}
                                     >
                                         -
                                     </div>
-                                    <div className='px-4 py-2  w-fit border-gray-300 border-y font-bold'>
+                                    <div className='px-4 py-2  w-fit border-base-300 border-y font-bold'>
                                         {quantity}
                                     </div>
 
                                     {/* Increase Button */}
                                     <div
                                         onClick={() => quantity <= medicine.stock && setQuantity(quantity + 1)}
-                                        className={`select-none px-4 py-2 border-gray-300 border w-fit cursor-pointer font-bold ${quantity <= medicine.stock ? 'hover:bg-[#35C7DF] hover:text-white' : 'cursor-not-allowed opacity-50'} `}
+                                        className={`select-none px-4 py-2 border-base-300 border w-fit cursor-pointer font-bold ${quantity <= medicine.stock ? 'hover:bg-[#35C7DF] hover:text-white' : 'cursor-not-allowed opacity-50'} `}
                                     >
                                         +
                                     </div>
