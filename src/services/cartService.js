@@ -50,12 +50,31 @@ const updateCartItem = async ({ email, medicineId, quantity }) => {
 
 export const useUpdateCart = () => {
     const queryClient = useQueryClient();
-
     return useMutation({
         mutationFn: updateCartItem,
         onSuccess: (_, data) => {
             console.log('useUpdateCart', _, data);
             queryClient.invalidateQueries(["cart", data.email])
+        }
+    })
+}
+
+// Remove Cart Item
+const removeCartItem = async ({ email, medicineId }) => {
+    console.log(email, medicineId);
+
+    const result = await axiosCommon.delete(`/cart/${email}/${medicineId}`)
+    console.log('remove result', result);
+
+}
+
+export const useRemoveCartItem = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: removeCartItem,
+        onSuccess: (_, data) => {
+            queryClient.invalidateQueries(["cart"])
+            console.log(data);
         }
     })
 }

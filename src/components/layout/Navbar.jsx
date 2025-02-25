@@ -88,8 +88,8 @@ const Navbar = () => {
             }
         >
             <FaShoppingCart className="text-xl" />
-            <span className="bg-[#0D6FEC] text-white text-xs rounded-full px-2 absolute -top-2 -right-5">
-                {data?.totalQuantity}
+            <span className="bg-[#0D6FEC] text-white text-xs rounded-full p-1 absolute -top-3 -right-5">
+                {data?.totalQuantity || 0}
             </span>
         </NavLink>
     </>

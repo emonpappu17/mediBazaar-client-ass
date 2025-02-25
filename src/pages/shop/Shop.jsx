@@ -17,6 +17,10 @@ const Shop = () => {
 
     const { data = [], isLoading, error } = useMedicines(page, 6, sortBy, category, search);
 
+
+
+    console.log('shop is loading and data', data, isLoading);
+
     // 🔥 FIX: Reset `page` to 1 when category, search, or sort changes
 
     useEffect(() => {
