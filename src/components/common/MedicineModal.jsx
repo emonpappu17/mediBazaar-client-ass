@@ -1,5 +1,5 @@
-import { Description, Dialog, DialogBackdrop, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react';
-import { Fragment, useState } from 'react';
+import { Description, Dialog, DialogPanel, DialogTitle, } from '@headlessui/react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../common/Button';
 import { motion } from 'framer-motion';
@@ -9,7 +9,6 @@ import useAuth from '../../hooks/useAuth';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router';
 import toast from 'react-hot-toast';
-
 
 const MedicineModal = ({ isOpen, closeModal, medicine }) => {
     const { user } = useAuth();
@@ -67,128 +66,6 @@ const MedicineModal = ({ isOpen, closeModal, medicine }) => {
     }
 
     return (
-        // <Transition appear={true} show={isOpen} as={Fragment}>
-        //     <Dialog as="div" className="relative z-50" onClose={closeModal}>
-        //         <div className="fixed inset-0 bg-black opacity-50" />
-
-        //         <div className="fixed inset-0 flex items-center justify-center p-4 border-red-600 border">
-        //             <TransitionChild
-        //                 as={Fragment}
-        //                 enter="ease-out duration-1000"
-        //                 enterFrom="opacity-0 scale-95"
-        //                 // enterTo="opacity-100 scale-100"
-        //                 // leave="ease-in duration-200"
-        //                 // leaveFrom="opacity-100 scale-100"
-        //                 // leaveTo="opacity-0 scale-95"
-        //             >
-        //                 <DialogPanel className="w-full max-w-lg bg-base-100 rounded-lg shadow-lg p-6">
-        //                     <DialogTitle className="text-xl font-bold text-gray-800 dark:text-white">
-        //                         {medicine.name}
-        //                     </DialogTitle>
-
-        //                     <div className="mt-4">
-        //                         <img
-        //                             src={medicine.image}
-        //                             alt={medicine.name}
-        //                             className="w-full h-64 object-cover rounded-lg"
-        //                         />
-        //                     </div>
-
-        //                     <div className="mt-4">
-        //                         <p className="text-gray-600 dark:text-gray-300"><strong>Category:</strong> {medicine.category}</p>
-        //                         <p className="text-gray-600 dark:text-gray-300"><strong>Company:</strong> {medicine.company}</p>
-        //                         <p className="text-gray-600 dark:text-gray-300"><strong>Dosage:</strong> {medicine.massUnit}</p>
-        //                         <p className="text-gray-600 dark:text-gray-300"><strong>Price:</strong> <span className="text-primary font-bold">${medicine.price}</span></p>
-        //                         <p className="text-gray-600 dark:text-gray-300"><strong>Stock:</strong> {medicine.stock}</p>
-        //                         <p className="text-gray-600 dark:text-gray-300"><strong>Description:</strong> {medicine.description}</p>
-        //                     </div>
-
-        //                     <div className="mt-6 flex justify-end gap-3">
-        //                         <Button className="px-6 py-2 rounded-lg" text="Select" />
-        //                         <Button className="px-6 py-2 rounded-lg bg-red-500 hover:bg-red-600" text="Close" onclick={closeModal} />
-        //                     </div>
-        //                 </DialogPanel>
-        //             </TransitionChild>
-        //         </div>
-        //     </Dialog>
-        // </Transition>
-
-        // <Transition appear show={isOpen} as={Fragment}>
-        //     <Dialog as="div" className="relative z-50" onClose={closeModal}>
-        //         {/* Background Overlay
-        //         <TransitionChild
-        //             as={Fragment}
-        //             enter="ease-out duration-300"
-        //             enterFrom="opacity-90"
-        //             enterTo="opacity-100"
-        //             leave="ease-in duration-200"
-        //             leaveFrom="opacity-100"
-        //             leaveTo="opacity-0"
-        //         >
-        //             <div className="fixed inset-0  opacity-50 backdrop-blur-md" />
-        //         </TransitionChild> */}
-
-        //         <div className="fixed inset-0 bg-black opacity-50 backdrop-blur-md" />
-        //         {/* Modal Content */}
-        //         <div className="fixed inset-0 flex items-center justify-center p-4">
-        //             <TransitionChild
-        //                 as={Fragment}
-        //                 enter="ease-out duration-300"
-        //                 enterFrom="opacity-0 scale-95"
-        //                 enterTo="opacity-100 scale-100"
-        //                 leave="ease-in duration-200"
-        //                 leaveFrom="opacity-100 scale-100"
-        //                 leaveTo="opacity-0 scale-95"
-        //             >
-        //                 <DialogPanel className="w-full max-w-lg bg-base-100 shadow-xl rounded-2xl overflow-hidden">
-        //                     {/* Animated Container */}
-        //                     <motion.div
-        //                         initial={{ opacity: 0, y: -50 }}
-        //                         animate={{ opacity: 1, y: 0 }}
-        //                         exit={{ opacity: 0, y: 50 }}
-        //                         transition={{ duration: 0.4, ease: "easeOut" }}
-        //                         className="p-6"
-        //                     >
-        //                         {/* Title */}
-        //                         <DialogTitle className="text-2xl font-bold text-gray-800 dark:text-white text-center">
-        //                             {medicine.name}
-        //                         </DialogTitle>
-
-        //                         {/* Image */}
-        //                         <div className="mt-4 flex justify-center">
-        //                             <motion.img
-        //                                 src={medicine.image}
-        //                                 alt={medicine.name}
-        //                                 className="w-full h-64 object-cover rounded-lg shadow-lg"
-        //                                 initial={{ scale: 0.8 }}
-        //                                 animate={{ scale: 1 }}
-        //                                 transition={{ duration: 0.3 }}
-        //                             />
-        //                         </div>
-
-        //                         {/* Medicine Details */}
-        //                         <div className="mt-6 space-y-3 text-gray-600 dark:text-gray-300">
-        //                             <p><strong>Category:</strong> {medicine.category}</p>
-        //                             <p><strong>Company:</strong> {medicine.company}</p>
-        //                             <p><strong>Dosage:</strong> {medicine.massUnit}</p>
-        //                             <p><strong>Price:</strong> <span className="text-primary font-bold">${medicine.price}</span></p>
-        //                             <p><strong>Stock:</strong> {medicine.stock}</p>
-        //                             <p><strong>Description:</strong> {medicine.description}</p>
-        //                         </div>
-
-        //                         {/* Buttons */}
-        //                         <div className="mt-6 flex justify-between">
-        //                             <Button className="px-6 py-2 rounded-lg w-1/2 mr-2" text="Select" />
-        //                             <Button className="px-6 py-2 rounded-lg w-1/2 bg-red-500 hover:bg-red-600" text="Close" onclick={closeModal} />
-        //                         </div>
-        //                     </motion.div>
-        //                 </DialogPanel>
-        //             </TransitionChild>
-        //         </div>
-        //     </Dialog>
-        // </Transition>
-
-        // final look
         <Dialog open={isOpen} onClose={closeModal} className="relative z-50">
 
             <div className="fixed inset-0 bg-black opacity-50" />
@@ -256,13 +133,10 @@ const MedicineModal = ({ isOpen, closeModal, medicine }) => {
                                 <p className="text-gray-400 "><strong>Discount:</strong> {medicine.discount}</p>
                             </div>
                             <div className='flex justify-end'>
-                                {/* <button onClick={closeModal} className='text-3xl cursor-pointer hover:text-red-600'><RxCross1 /></button> */}
                                 <button
                                     onClick={closeModal}
                                     className="p-2 rounded-full transition-all duration-300 bg-red-100 hover:bg-red-500 text-red-500 hover:text-white shadow-md hover:shadow-lg cursor-pointer"
-                                // onClick={() => removeItem.mutate({ userId, medicineId: item.medicineId })}
                                 >
-                                    {/* <FaTrashAlt className="text-lg" /> */}
                                     <RxCross1 className='text-lg'></RxCross1>
                                 </button>
                             </div>

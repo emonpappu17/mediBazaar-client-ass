@@ -35,13 +35,6 @@ export const useCart = () => {
         enabled: !!user?.email,
     })
 }
-// export const useCart = (email) => {
-//     return useQuery({
-//         queryKey: ["cart", email],
-//         queryFn: () => fetchCart(email),
-//         enabled: !!email,
-//     })
-// }
 
 // Update Cart Quantity
 const updateCartItem = async ({ email, medicineId, quantity }) => {
@@ -75,6 +68,23 @@ export const useRemoveCartItem = () => {
         onSuccess: (_, data) => {
             queryClient.invalidateQueries(["cart"])
             console.log(data);
+        }
+    })
+}
+
+// Clear Cart
+const clearCart = async (email) => {
+    console.log(email);
+
+    await axiosCommon.delete(`/cart/${email}`)
+}
+
+export const useClearCart = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: clearCart,
+        onSuccess: () => {
+            queryClient.invalidateQueries(['cart']);
         }
     })
 }

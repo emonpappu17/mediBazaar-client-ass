@@ -7,6 +7,7 @@ import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 import Shop from "../pages/shop/Shop";
 import Cart from "../pages/cart/Cart";
+import Checkout from "../pages/checkout/Checkout";
 
 const AppRoutes = () => {
     return (
@@ -17,6 +18,7 @@ const AppRoutes = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/shop" element={<Shop />}></Route>
                 <Route path="/cart" element={<Cart />}></Route>
+                <Route path="/checkout" element={<Checkout />}></Route>
 
                 {/* Authentication */}
                 <Route path="/login" element={<Login />} />

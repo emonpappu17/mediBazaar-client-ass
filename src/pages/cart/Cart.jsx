@@ -110,10 +110,12 @@
 import Lottie from "lottie-react";
 import Button from "../../components/common/Button";
 import useAuth from "../../hooks/useAuth";
-import { useCart, useRemoveCartItem, useUpdateCart } from "../../services/cartService";
+import { useCart, useClearCart, useRemoveCartItem, useUpdateCart } from "../../services/cartService";
 import { FaTrashAlt } from "react-icons/fa";
 import emptyCartAnimation from "../../assets/emptyCart.json";
 import SkeletonCartItem from "../../components/cart/SkeletonCartItem";
+import Swal from "sweetalert2";
+import { Link } from "react-router";
 
 const Cart = () => {
     const { user, loading } = useAuth();
@@ -121,6 +123,7 @@ const Cart = () => {
     const { data = [], isLoading: cartLoading, error } = useCart();
     const updateCart = useUpdateCart();
     const removeItem = useRemoveCartItem();
+    const clearCart = useClearCart();
 
     // console.log("cart data", data, isLoading, !!email);
     // console.log(loading, cartLoading);
@@ -133,6 +136,14 @@ const Cart = () => {
             <h2 className="text-4xl font-bold text-center mb-8 text-base-content nunito-font">
                 Your Cart
             </h2>
+
+            {/* If no cart  */}
+            {!cartLoading && data?.items?.length === 0 &&
+                <div className="w-90 mx-auto mb-10">
+                    <Lottie animationData={emptyCartAnimation} loop={true} />
+                    <h1 className="text-center text-2xl">Your cart is currently empty.</h1>
+                </div>
+            }
 
             {/* Show Skeleton When Loading */}
             {cartLoading ?
@@ -201,10 +212,76 @@ const Cart = () => {
 
                                     {/* Delete Button */}
                                     <button
-                                        onClick={() => removeItem.mutate({ email, medicineId: item.medicineId })}
+                                        onClick={
+                                            () => {
+                                                Swal.fire({
+                                                    title: "Are you sure?",
+                                                    text: `You won't be able to revert ${item.name}`,
+                                                    icon: "warning",
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: "#3085d6",
+                                                    cancelButtonColor: "#d33",
+                                                    confirmButtonText: "Yes, remove it!"
+                                                }).then(async (result) => {
+                                                    if (result.isConfirmed) {
+                                                        removeItem.mutate({ email, medicineId: item.medicineId }, {
+                                                            onSuccess: () => {
+                                                                Swal.fire({
+                                                                    title: "Deleted!",
+                                                                    text: `${item.name} has been removed from your cart.`,
+                                                                    icon: "success"
+                                                                });
+                                                            },
+                                                            onError: () => {
+                                                                Swal.fire({
+                                                                    title: "Error!",
+                                                                    text: "Failed to remove the item. Please try again.",
+                                                                    icon: "error"
+                                                                });
+                                                            }
+                                                        })
+                                                    }
+                                                });
+                                            }
+                                        }
                                         className="p-2 rounded-full transition-all duration-300 bg-red-100 hover:bg-red-500 text-red-500 hover:text-white shadow-md hover:shadow-lg cursor-pointer">
                                         <FaTrashAlt className="text-lg" />
                                     </button>
+                                    {/* <button
+                                        onClick={() => {
+                                            Swal.fire({
+                                                title: "Are you sure?",
+                                                text: "You won't be able to revert this action!",
+                                                icon: "warning",
+                                                showCancelButton: true,
+                                                confirmButtonColor: "#3085d6",
+                                                cancelButtonColor: "#d33",
+                                                confirmButtonText: "Yes, remove it!"
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    removeItem.mutate({ email, medicineId: item.medicineId }, {
+                                                        onSuccess: () => {
+                                                            Swal.fire({
+                                                                title: "Deleted!",
+                                                                text: "The item has been removed from your cart.",
+                                                                icon: "success"
+                                                            });
+                                                        },
+                                                        onError: () => {
+                                                            Swal.fire({
+                                                                title: "Error!",
+                                                                text: "Failed to remove the item. Please try again.",
+                                                                icon: "error"
+                                                            });
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        }}
+                                        className="p-2 rounded-full transition-all duration-300 bg-red-100 hover:bg-red-500 text-red-500 hover:text-white shadow-md hover:shadow-lg cursor-pointer"
+                                    >
+                                        <FaTrashAlt className="text-lg" />
+                                    </button> */}
                                 </div>
                             ))}
                         </div>
@@ -215,24 +292,53 @@ const Cart = () => {
                                 Total: ${data?.totalPrice?.toFixed(2)}
                             </p>
                             <div>
-                                <button className="btn btn-danger mr-2 rounded-[10px]">
+                                <button
+                                    disabled={data.length === 0 || data.items.length === 0}
+                                    onClick={
+                                        () => {
+                                            Swal.fire({
+                                                title: "Are you sure?",
+                                                text: `You won't be able to revert this again `,
+                                                icon: "warning",
+                                                showCancelButton: true,
+                                                confirmButtonColor: "#3085d6",
+                                                cancelButtonColor: "#d33",
+                                                confirmButtonText: "Yes, clear it!"
+                                            }).then(async (result) => {
+                                                if (result.isConfirmed) {
+                                                    clearCart.mutate(email, {
+                                                        onSuccess: () => {
+                                                            Swal.fire({
+                                                                title: "Cleared!",
+                                                                text: `All the cart have be removed from your cart.`,
+                                                                icon: "success"
+                                                            });
+                                                        },
+                                                        onError: () => {
+                                                            Swal.fire({
+                                                                title: "Error!",
+                                                                text: "Failed to clear the cart. Please try again.",
+                                                                icon: "error"
+                                                            });
+                                                        }
+                                                    })
+                                                }
+                                            });
+                                        }
+                                    }
+                                    className="btn btn-danger mr-2 rounded-[10px]">
                                     Clear Cart
                                 </button>
-                                <Button
+                                <Link to={'/checkout'}> <Button
                                     text="Proceed to Checkout"
                                     className="py-2 px-3 rounded-[10px]"
-                                />
+                                /></Link>
                             </div>
                         </div>
                     </div>
                 )}
-            {!cartLoading && data?.length === 0 &&
-                <div className="w-90 mx-auto">
-                    <Lottie animationData={emptyCartAnimation} loop={true} />
-                    <h1 className="text-center text-2xl">Your cart is currently empty.</h1>
-                </div>
-            }
-        </div>
+
+        </div >
     );
 };
 

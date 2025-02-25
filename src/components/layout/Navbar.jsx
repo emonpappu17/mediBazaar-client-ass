@@ -13,7 +13,6 @@ import { useCart } from "../../services/cartService";
 
 const Navbar = () => {
     const { user, logOut } = useAuth();
-    // const [isLoggedIn, setIsLoggedIn] = useState(true); // Temporary state for login status
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isSideBarOpen, setIsSideBarOpen] = useState(false)
     const [scrollY, setScrollY] = useState(0);
@@ -88,7 +87,7 @@ const Navbar = () => {
             }
         >
             <FaShoppingCart className="text-xl" />
-            <span className="bg-[#0D6FEC] text-white text-xs rounded-full p-1 absolute -top-3 -right-5">
+            <span className="bg-[#0D6FEC] text-white text-xs rounded-full p-1 absolute -top-3 -right-4">
                 {data?.totalQuantity || 0}
             </span>
         </NavLink>
@@ -194,12 +193,6 @@ const Navbar = () => {
                                     <RxCross1 />
                                 </label>
                             </div>
-                            {/* <label
-                                htmlFor="my-drawer"
-                                className="hover:text-primary drawer-button md:hidden text-2xl ml-auto mt-2 cursor-pointer transition duration-300 ease-in-out hover:scale-75 border"
-                            >
-                                <RxCross1 />
-                            </label> */}
                             {navLinks}
                         </ul>
                     </div>
