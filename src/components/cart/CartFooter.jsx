@@ -50,6 +50,7 @@ const CartFooter = ({ totalPrice, itemsLength, email, clearCart }) => {
                     Clear Cart
                 </button>
                 <Link to={'/checkout'}> <Button
+                    disabled={itemsLength === 0}
                     text="Proceed to Checkout"
                     className="py-2 px-3 rounded-[10px]"
                 /></Link>

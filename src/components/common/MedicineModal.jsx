@@ -16,7 +16,7 @@ const MedicineModal = ({ isOpen, closeModal, medicine }) => {
     const { mutate: addToCart, isPending } = useAddToCart();
     const navigate = useNavigate();
 
-    console.log('is data done to go to bd', isPending);
+    // console.log('is data done to go to bd', isPending);
 
     // if (!medicine) return null; // Prevent rendering if no medicine is selected
 

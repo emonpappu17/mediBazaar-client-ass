@@ -6,7 +6,7 @@ const fetchMedicines = async ({ queryKey }) => {
 
     const { data } = await axiosCommon(`/medicines?page=${page}&limit=${limit}&sortBy=${sortBy}&category=${category}&search=${search}`)
 
-    console.log('all medicine', data);
+    // console.log('all medicine', data);
 
     return data;
 }
