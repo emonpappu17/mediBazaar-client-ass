@@ -97,7 +97,7 @@ const Register = () => {
                             {...register("username", { required: "Username is required" })}
                             type="text"
                             placeholder="Username"
-                            className="mt-3 w-full p-3 bg-base-200 rounded border-0 outline-primary focus:outline-1"
+                            className="mt-3 w-full p-3 bg-base-200 rounded border-0 outline-base-content focus:outline-1"
                             required
                         />
                         {errors.username && <p className="text-red-500 text-sm  mt-2">{errors.username.message}</p>}
@@ -107,7 +107,7 @@ const Register = () => {
                             {...register("email", { required: "Email is required" })}
                             type="email"
                             placeholder="Email"
-                            className="mt-3 p-3 w-full bg-base-200 rounded border-0 outline-primary focus:outline-1"
+                            className="mt-3 p-3 w-full bg-base-200 rounded border-0 outline-base-content focus:outline-1"
                             required
                         />
                         {errors.email && <p className="text-red-500 text-sm mt-2">{errors.email.message}</p>}
@@ -116,7 +116,7 @@ const Register = () => {
                         <input
                             {...register("profileImage", { required: "Profile image is required" })}
                             type="file"
-                            className="file-input mt-3 w-full bg-base-200 rounded border-0 outline-primary focus:outline-1"
+                            className="file-input mt-3 w-full bg-base-200 rounded border-0 outline-base-content focus:outline-1"
                         />
                         {errors.profileImage && <p className="text-red-500 text-sm mt-2">{errors.profileImage.message}</p>}
 
@@ -125,7 +125,7 @@ const Register = () => {
                             {...register("password", { required: "Password is required", minLength: 6 })}
                             type="password"
                             placeholder="Password"
-                            className="mt-3 w-full p-3 bg-base-200 rounded border-0 outline-primary focus:outline-1"
+                            className="mt-3 w-full p-3 bg-base-200 rounded border-0 outline-base-content focus:outline-1"
                             required
                         />
                         {errors.password && <p className="text-red-500 text-sm mt-2">Password must be at least 6 characters</p>}
@@ -135,7 +135,7 @@ const Register = () => {
                             {...register("confirmPassword", { validate: value => value === watch("password") || "Password do not match" })}
                             type="password"
                             placeholder="Confirm password"
-                            className="mt-3 w-full p-3 bg-base-200 rounded border-0 outline-primary focus:outline-1"
+                            className="mt-3 w-full p-3 bg-base-200 rounded border-0 outline-base-content focus:outline-1"
                             required
                         />
                         {errors.confirmPassword && <p className="text-red-500 text-sm mt-2">{errors.confirmPassword.message}</p>}
@@ -144,7 +144,7 @@ const Register = () => {
                         <select
                             {...register("role", { required: "Role is required" })}
                             placeholder="Role"
-                            className="mt-3 w-full p-3 bg-base-200 rounded border-0 outline-primary focus:outline-1"
+                            className="mt-3 w-full p-3 bg-base-200 rounded border-0 outline-base-content focus:outline-1"
                         >
                             <option value="user">User</option>
                             <option value="seller">Seller</option>

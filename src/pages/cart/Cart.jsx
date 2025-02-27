@@ -43,8 +43,6 @@ const Cart = () => {
                     <div className="bg-base-100 p-6 rounded-lg border border-base-300">
                         <div className="space-y-4">
                             {data?.items?.map((item) => (
-
-
                                 <CartItem
                                     key={item.medicineId}
                                     item={item}
@@ -64,7 +62,6 @@ const Cart = () => {
                         />
                     </div>
                 )}
-
         </div >
     );
 };

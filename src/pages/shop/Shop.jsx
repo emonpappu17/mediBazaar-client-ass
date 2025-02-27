@@ -66,6 +66,7 @@ const Shop = () => {
                 <div className="w-90 mx-auto">
                     {/* No match found */}
                     <Lottie animationData={emptyAnimation} loop={false}></Lottie>
+                    <h1 className="text-center text-2xl">No match found</h1>
                 </div>}
 
             {/* Pagination UI */}

@@ -9,6 +9,7 @@ import Shop from "../pages/shop/Shop";
 import Cart from "../pages/cart/Cart";
 import Checkout from "../pages/checkout/Checkout";
 import Layout from "../components/layout/Layout ";
+import CategoryDetails from "../pages/category/CategoryDetails";
 
 const AppRoutes = () => {
     // const location = useLocation();
@@ -24,6 +25,7 @@ const AppRoutes = () => {
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/category/:category" element={<CategoryDetails />}></Route>
                 </Route>
                 {/* Public Routes */}
                 {/* <Route path="/" element={<Home />} />

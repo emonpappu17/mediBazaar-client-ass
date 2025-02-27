@@ -40,7 +40,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
                 [...Array(totalPages)].map((_, index) => (
                     <button
                         key={index}
-                        className={`btn ${currentPage === index + 1 ? 'btn-primary bg-[#0D6FEC] border-0' : ''}`}
+                        className={`btn ${currentPage === index + 1 ? 'btn text-white bg-[#0D6FEC] border-0' : ''}`}
                         onClick={() => onPageChange(index + 1)}
                     >
                         {index + 1}

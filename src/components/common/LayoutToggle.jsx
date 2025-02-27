@@ -6,13 +6,13 @@ const LayoutToggle = ({ layout, setLayout }) => {
         <div className="flex justify-end mb-6">
             <button
                 onClick={() => setLayout("grid")}
-                className={`btn btn-sm mr-2 ${layout === "grid" ? "btn-primary bg-[#0D6FEC] border-0" : ""}`}
+                className={`btn btn-sm mr-2 ${layout === "grid" ? "btn text-white bg-[#0D6FEC] border-0" : ""}`}
             >
                 <FaThLarge className="text-lg" /> Grid
             </button>
             <button
                 onClick={() => setLayout("list")}
-                className={`btn btn-sm ${layout === "list" ? "btn-primary bg-[#0D6FEC] border-0" : ""}`}
+                className={`btn btn-sm ${layout === "list" ? "btn text-white bg-[#0D6FEC] border-0" : ""}`}
             >
                 <FaList className="text-lg" /> List
             </button>
