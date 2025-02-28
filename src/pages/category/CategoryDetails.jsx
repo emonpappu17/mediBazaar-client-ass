@@ -14,14 +14,9 @@ const CategoryDetails = () => {
     const [layout, setLayout] = useState("grid");
     const [search, setSearch] = useState("");
     const [sortBy, setSortBy] = useState("");
-    const [page, setPage] = useState(1);
-    // const [search, setSearch] = useState("");
-
-    // const [sortBy, setSortBy] = useState("");
     // const [page, setPage] = useState(1);
 
     const { data = [], isLoading, error } = useCategoryMedicines(category, sortBy, search);
-    console.log('i am category data', data);
     { error && <p className="text-red-500 text-center mt-4">Failed to load Medicines</p> }
 
     return (

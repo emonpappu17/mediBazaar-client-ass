@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import loginAnimation from '../../assets/loginAnimation.json'
 import Lottie from "lottie-react";
 import { FcGoogle } from "react-icons/fc";
@@ -14,6 +14,8 @@ const Login = () => {
     const { signIn, signInWithGoogle, resetPassword, signInWithGithub } = useAuth();
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState('');
+    const location = useLocation();
+    const navigateTo = location?.state || '/'
     const navigate = useNavigate();
     console.log(email);
 
@@ -28,7 +30,7 @@ const Login = () => {
         try {
             // User Login
             await signIn(data.email, data.password)
-            navigate('/')
+            navigate(navigateTo)
             toast.success("Account login successfully!");
         } catch (error) {
             console.log(error);
@@ -41,7 +43,7 @@ const Login = () => {
     const handleGoogleLogin = async () => {
         try {
             await signInWithGoogle();
-            navigate('/')
+            navigate(navigateTo)
             toast.success("Account login successfully!");
         } catch (error) {
             console.log(error);
@@ -53,7 +55,7 @@ const Login = () => {
     const handleGithubLogin = async () => {
         try {
             await signInWithGithub();
-            navigate('/')
+            navigate(navigateTo)
             toast.success("Account login successfully!");
         } catch (error) {
             console.log(error);

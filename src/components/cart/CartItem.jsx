@@ -3,6 +3,9 @@ import { FaTrashAlt } from "react-icons/fa";
 import Swal from "sweetalert2";
 
 const CartItem = ({ item, email, updateCart, removeItem }) => {
+
+    const hasDiscount = item.discount > 0;
+
     return (
         <div
             className="flex items-center gap-4 border-base-300 border-b pb-3"
@@ -14,12 +17,29 @@ const CartItem = ({ item, email, updateCart, removeItem }) => {
             />
             <div className="flex-1">
                 <h3 className="text-lg font-semibold">{item.name}</h3>
-                <p className="text-gray-600">
-                    Price:{" "}
-                    <span className="font-bold text-[#0D6FEC]">
-                        ${item.finalPrice.toFixed(2)}
-                    </span>
-                </p>
+
+                {/* Price Information */}
+                {hasDiscount ? (
+                    <div className=" flex items-center text-gray-600">
+                        <h1>Price:</h1>
+                        <div className={`flex items-center  gap-2 ml-1`}>
+                            <span className=" font-bold text-[#0D6FEC]">
+                                ${item.finalPrice.toFixed(2)}
+                            </span>
+                            <span className="text-base line-through text-base-content/50">
+                                ${item.price.toFixed(2)}
+                            </span>
+                        </div>
+                    </div>
+                ) : (
+                    <p className="text-gray-600">
+                        Price:{' '}
+                        <span className="font-bold text-[#0D6FEC]">
+                            ${item.finalPrice.toFixed(2)}
+                        </span>
+                    </p>
+                )}
+
                 <p className="text-gray-500">Discount: {item.discount}%</p>
 
                 {/* Quantity Controls */}
@@ -104,6 +124,7 @@ CartItem.propTypes = {
         finalPrice: PropTypes.number.isRequired,
         discount: PropTypes.number.isRequired,
         quantity: PropTypes.number.isRequired,
+        price: PropTypes.number.isRequired,
     }).isRequired,
     email: PropTypes.string.isRequired,
     updateCart: PropTypes.shape({

@@ -8,6 +8,7 @@ import Cart from "../pages/cart/Cart";
 import Checkout from "../pages/checkout/Checkout";
 import Layout from "../components/layout/Layout ";
 import CategoryDetails from "../pages/category/CategoryDetails";
+import PrivateRoute from "./PrivateRoute";
 
 const AppRoutes = () => {
     // const location = useLocation();
@@ -20,7 +21,7 @@ const AppRoutes = () => {
                 <Route element={<Layout />}> {/* ✅ Wrap pages inside Layout */}
                     <Route path="/" element={<Home />} />
                     <Route path="/shop" element={<Shop />} />
-                    <Route path="/cart" element={<Cart />} />
+                    <Route path="/cart" element={<PrivateRoute><Cart /></PrivateRoute>} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/category/:category" element={<CategoryDetails />}></Route>

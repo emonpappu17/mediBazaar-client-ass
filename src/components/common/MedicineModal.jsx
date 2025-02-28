@@ -13,10 +13,13 @@ import toast from 'react-hot-toast';
 const MedicineModal = ({ isOpen, closeModal, medicine }) => {
     const { user } = useAuth();
     const [quantity, setQuantity] = useState(1);
-    const { mutate: addToCart, isPending } = useAddToCart();
+    const { mutate: addToCart, } = useAddToCart();
     const navigate = useNavigate();
 
-    // console.log('is data done to go to bd', isPending);
+    // Determine if the product has a discount
+    const hasDiscount = medicine.discount > 0;
+    const originalPrice = medicine.price;
+    const discountPrice = originalPrice - (originalPrice * (medicine.discount / 100))
 
     // if (!medicine) return null; // Prevent rendering if no medicine is selected
 
@@ -91,7 +94,22 @@ const MedicineModal = ({ isOpen, closeModal, medicine }) => {
 
                             <div className="divider"></div>
 
-                            <p className="text-[#0D6FEC] font-extrabold text-3xl">${medicine.price}</p>
+                            {/* Price Information */}
+                            {hasDiscount ? (
+                                <div>
+                                    <div className={`flex items-center  gap-2`}>
+                                        <span className="text-3xl font-extrabold text-[#0D6FEC]">
+                                            ${discountPrice.toFixed(2)}
+                                        </span>
+                                        <span className="text-xl line-through text-base-content/50">
+                                            ${originalPrice.toFixed(2)}
+                                        </span>
+
+                                    </div>
+                                </div>
+                            ) : (
+                                <p className="text-[#0D6FEC] font-extrabold text-3xl">${medicine.price}</p>
+                            )}
 
                             <Description className={'text-gray-400'}>{medicine.description}</Description>
 
@@ -130,7 +148,7 @@ const MedicineModal = ({ isOpen, closeModal, medicine }) => {
                                 <p className="text-gray-400 "><strong>Company:</strong> {medicine.company}</p>
                                 <p className="text-gray-400 "><strong>Dosage:</strong> {medicine.massUnit}</p>
                                 <p className="text-gray-400 "><strong>Stock:</strong> {medicine.stock === 0 ? 'Unavailable' : medicine.stock}</p>
-                                <p className="text-gray-400 "><strong>Discount:</strong> {medicine.discount}</p>
+                                <p className="text-gray-400 "><strong>Discount:</strong> {medicine.discount}%</p>
                             </div>
                             <div className='flex justify-end'>
                                 <button
