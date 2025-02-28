@@ -1,10 +1,8 @@
-import { BrowserRouter, Route, Routes, useLocation } from "react-router";
+import { BrowserRouter, Route, Routes, } from "react-router";
 import Home from "../pages/home/Home";
 import NotFound from "../pages/error/NotFound";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
-import Navbar from "../components/layout/Navbar";
-import Footer from "../components/layout/Footer";
 import Shop from "../pages/shop/Shop";
 import Cart from "../pages/cart/Cart";
 import Checkout from "../pages/checkout/Checkout";

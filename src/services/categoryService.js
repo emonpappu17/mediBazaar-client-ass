@@ -13,37 +13,19 @@ export const useCategories = () => {
     })
 }
 
-
 // Category Medicines 
-const fetchCategoryMedicines = async (category) => {
+const fetchCategoryMedicines = async (category, sortBy, search) => {
     // console.log('category', category);
-
-    const { data } = await axiosCommon(`/medicines/category/${category}`);
+    const { data } = await axiosCommon(`/medicines/category/${category}?sortBy=${sortBy}&search=${search}`);
     console.log('fetchCategoryMedicines', data);
     return data;
 }
 
-export const useCategoryMedicines = (category) => {
-    // console.log('category', category);
+export const useCategoryMedicines = (category, sortBy, search) => {
+    console.log('category', category, sortBy, search);
     return useQuery({
-        queryKey: ['categoryMedicines', category],
-        queryFn: () => fetchCategoryMedicines(category),
+        queryKey: ['categoryMedicines', category, sortBy, search],
+        queryFn: () => fetchCategoryMedicines(category, sortBy, search),
         enabled: !!category, // Fetch only if category exists
     })
 }
-
-
-// const fetchCategoryMedicines = async (category) => {
-//     console.log(category);
-    
-//     const { data } = await axiosCommon.get(`/medicines/category/${category}`);
-//     return data;
-// };
-
-// export const useCategoryMedicines = (category) => {
-//     return useQuery({
-//         queryKey: ["categoryMedicines", category],
-//         queryFn: () => fetchCategoryMedicines(category),
-//         enabled: !!category, // Fetch only if category exists
-//     });
-// };

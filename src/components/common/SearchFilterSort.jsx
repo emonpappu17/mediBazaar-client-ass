@@ -1,9 +1,9 @@
-import { Combobox, ComboboxInput, Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react';
+import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
 import { FaFilter, FaSearch, FaSortAmountDown } from 'react-icons/fa';
-import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid'
+import { CheckIcon, } from '@heroicons/react/20/solid'
+import { useLocation } from 'react-router';
 
 const categories = [
     'All Categories',
@@ -24,6 +24,9 @@ const sortOptions = [
 ];
 
 const SearchFilterSort = ({ setSearch, category, setCategory, sortBy, setSortBy }) => {
+    const { pathname } = useLocation();
+    // console.log(pathname);
+    const hideCategory = pathname !== '/shop'
 
     return (
         <div className="flex flex-wrap md:flex-nowrap justify-between mb-6 gap-4 bg-base-100 p-4 rounded-lg drop-shadow-md">
@@ -77,43 +80,44 @@ const SearchFilterSort = ({ setSearch, category, setCategory, sortBy, setSortBy 
             </div> */}
 
             {/* Category Filter */}
-            <div className=' w-full '>
-                <Listbox value={category} onChange={setCategory}>
-                    <ListboxButton
-                        className={clsx(
-                            'relative block w-full rounded-lg cursor-pointer py-2 pr-8 pl-10 text-left text-sm/6  bg-[#0D6FEC] text-white',
-                            'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
-                        )}
-                    >
-                        <FaFilter
-                            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white"
-                            aria-hidden="true"
-                        />
-                        {category === '' ? 'All Categories' : category}
-                        {/* {category} */}
-                    </ListboxButton>
-                    <ListboxOptions
-                        modal={false}
-                        anchor="bottom"
-                        transition
-                        className={clsx(
-                            'w-[var(--button-width)] rounded-xl border border-base-300 bg-base-200 p-1 [--anchor-gap:var(--spacing-1)] focus:outline-none',
-                            'transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0 '
-                        )}
-                    >
-                        {categories.map((category, index) => (
-                            <ListboxOption
-                                key={index}
-                                value={category}
-                                className="group flex cursor-pointer items-center gap-2 rounded-lg py-1.5 px-3  data-[focus]:bg-[#0D6FEC] "
-                            >
-                                <CheckIcon className="invisible size-4 group-hover:fill-white fill-base-content group-data-[selected]:visible " />
-                                <div className="text-sm/6 text-base-content group-hover:text-white ">{category}</div>
-                            </ListboxOption>
-                        ))}
-                    </ListboxOptions>
-                </Listbox>
-            </div>
+            {!hideCategory &&
+                <div className=' w-full '>
+                    <Listbox value={category} onChange={setCategory}>
+                        <ListboxButton
+                            className={clsx(
+                                'relative block w-full rounded-lg cursor-pointer py-2 pr-8 pl-10 text-left text-sm/6  bg-[#0D6FEC] text-white',
+                                'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
+                            )}
+                        >
+                            <FaFilter
+                                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white"
+                                aria-hidden="true"
+                            />
+                            {category === '' ? 'All Categories' : category}
+                            {/* {category} */}
+                        </ListboxButton>
+                        <ListboxOptions
+                            modal={false}
+                            anchor="bottom"
+                            transition
+                            className={clsx(
+                                'w-[var(--button-width)] rounded-xl border border-base-300 bg-base-200 p-1 [--anchor-gap:var(--spacing-1)] focus:outline-none',
+                                'transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0 '
+                            )}
+                        >
+                            {categories.map((category, index) => (
+                                <ListboxOption
+                                    key={index}
+                                    value={category}
+                                    className="group flex cursor-pointer items-center gap-2 rounded-lg py-1.5 px-3  data-[focus]:bg-[#0D6FEC] "
+                                >
+                                    <CheckIcon className="invisible size-4 group-hover:fill-white fill-base-content group-data-[selected]:visible " />
+                                    <div className="text-sm/6 text-base-content group-hover:text-white ">{category}</div>
+                                </ListboxOption>
+                            ))}
+                        </ListboxOptions>
+                    </Listbox>
+                </div>}
 
 
             {/* Sort Options */}

@@ -25,8 +25,10 @@ const DiscountList = () => {
                 }}
                 loop={true}
                 autoplay={{ delay: 3000, disableOnInteraction: false }}
-                pagination={{ clickable: true }}
+                // pagination={{ clickable: true }}
                 navigation
+                className=""
+               
             >
                 {isLoading
                     ? Array.from({ length: 6 }).map((_, index) => (
