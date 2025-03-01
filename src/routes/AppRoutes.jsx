@@ -11,12 +11,8 @@ import CategoryDetails from "../pages/category/CategoryDetails";
 import PrivateRoute from "./PrivateRoute";
 
 const AppRoutes = () => {
-    // const location = useLocation();
-    // console.log('location', location);
-
     return (
         <BrowserRouter>
-            {/* <Navbar /> */}
             <Routes>
                 <Route element={<Layout />}> {/* ✅ Wrap pages inside Layout */}
                     <Route path="/" element={<Home />} />
@@ -26,26 +22,13 @@ const AppRoutes = () => {
                     <Route path="/register" element={<Register />} />
                     <Route path="/category/:category" element={<CategoryDetails />}></Route>
                 </Route>
-                {/* Public Routes */}
-                {/* <Route path="/" element={<Home />} />
-                <Route path="/shop" element={<Shop />}></Route> */}
-
-                {/* Private Routes */}
-                {/* <Route path="/cart" element={<Cart />}></Route>
-                <Route path="/checkout" element={<Checkout />}></Route> */}
-
-                {/* Authentication */}
-                {/* <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} /> */}
-
 
                 {/* Checkout Page (without Navbar/Footer) */}
-                <Route path="/checkout" element={<Checkout />} />
+                <Route path="/checkout" element={<PrivateRoute><Checkout /></PrivateRoute>} />
 
                 {/* Error Page */}
                 <Route path="*" element={<NotFound />} />
             </Routes>
-            {/* <Footer></Footer> */}
         </BrowserRouter>
     );
 };
