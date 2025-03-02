@@ -29,7 +29,7 @@ const BackToTop = () => {
             <Button
                 icon={FaArrowUp}  // Pass icon to Button component
                 onclick={scrollToTop}
-                className="fixed bottom-5 right-5  z-10 text-white p-3 rounded-full shadow-lg transition-opacity opacity-100"
+                className="fixed bottom-5 right-5  z-10 text-white p-3 rounded-full shadow-lg  opacity-100 transition-all duration-300 "
             />
         )
     );

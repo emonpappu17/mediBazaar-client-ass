@@ -1,4 +1,4 @@
-import BannerSlider from "./BannerSlider";
+import BannerSlider from "../../components/home/BannerSlider";
 import CategoryList from "../../components/home/CategoryList";
 import DiscountList from "../../components/home/DiscountList";
 import ParallaxSection from "../../components/home/ParallaxSection";

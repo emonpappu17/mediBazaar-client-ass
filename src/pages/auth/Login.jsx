@@ -80,7 +80,7 @@ const Login = () => {
         <div className="flex h-auto items-center justify-center bg-base-200 ">
             <div className="md:flex flex-row my-10  md:my-30 rounded-3xl overflow-hidden">
                 {/* Animation side*/}
-                <div className="bg-primary  flex items-center">
+                <div className="bg-[#0D6FEC] mt-2  flex items-center">
                     <div className="w-90  md:mr-5  ">
                         <Lottie animationData={loginAnimation} loop={true} />
                     </div>
@@ -98,7 +98,8 @@ const Login = () => {
                             type="email"
                             placeholder="Email"
                             onChange={(e) => setEmail(e.target.value)}
-                            className="mt-3 p-3 w-full bg-base-200 rounded border-0 outline-primary focus:outline-1"
+                            className="mt-3 w-full p-3 bg-base-200 rounded border-0 outline-base-content focus:outline-1"
+                            // className="mt-3 p-3 w-full bg-base-200 rounded border-0 outline-[#0D6FEC]  focus:outline-1"
                             required
                         />
                         {errors.email && <p className="text-red-500 text-sm mt-2">{errors.email.message}</p>}
@@ -108,7 +109,8 @@ const Login = () => {
                             {...register("password", { required: "Password is required", minLength: 6 })}
                             type="password"
                             placeholder="Password"
-                            className="mt-3 w-full p-3 bg-base-200 rounded border-0 outline-primary focus:outline-1"
+                            className="mt-3 w-full p-3 bg-base-200 rounded border-0 outline-base-content focus:outline-1"
+                            // className="mt-3 w-full p-3 bg-base-200 rounded border-0 outline-[#0D6FEC]  focus:outline-1"
                             required
                         />
                         {errors.password && <p className="text-red-500 text-sm mt-2">Password must be at least 6 characters</p>}
@@ -125,12 +127,12 @@ const Login = () => {
 
                     {/* Forgot password */}
                     <div className='space-y-1'>
-                        <button onClick={() => handleResetPassword(email)} className='cursor-pointer text-xs hover:underline text-base-content hover:text-primary'>
+                        <button onClick={() => handleResetPassword(email)} className='cursor-pointer text-xs hover:underline text-base-content hover:text-[#0D6FEC] mt-2'>
                             Forgot password?
                         </button>
                     </div>
 
-                    <span className="mt-3"><Link to={'/register '} className="font-bold hover:text-primary">Sign up</Link>  or Login with</span>
+                    <span className="mt-3"><Link to={'/register '} className="font-bold hover:text-[#0D6FEC] mt-2">Sign up</Link>  or Login with</span>
                     {/* Social Login */}
                     <div className="flex gap-2 mt-2">
                         <i className=" text-3xl cursor-pointer mr-2" onClick={handleGoogleLogin}> <FcGoogle /></i>

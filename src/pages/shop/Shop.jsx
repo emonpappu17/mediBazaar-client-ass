@@ -7,6 +7,7 @@ import Pagination from '../../components/common/Pagination';
 import SkeletonMedicineCard from '../../components/shop/SkeletonMedicineCard';
 import Lottie from 'lottie-react';
 import emptyAnimation from '../../assets/empty.json'
+import BackToTop from '../../components/common/BackToTop';
 
 const Shop = () => {
     const [layout, setLayout] = useState("grid");
@@ -71,6 +72,7 @@ const Shop = () => {
 
             {/* Pagination UI */}
             <Pagination currentPage={page} totalPages={data?.totalPages || 1} onPageChange={setPage}></Pagination>
+            <BackToTop></BackToTop>
         </div >
     );
 };

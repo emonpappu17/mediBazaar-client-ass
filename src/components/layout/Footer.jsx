@@ -151,7 +151,7 @@ const Footer = () => {
                             type="email"
                             name="email"
                             placeholder="Enter your email"
-                            className="w-full md:w-auto p-2 rounded-md outline-none mb-4 bg-base-100"
+                            className="w-full md:w-auto p-2 rounded-md outline-none mb-4 bg-base-100 border-none"
                             required
                         />
                         <Button className="mt-2 md:mt-0 md:ml-2 py-2 px-4 rounded-md" text="Subscribe"></Button>

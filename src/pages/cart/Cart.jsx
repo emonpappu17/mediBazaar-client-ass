@@ -5,6 +5,7 @@ import emptyCartAnimation from "../../assets/emptyCart.json";
 import SkeletonCartItem from "../../components/cart/SkeletonCartItem";
 import CartItem from "../../components/cart/CartItem";
 import CartFooter from "../../components/cart/CartFooter";
+import BackToTop from "../../components/common/BackToTop";
 
 const Cart = () => {
     const { user, loading } = useAuth();
@@ -62,6 +63,7 @@ const Cart = () => {
                         />
                     </div>
                 )}
+            <BackToTop></BackToTop>
         </div >
     );
 };

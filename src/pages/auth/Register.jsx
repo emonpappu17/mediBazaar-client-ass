@@ -81,7 +81,7 @@ const Register = () => {
         <div className="flex h-auto items-center justify-center bg-base-200 ">
             <div className="md:flex flex-row my-10 md:my-20 rounded-3xl overflow-hidden">
                 {/* Animation side */}
-                <div className="bg-primary flex items-center">
+                <div className="bg-[#0D6FEC] flex items-center">
                     <div className="w-90 md:mr-5">
                         <Lottie animationData={signupAnimation} loop={true} />
                     </div>
@@ -161,7 +161,7 @@ const Register = () => {
                     </form>
 
                     <span className="mt-3">
-                        <Link to={'/login'} className="font-bold hover:text-primary">
+                        <Link to={'/login'} className="font-bold hover:text-[#0D6FEC]">
                             Login
                         </Link>{' '}
                         or Signup with
