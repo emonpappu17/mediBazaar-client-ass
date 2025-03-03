@@ -17,7 +17,6 @@ const Login = () => {
     const location = useLocation();
     const navigateTo = location?.state || '/'
     const navigate = useNavigate();
-    console.log(email);
 
     const {
         register,

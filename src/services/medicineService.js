@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { axiosCommon } from "../hooks/useAxiosCommon"
+import axiosPublic from "./axiosPublic";
 
 const fetchMedicines = async ({ queryKey }) => {
     const [, page, limit, sortBy, category, search] = queryKey;
 
-    const { data } = await axiosCommon(`/medicines?page=${page}&limit=${limit}&sortBy=${sortBy}&category=${category}&search=${search}`)
+    const { data } = await axiosPublic(`/medicines?page=${page}&limit=${limit}&sortBy=${sortBy}&category=${category}&search=${search}`)
 
     // console.log('all medicine', data);
 

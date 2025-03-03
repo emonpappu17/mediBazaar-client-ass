@@ -3,6 +3,7 @@ import { createContext, useEffect, useMemo, useState } from "react";
 import app from "../services/firebase";
 import { createUserWithEmailAndPassword, getAuth, GithubAuthProvider, GoogleAuthProvider, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
 import { saveUserToDB } from "../services/userService";
+import axiosPublic from "../services/axiosPublic";
 
 export const AuthContext = createContext();
 const auth = getAuth(app);
@@ -12,7 +13,8 @@ const githubProvider = new GithubAuthProvider();
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
-    console.log(user);
+    const [tokenStored, setTokenStored] = useState(false);
+    console.log(tokenStored);
 
     // Creating user
     const createUser = (email, password) => {
@@ -26,9 +28,26 @@ const AuthProvider = ({ children }) => {
 
     // Getting current login user
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             setUser(currentUser);
-            setLoading(false);
+            if (currentUser) {
+                const userInfo = { email: currentUser?.email };
+                const { data } = await axiosPublic.post('/jwt', userInfo)
+                if (data?.token) {
+                    localStorage.setItem('access-token', data.token);
+                    setLoading(false);
+                    setTokenStored(true)
+                } else {
+                    setLoading(false)
+                    setTokenStored(false)
+                }
+            }
+            else {
+                localStorage.removeItem('access-token');
+                setLoading(false);
+                setTokenStored(false)
+            }
+
         })
         return () => unsubscribe();
     }, []);
@@ -63,6 +82,7 @@ const AuthProvider = ({ children }) => {
         // storing google user to db
         await saveUserToDB(userData)
     }
+
     // Github Sign-In
     const signInWithGithub = async () => {
         const result = await signInWithPopup(auth, githubProvider)
@@ -81,6 +101,7 @@ const AuthProvider = ({ children }) => {
         user,
         setUser,
         loading,
+        tokenStored,
         createUser,
         signIn,
         updateUserProfile,
@@ -88,7 +109,7 @@ const AuthProvider = ({ children }) => {
         logOut,
         signInWithGoogle,
         signInWithGithub
-    }), [user, loading])
+    }), [user, loading, tokenStored])
 
     return (
         <AuthContext value={contextValue}>

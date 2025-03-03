@@ -1,9 +1,9 @@
 
-import { axiosCommon } from "../hooks/useAxiosCommon";
+import axiosPublic from "./axiosPublic";
 
 export const saveUserToDB = async (userData) => {
     try {
-        const { data } = await axiosCommon.post(`/users`, userData)
+        const { data } = await axiosPublic.post(`/users`, userData)
         return data;
     } catch (err) {
         console.log("Error saving user:", err);

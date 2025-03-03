@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { axiosCommon } from "../hooks/useAxiosCommon"
+import axiosPublic from "./axiosPublic";
 
 const fetchDiscountMedicine = async () => {
-    const { data } = await axiosCommon('/discount-medicines');
+    const { data } = await axiosPublic('/discount-medicines');
     return data;
 }
 

@@ -39,7 +39,6 @@ const MedicineModal = ({ isOpen, closeModal, medicine }) => {
             addToCart(cartItem, {
                 onSuccess: () => {
                     console.log('i am in onSuccess');
-
                     toast.success("Item added to cart!");
                     closeModal();
                 },
