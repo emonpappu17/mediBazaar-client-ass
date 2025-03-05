@@ -7,26 +7,14 @@ const DashboardNav = ({ label, address, icon: Icon }) => {
             <NavLink
                 to={address}
                 end
-                // className="flex items-center gap-2 p-3 hover:bg-primary rounded-md"
                 className={({ isActive }) =>
                     isActive
-                        ? "text-[#0D6FEC] border-b-[#0D6FEC] border-b flex items-center" // Active state
-                        : "text-base-content hover:text-[#0D6FEC] border-b-transparent hover:border-b-[#0D6FEC] flex items-center" // Inactive state
+                        ? "text-white p-2 rounded-[10px] bg-[#0D6FEC] flex items-center gap-2 " // Active 
+                        : "text-base-content hover:text-white p-2 rounded-[10px] hover:bg-[#0D6FEC]  flex items-center gap-2 transition-all duration-300" // Inactive 
                 }
             >
                 {Icon}{label}
             </NavLink>
-
-            {/* <NavLink
-                to="/"
-                className={({ isActive }) =>
-                    isActive
-                        ? "text-[#0D6FEC] border-b-[#0D6FEC] border-b" // Active state
-                        : "text-base-content hover:text-[#0D6FEC] border-b-transparent hover:border-b-[#0D6FEC]" // Inactive state
-                }
-            >
-                Home
-            </NavLink> */}
         </div>
     );
 };

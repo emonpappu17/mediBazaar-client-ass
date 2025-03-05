@@ -8,9 +8,6 @@ import DashboardNav from "../../../components/common/DashboardNav";
 const AdminDashboard = () => {
     return (
         <>
-            {/* <NavLink to="/dashboard" className="flex items-center gap-2 p-3 hover:bg-primary rounded-md">
-                <MdSpaceDashboard /> Dashboard
-            </NavLink> */}
             <DashboardNav
                 address={'/dashboard'}
                 label={'Dashboard'}

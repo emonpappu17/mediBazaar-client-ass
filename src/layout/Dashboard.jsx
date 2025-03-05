@@ -3,32 +3,28 @@ import { Outlet } from "react-router";
 // import AdminSidebar from "../pages/dashboard/admin/AdminSidebar";
 // import AdminNavbar from "../pages/dashboard/admin/AdminNavbar";
 import Sidebar from "../pages/dashboard/Sidebar";
+import AdminNavbar from "../pages/dashboard/admin/AdminNavbar";
+import { useState } from "react";
 
 const Dashboard = () => {
+    const [isActive, setActive] = useState(false)
+
+    const handleToggle = () => {
+        setActive(!isActive)
+    }
     return (
-        <div className="flex h-screen">
+        <div className="md:flex min-h-screen">
             {/* Sidebar */}
-            <Sidebar />
+            <Sidebar isActive={isActive} handleToggle={handleToggle} />
 
             {/* Main Content */}
-            <div className="flex-1 p-6 bg-gray-100 overflow-y-auto">
-                <Outlet /> {/* Loads the nested dashboard pages */}
+            <div className="flex-1 overflow-y-auto">
+                <AdminNavbar isActive={isActive} handleToggle={handleToggle}></AdminNavbar>
+                <div className="p-6 border">
+                    <Outlet />
+                </div>
             </div>
         </div>
-
-
-        // <div className="flex h-screen">
-        //     {/* Sidebar */}
-        //     <AdminSidebar />
-
-        //     {/* Main Content */}
-        //     <div className="flex-1 flex flex-col">
-        //         <AdminNavbar />
-        //         <div className="p-6">
-        //             <Outlet /> {/* Renders nested routes like Dashboard Home */}
-        //         </div>
-        //     </div>
-        // </div>
     );
 };
 
