@@ -138,7 +138,7 @@ const Navbar = () => {
                                         Update Profile
                                     </Link>
                                     <Link
-                                        to="/dashboard/user"
+                                        to="/dashboard"
                                         className="block px-4 py-2 hover:bg-base-200 hover:text-[#0D6FEC]"
                                     >
                                         Dashboard

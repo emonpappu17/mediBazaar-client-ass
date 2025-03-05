@@ -1,12 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useAuth from "../hooks/useAuth";
-// import axiosPublic from "./axiosPublic";
 import useAxiosInstance from "./axiosInstance";
 
 export const addToCart = async ({ cartData, axiosInstance }) => {
-
     const { data } = await axiosInstance.post('/cart', cartData);
-    console.log(data);
+    // console.log(data);
     return data;
 }
 
@@ -34,9 +32,9 @@ const fetchCart = async ({ email, axiosInstance }) => {
 
 // Get all cart
 export const useCart = () => {
-    const { user, loading, tokenStored } = useAuth();
+    const { user, tokenStored } = useAuth();
     const axiosInstance = useAxiosInstance();
-    console.log('useCart 1st');
+    // console.log('useCart 1st');
 
     return useQuery({
         queryKey: ["cart", user?.email],
@@ -65,7 +63,7 @@ export const useUpdateCart = () => {
 
 // Remove Cart Item
 const removeCartItem = async ({ email, medicineId, axiosInstance }) => {
-    console.log(email, medicineId);
+    // console.log(email, medicineId);
 
     const result = await axiosInstance.delete(`/cart/${email}/${medicineId}`)
     console.log('remove result', result);
@@ -74,7 +72,7 @@ const removeCartItem = async ({ email, medicineId, axiosInstance }) => {
 
 export const useRemoveCartItem = () => {
     const queryClient = useQueryClient();
-    const axiosInstance = useAxiosInstance(); // ✅ Move inside hook
+    const axiosInstance = useAxiosInstance(); 
 
     return useMutation({
         mutationFn: (data) => removeCartItem({ ...data, axiosInstance }),
@@ -87,14 +85,14 @@ export const useRemoveCartItem = () => {
 
 // Clear Cart
 const clearCart = async ({ email, axiosInstance }) => {
-    console.log(email);
+    // console.log(email);
 
     await axiosInstance.delete(`/cart/${email}`)
 }
 
 export const useClearCart = () => {
     const queryClient = useQueryClient();
-    const axiosInstance = useAxiosInstance(); // ✅ Move inside hook
+    const axiosInstance = useAxiosInstance();
 
     return useMutation({
         mutationFn: (email) => clearCart({ email, axiosInstance }),

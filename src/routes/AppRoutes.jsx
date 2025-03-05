@@ -6,9 +6,18 @@ import Register from "../pages/auth/Register";
 import Shop from "../pages/shop/Shop";
 import Cart from "../pages/cart/Cart";
 import Checkout from "../pages/checkout/Checkout";
-import Layout from "../components/layout/Layout ";
+// import Layout from "../components/layout/Layout ";
 import CategoryDetails from "../pages/category/CategoryDetails";
 import PrivateRoute from "./PrivateRoute";
+import Layout from "../layout/Layout ";
+import Dashboard from "../layout/Dashboard";
+// import ManageUsers from "../pages/dashboard/admin/ManageUsers";
+import DashboardHome from "../components/AdminDashboard/home/DashboardHome";
+import ManageUsers from "../components/AdminDashboard/users/ManageUsers";
+import ManageCategory from "../components/AdminDashboard/category/ManageCategory";
+import ManagePayment from "../components/AdminDashboard/payment/ManagePayment";
+import ManageSales from "../components/AdminDashboard/sales/ManageSales";
+import ManageAdvertise from "../components/AdminDashboard/advertise/ManageAdvertise";
 
 const AppRoutes = () => {
     return (
@@ -25,6 +34,23 @@ const AppRoutes = () => {
 
                 {/* Checkout Page (without Navbar/Footer) */}
                 <Route path="/checkout" element={<PrivateRoute><Checkout /></PrivateRoute>} />
+
+                {/* Dashboard Routes */}
+
+                <Route path="/dashboard" element={
+                    <PrivateRoute>
+                        <Dashboard />
+                    </PrivateRoute>
+                }>
+                    {/* <Route index element={<DashboardHome />} />
+                    <Route path="manage-users" element={<ManageUsers />} /> */}
+                    <Route index element={<DashboardHome />}></Route>
+                    <Route path="users" element={<ManageUsers />}></Route>
+                    <Route path="category" element={<ManageCategory />}></Route>
+                    <Route path="payment" element={<ManagePayment />}></Route>
+                    <Route path="sales" element={<ManageSales />}></Route>
+                    <Route path="advertise" element={<ManageAdvertise />}></Route>
+                </Route>
 
                 {/* Error Page */}
                 <Route path="*" element={<NotFound />} />

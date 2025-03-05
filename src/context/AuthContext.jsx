@@ -47,7 +47,6 @@ const AuthProvider = ({ children }) => {
                 setLoading(false);
                 setTokenStored(false)
             }
-
         })
         return () => unsubscribe();
     }, []);
@@ -79,7 +78,7 @@ const AuthProvider = ({ children }) => {
             role: "user"
         }
 
-        // storing google user to db
+        // Storing google user to db
         await saveUserToDB(userData)
     }
 
