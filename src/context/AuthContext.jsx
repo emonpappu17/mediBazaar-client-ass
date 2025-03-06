@@ -14,7 +14,7 @@ const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [tokenStored, setTokenStored] = useState(false);
-    console.log(tokenStored);
+    console.log(user);
 
     // Creating user
     const createUser = (email, password) => {
@@ -72,9 +72,12 @@ const AuthProvider = ({ children }) => {
     // Google Sign-In
     const signInWithGoogle = async () => {
         const result = await signInWithPopup(auth, googleProvider)
+        console.log('signInWithGoogle', result);
+
         const userData = {
             email: result.user.email,
-            name: result.displayName || "No Name",
+            name: result.user.displayName,
+            // image: result.user.photoURL,
             role: "user"
         }
 
@@ -87,7 +90,8 @@ const AuthProvider = ({ children }) => {
         const result = await signInWithPopup(auth, githubProvider)
         const userData = {
             email: result.user.email,
-            name: result.displayName || "No Name",
+            name: result.user.displayName,
+            // image: result.user.photoURL,
             role: "user"
         }
 

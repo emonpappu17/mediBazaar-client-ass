@@ -1,51 +1,44 @@
 // import useAuth from "../../hooks/useAuth";
 
 import { FaAlignJustify } from "react-icons/fa";
+import { RxCross1 } from "react-icons/rx";
+import useAuth from "../../../hooks/useAuth";
+import avatarImg from '../../../assets/placeholder.jpg'
 
 const AdminNavbar = ({ isActive, handleToggle }) => {
-    // const { user, logOut } = useAuth();
-
+    const { user } = useAuth();
     return (
-        // <div className="bg-base-100 shadow-md py-4 px-6 flex justify-between items-center">
-        //     <h2 className="text-xl font-bold">Admin Dashboard</h2>
-        //     <div className="flex items-center gap-4">
-        //         <p className="text-lg">Emon howlader</p>
-        //         <button className="btn btn-sm btn-outline" >
-        //             Logout
-        //         </button>
-        //     </div>
-        // </div>
-        <div className="navbar bg-base-100 shadow-sm">
-
-            <button onClick={handleToggle} className="flex-1 ">
-                <FaAlignJustify />
-            </button>
-            <div className="flex gap-2 ">
-                <input type="text" placeholder="Search" className="input input-bordered w-24 md:w-auto" />
-                <div className="dropdown dropdown-end">
-                    <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-                        <div className="w-10 rounded-full">
-                            <img
-                                alt="Tailwind CSS Navbar component"
-                                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                        </div>
-                    </div>
-                    <ul
-                        tabIndex={0}
-                        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                        <li>
-                            <a className="justify-between">
-                                Profile
-                                <span className="badge">New</span>
-                            </a>
-                        </li>
-                        <li><a>Settings</a></li>
-                        <li><a>Logout</a></li>
-                    </ul>
+        <div className="  py-4 px-6 flex justify-between items-center ">
+            <h2 className="text-xl font-bold"> Dashboard</h2>
+            <div className="flex items-center gap-4 ">
+                <div>
+                    <p className="">{user?.displayName}</p>
+                    <p className="text-right text-base-content/50">  Admin</p>
                 </div>
+
+
+                <div className="w-10 rounded-full  overflow-hidden">
+                    {/* <img
+                        alt="Tailwind CSS Navbar component"
+                        src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" /> */}
+
+
+                    <img
+                        src={user && user?.photoURL ? user?.photoURL : avatarImg}
+                        alt="profile"
+                        // className="size-8 rounded-full"
+                        referrerPolicy='no-referrer' />
+                </div>
+                <button onClick={handleToggle} className="md:hidden cursor-pointer  hover:text-[#0D6FEC] text-2xl">
+                    {isActive ? <FaAlignJustify /> : <RxCross1 />}
+                </button>
             </div>
         </div>
     );
 };
 
 export default AdminNavbar;
+
+
+
+
