@@ -21,6 +21,7 @@
     "firebase": "^11.2.0",
     "framer-motion": "^12.3.1",
     "lottie-react": "^2.4.1",
+    "lucide": "^0.477.0",
     "prop-types": "^15.8.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import AdminDashboard from "./admin/AdminDashboard";
-import logo from '../../../public/websiteLogo.png'
+import logo from '/websiteLogo.png'
 import DashboardNav from "../../components/common/DashboardNav";
 import { LuLogOut } from "react-icons/lu";
 import { FaRegUser } from "react-icons/fa";
@@ -52,7 +52,7 @@ const Sidebar = ({ isActive, handleToggle }) => {
 
 
             {/* Sidebar */}
-            <div className={` w-64 bg-base-200  p-5 flex flex-col justify-between md:translate-x-0  overflow-x-hidden absolute md:fixed inset-y-0 left-0 ${isActive && '-translate-x-full'} transition-all duration-300`}>
+            <div className={` w-64 bg-base-200  p-5 flex flex-col justify-between md:translate-x-0  overflow-x-hidden absolute md:fixed inset-y-0 left-0 ${isActive && '-translate-x-full'} transition-all duration-300 z-30`}>
                 <div>
                     {/* Logo & Website Name */}
                     <Link to="/" className="text-base font-bold flex items-center justify-center  mb-5 shadow-lg rounded-2xl bg-base-200">

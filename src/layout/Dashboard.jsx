@@ -3,8 +3,10 @@ import { Outlet } from "react-router";
 // import AdminSidebar from "../pages/dashboard/admin/AdminSidebar";
 // import AdminNavbar from "../pages/dashboard/admin/AdminNavbar";
 import Sidebar from "../pages/dashboard/Sidebar";
-import AdminNavbar from "../pages/dashboard/admin/AdminNavbar";
+// import AdminNavbar from "../pages/dashboard/admin/AdminNavbar";
 import { useState } from "react";
+// import DashboardNav from "../components/common/DashboardNav";
+import DashboardNavbar from "../pages/dashboard/DashboardNavbar";
 
 const Dashboard = () => {
     const [isActive, setActive] = useState(true)
@@ -19,7 +21,9 @@ const Dashboard = () => {
 
             {/* Main Content */}
             <div className="flex-1  md:ml-64">
-                <AdminNavbar isActive={isActive} handleToggle={handleToggle}></AdminNavbar>
+                {/* <AdminNavbar isActive={isActive} handleToggle={handleToggle}></AdminNavbar> */}
+                {/* <DashboardNav isActive={isActive} handleToggle={handleToggle}></DashboardNav> */}
+                <DashboardNavbar isActive={isActive} handleToggle={handleToggle}></DashboardNavbar>
                 <div className="p-6">
                     <Outlet />
                 </div>
