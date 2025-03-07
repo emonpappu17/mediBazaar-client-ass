@@ -11,15 +11,14 @@ const DashboardNavbar = ({ isActive, handleToggle }) => {
     // console.log('DashboardNavbar', role);
 
     return (
-        <div className="  py-2 px-6 flex justify-between items-center ">
+        <div className="py-2 px-6 flex justify-between items-center ">
             <h2 className="text-xl font-bold"> Dashboard</h2>
             <div className="flex items-center gap-4 ">
                 <div>
                     <p className="text-sm  capitalize">{user?.displayName}</p>
-                    <p className="text-sm bg-[#35C7DF] w-fit ml-auto px-2 rounded-2xl text-white capitalize drop-shadow-lg">{role}</p>
+                    <p className="text-[12px] bg-[#35C7DF] w-fit ml-auto px-2 rounded-2xl text-white capitalize drop-shadow-lg">{role}</p>
                 </div>
-
-                <div className="size-12 rounded-full  overflow-hidden">
+                <div className="size-12 rounded-full overflow-hidden">
                     <img
                         src={user && user?.photoURL ? user?.photoURL : avatarImg}
                         alt="profile"

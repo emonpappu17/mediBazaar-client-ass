@@ -38,7 +38,7 @@ const Register = () => {
             const userData = {
                 email: data.email,
                 name: data.username,
-                // image: imageUrl,
+                image: imageUrl,
                 role: data.role,
             }
             await saveUserToDB(userData);

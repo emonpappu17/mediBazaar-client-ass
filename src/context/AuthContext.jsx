@@ -77,7 +77,7 @@ const AuthProvider = ({ children }) => {
         const userData = {
             email: result.user.email,
             name: result.user.displayName,
-            // image: result.user.photoURL,
+            image: result.user.photoURL,
             role: "user"
         }
 
@@ -91,7 +91,7 @@ const AuthProvider = ({ children }) => {
         const userData = {
             email: result.user.email,
             name: result.user.displayName,
-            // image: result.user.photoURL,
+            image: result.user.photoURL,
             role: "user"
         }
 

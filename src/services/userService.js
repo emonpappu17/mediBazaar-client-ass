@@ -1,11 +1,9 @@
-
-import { use } from "react";
 import useAuth from "../hooks/useAuth";
 import useAxiosInstance from "./axiosInstance";
 import axiosPublic from "./axiosPublic";
 import { useQuery } from '@tanstack/react-query'
 
-
+// Saving user to db
 export const saveUserToDB = async (userData) => {
     try {
         const { data } = await axiosPublic.post(`/users`, userData)
@@ -15,6 +13,7 @@ export const saveUserToDB = async (userData) => {
     }
 }
 
+// Getting user role
 export const useRole = () => {
     const { user, loading } = useAuth();
     const axiosInstance = useAxiosInstance();
@@ -28,4 +27,17 @@ export const useRole = () => {
         }
     })
     return [role, isLoading]
+}
+
+// Getting all users 
+export const useUsers = () => {
+    const axiosInstance = useAxiosInstance();
+    return useQuery({
+        queryKey: ['users'],
+        queryFn: async () => {
+            const { data } = await axiosInstance('/users')
+            // console.log('useUsers', data);
+            return data
+        }
+    })
 }
