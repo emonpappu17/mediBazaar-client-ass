@@ -18,7 +18,7 @@ const DashboardNavbar = ({ isActive, handleToggle }) => {
                     <p className="text-sm  capitalize">{user?.displayName}</p>
                     <p className="text-[12px] bg-[#35C7DF] w-fit ml-auto px-2 rounded-2xl text-white capitalize drop-shadow-lg">{role}</p>
                 </div>
-                <div className="size-12 rounded-full overflow-hidden">
+                <div className="size-11 rounded-full overflow-hidden">
                     <img
                         src={user && user?.photoURL ? user?.photoURL : avatarImg}
                         alt="profile"

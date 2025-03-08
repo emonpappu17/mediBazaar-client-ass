@@ -1,7 +1,7 @@
 import useAuth from "../hooks/useAuth";
 import useAxiosInstance from "./axiosInstance";
 import axiosPublic from "./axiosPublic";
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 // Saving user to db
 export const saveUserToDB = async (userData) => {
@@ -27,6 +27,24 @@ export const useRole = () => {
         }
     })
     return [role, isLoading]
+}
+
+
+// Updating user role
+export const useUpdateUserRole = () => {
+    const queryClient = useQueryClient();
+    const axiosInstance = useAxiosInstance();
+    return useMutation({
+        mutationFn: async ({ email, role }) => {
+            // console.log('role form updateuser', role);
+            const { data } = await axiosInstance.patch(`/users/${email}`, { role })
+            // console.log('useUpdateUserRole', data);
+            return data
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['role'])
+        }
+    })
 }
 
 // Getting all users 
