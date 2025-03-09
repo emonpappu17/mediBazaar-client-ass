@@ -10,7 +10,7 @@ const ManageUsers = () => {
 
     return (
         <>
-            <div className="overflow-x-auto drop-shadow-md rounded-lg">
+            <div className="overflow-x-auto drop-shadow-md rounded-lg lg:mx-16">
                 <table className="min-w-full bg-base-100 rounded-lg">
                     <thead className="bg-base-200">
                         <tr className="border-b border-base-300">

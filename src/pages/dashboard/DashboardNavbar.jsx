@@ -4,14 +4,28 @@ import { RxCross1 } from "react-icons/rx";
 import useAuth from "../../hooks/useAuth";
 import avatarImg from '../../assets/placeholder.jpg'
 import { useRole } from "../../services/userService";
+import { useEffect, useState } from "react";
 
 const DashboardNavbar = ({ isActive, handleToggle }) => {
     const { user } = useAuth();
     const [role] = useRole();
-    // console.log('DashboardNavbar', role);
+
+    const [scrollY, setScrollY] = useState(0);
+
+
+    const handleScroll = () => {
+        setScrollY(window.scrollY);
+    }
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll)
+        }
+    }, [])
 
     return (
-        <div className="py-2 px-6 flex justify-between items-center ">
+        <div className={`py-2 px-6 flex justify-between items-center ${scrollY > 0 ? ' shadow-md ' : ''} bg-base-100 sticky top-0 z-20`}>
             <h2 className="text-xl font-bold"> Dashboard</h2>
             <div className="flex items-center gap-4 ">
                 <div>
