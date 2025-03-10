@@ -12,14 +12,14 @@ const RoleUpdateModal = ({ user, isModalOpen, selectedRole, setSelectedRole, clo
             <div className="fixed inset-0 flex items-center justify-center p-4">
                 <DialogPanel
                     transition
-                    className="w-full max-w-sm bg-base-100 dark:bg-base-800 rounded-lg shadow-xl p-6   duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
+                    className="w-full max-w-sm bg-base-100  rounded-lg shadow-xl p-6   duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
                 >
                     <DialogTitle className="text-lg font-medium text-base-content">Update Role for {user?.name}</DialogTitle>
                     <p className="mt-2 text-sm text-base-content/70">Select a new role from the dropdown below.</p>
 
                     <Listbox value={selectedRole} onChange={setSelectedRole}>
                         <div className="relative mt-4">
-                            <ListboxButton className="w-full bg-base-200 dark:bg-base-700 text-base-content rounded-md py-2 px-3 flex justify-between">
+                            <ListboxButton className="w-full bg-base-200  text-base-content rounded-md py-2 px-3 flex justify-between">
                                 <p>{selectedRole}</p>
                                 <p className="pointer-events-none">▼</p>
                             </ListboxButton>
@@ -39,7 +39,7 @@ const RoleUpdateModal = ({ user, isModalOpen, selectedRole, setSelectedRole, clo
                     </Listbox>
 
                     <div className="mt-6 flex justify-end gap-3">
-                        <button onClick={closeModal} className="px-4 py-2 bg-base-300 dark:bg-base-700 text-base-content rounded-md hover:bg-base-400 transition-colors">
+                        <button onClick={closeModal} className="px-4 py-2 bg-base-300  text-base-content rounded-md hover:bg-base-400 transition-colors">
                             Close
                         </button>
                         <Button text='Change Role' onclick={handleRoleUpdate} className='px-4 py-2 rounded-md'></Button>
