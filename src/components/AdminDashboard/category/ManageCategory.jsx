@@ -1,63 +1,104 @@
 import avatarImg from '../../../assets/placeholder.jpg';
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import Button from "../../common/Button";
-import { useCategories } from "../../../services/categoryService";
+import { useAddCategory, useCategories, useDeleteCategory } from "../../../services/categoryService";
 import { Dialog, DialogPanel, DialogTitle, } from "@headlessui/react";
 import { useState } from "react";
 import { useForm } from 'react-hook-form';
+import uploadImageToImgBB from '../../../services/imgbbService';
+import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
+import { format } from 'date-fns';
 
+const protectedCategories = [
+    "Tablet",
+    "Capsule",
+    "Syrup",
+    "Injection",
+    "Inhaler",
+    "Ointment",
+    "Powder",
+    "Other",
+    "Drops",
+];
 
 const ManageCategory = () => {
-    // const [isOpen, setIsOpen] = (false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    // experiment
-    const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm();
     const [previewImage, setPreviewImage] = useState(null);
+    const [imageText, setImageText] = useState('Upload image')
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const { register, handleSubmit, setValue, reset } = useForm();
 
-    // API Call
-    const { data, isLoading, error } = useCategories();
+    // API Calls
+    const { data, isLoading, error, refetch } = useCategories();
+    const { mutateAsync } = useAddCategory();
+    const { mutate } = useDeleteCategory()
+
+    // Handle Image
+    const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setImageText(file.name)
+            const imageUrl = URL.createObjectURL(file)
+            setPreviewImage(imageUrl)
+            setValue("categoryImage", file);
+        }
+    }
+
+    // Submitting form
+    const onSubmit = async (data) => {
+        if (!data.categoryImage) {
+            toast.error('Please upload a category image.');
+            return;
+        }
+        try {
+            setIsSubmitting(true)
+
+            // Upload Image
+            const imageUrl = data.categoryImage
+            const image = await uploadImageToImgBB(imageUrl)
+
+            // Prepare data to send
+            const formData = {
+                categoryName: data.categoryName,
+                categoryImage: image
+            }
+
+            // Send Data
+            await mutateAsync(formData)
+
+            toast.success('Category added successfully!');
+
+            // Reset form
+            reset()
+            setPreviewImage(null)
+            setImageText('Upload image')
+
+            // Close Modal
+            setIsModalOpen(false)
+        } catch (err) {
+            console.log(err);
+            toast.error('Failed to add category. Please try again.');
+        } finally {
+            setIsSubmitting(false)
+        }
+    }
+
     if (isLoading) return <p>loading...</p>
     if (error) return <p>error</p>
-
-
-    // experiment
-    // Watch for image URL input
-    const imageUrl = watch("categoryImage");
-
-
-    // Handle file upload and convert to URL
-    const handleImageUpload = (event) => {
- 
-
-        const file = event.target.files[0];
-        // console.log('file', file);
-
-        if (file) {
-            const imageUrl = URL.createObjectURL(file);
-            // console.log('imageUrl', imageUrl);
-
-            setPreviewImage(imageUrl); // Show preview
-            setValue("categoryImage", file); // Store file in form state
-        }
-    };
-
-    const onSubmit = (data) => {
-        console.log("Form Data:", data);
-    };
-    console.log('watch imageUrl', imageUrl);
-    console.log('imageUrl || previewImage', imageUrl, previewImage);
 
     return (
         <div className="drop-shadow-md lg:mx-16">
 
             {/* Add Category */}
-            <div className="flex justify-end items-center">
+            <div className="flex justify-between items-center mb-4">
+                <h1 className='text-2xl font-semibold'>Total Category:{data.length}</h1>
                 <Button
                     onclick={() => setIsModalOpen(true)}
                     text=" + Add Category"
-                    className="rounded-lg py-2 px-3 mb-4"
-                >
-                </Button>
+                    className="rounded-lg py-2 px-3"
+                />
+
             </div>
 
             {/* Table */}
@@ -89,8 +130,7 @@ const ManageCategory = () => {
                                 </td>
 
                                 <td className="py-3 px-4 text-sm text-base-content text-nowrap">
-                                    {/* {category.createdAt} */}
-                                    {'2024-02-14'}
+                                    {format(new Date(category.createdAt), "yyyy-MM-dd")}
                                 </td>
 
                                 <td className="py-3 px-4 text-sm text-base-content">
@@ -101,7 +141,45 @@ const ManageCategory = () => {
                                         </button>
 
                                         {/* Delete Button */}
-                                        <button className="p-2 rounded-full transition-all duration-300 bg-red-100 hover:bg-red-500 text-red-500 hover:text-white shadow-md hover:shadow-lg cursor-pointer">
+                                        <button
+                                            onClick={
+                                                () => {
+                                                    if (protectedCategories.includes(category.categoryName)) {
+                                                        toast.error("This category cannot be deleted as it is for demo purposes.");
+                                                        return;
+                                                    }
+                                                    Swal.fire({
+                                                        title: "Are you sure?",
+                                                        text: `You won't be able to revert this again `,
+                                                        icon: "warning",
+                                                        showCancelButton: true,
+                                                        confirmButtonColor: "#3085d6",
+                                                        cancelButtonColor: "#d33",
+                                                        confirmButtonText: "Yes, clear it!"
+                                                    }).then(async (result) => {
+                                                        if (result.isConfirmed) {
+                                                            mutate(category._id, {
+                                                                onSuccess: () => {
+                                                                    Swal.fire({
+                                                                        title: "Deleted!",
+                                                                        text: `Category have be removed successfully.`,
+                                                                        icon: "success"
+                                                                    });
+                                                                    refetch()
+                                                                },
+                                                                onError: () => {
+                                                                    Swal.fire({
+                                                                        title: "Error!",
+                                                                        text: "Failed to delete category. Please try again.",
+                                                                        icon: "error"
+                                                                    });
+                                                                }
+                                                            })
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                            className="p-2 rounded-full transition-all duration-300 bg-red-100 hover:bg-red-500 text-red-500 hover:text-white shadow-md hover:shadow-lg cursor-pointer ">
                                             <FaTrashAlt className="text-lg" />
                                         </button>
                                     </div>
@@ -123,51 +201,49 @@ const ManageCategory = () => {
                         <p className="mt-2 text-sm text-base-content/70">Enter the details below to create a new category.</p>
 
                         {/* Name and Image */}
-                        {/* <div className="grid gap-4 mt-4">
+                        <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4 mt-4 ">
 
+                            {/* Name */}
                             <div className="grid gap-2 ">
                                 <label htmlFor="categoryName" className="text-sm font-medium text-base-content">Category Name</label>
                                 <input
                                     id="categoryName"
                                     type="text"
                                     placeholder="Enter category name"
+                                    required
+                                    {...register("categoryName")}
                                     className="w-full rounded-md text-sm p-2 bg-base-200 border-0 outline-base-content focus:outline-1"
                                 />
                             </div>
 
-
+                            {/* Image */}
                             <div className="grid gap-2">
-                                <label
-                                    // htmlFor="categoryImage" 
-                                    className="text-sm font-medium text-base-content ">Category Image</label>
-                                <div className="flex items-center gap-2">
-                                    <input
-                                        // id="categoryImage"
-                                        type="file"
-
-                                        placeholder="Image URL"
-                                        className="w-full rounded-md bg-base-200 p-2 text-sm border-0 outline-base-content focus:outline-1"
-                                    />
-                                    <span className="text-gray-500">or</span>
-                                    <button className="rounded-md btn">
-                                        <label>
-                                            <input
-                                                className='border text-sm cursor-pointer w-36 hidden'
-                                                type='file'
-                                                name='image'
-                                                id='image'
-                                                accept='image/*'
-                                                hidden
-                                            />
-                                            <div className=''>
-                                                Upload
-                                            </div>
+                                <label className="text-sm font-medium text-base-content">Category Image  Upload</label>
+                                <div className="flex items-center justify-between gap-2 ">
+                                    <div className=' px-5 py-3  border-4 border-dotted border-base-300 rounded-lg'>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            className="hidden"
+                                            id="fileUpload"
+                                            onChange={handleImageUpload}
+                                        />
+                                        <label htmlFor="fileUpload" className="btn cursor-pointer">
+                                            {/* Image Text */}
+                                            {imageText.length > 20 ? imageText.split('.')[0].slice(0, 15) + '....' + imageText.split('.')[1].slice(0, 3) : imageText}
                                         </label>
-                                    </button>
+                                    </div>
+                                    {previewImage && (
+                                        <img
+                                            src={previewImage}
+                                            alt="Preview"
+                                            className="size-20 object-cover rounded-md"
+                                        />
+                                    )}
                                 </div>
                             </div>
 
-
+                            {/* Description */}
                             <div className="grid gap-2">
                                 <label htmlFor="description" className="text-sm font-medium text-base-content">Description (Optional)</label>
                                 <textarea
@@ -176,102 +252,31 @@ const ManageCategory = () => {
                                     className="min-h-20 w-full rounded-md t p-2 text-sm  bg-base-200 border-0 outline-base-content focus:outline-1"
                                 />
                             </div>
-                        </div> */}
 
-
-                        {/* experiment */}
-                        <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4 mt-4">
-                            {/* Category Name */}
-                            <div className="grid gap-2">
-                                <label htmlFor="categoryName" className="text-sm font-medium text-base-content">
-                                    Category Name
-                                </label>
-                                <input
-                                    id="categoryName"
-                                    type="text"
-                                    placeholder="Enter category name"
-                                    {...register("categoryName", { required: "Category Name is required" })}
-                                    className="w-full rounded-md text-sm p-2 bg-base-200 border-0 outline-base-content focus:outline-1"
-                                />
-                                {errors.categoryName && <p className="text-red-500 text-xs">{errors.categoryName.message}</p>}
-                            </div>
-
-                            {/* Category Image (URL or Upload) */}
-                            <div className="grid gap-2">
-                                <label className="text-sm font-medium text-base-content">
-                                    Category Image (URL or Upload)
-                                </label>
-                                <div className="flex items-center gap-2">
-                                    <input
-                                        type="url"
-                                        placeholder="Image URL"
-                                        {...register("categoryImage")}
-                                      
-                                        // onChange lagano lagbe
-                                        className="w-full rounded-md bg-base-200 p-2 text-sm border-0 outline-base-content focus:outline-1"
-                                    />
-                                    <span className="text-gray-500">or</span>
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={handleImageUpload}
-                                        className="hidden"
-                                        id="fileUpload"
-                                    />
-                                    <label htmlFor="fileUpload" className="btn cursor-pointer">
-                                        Upload
-                                    </label>
-                                </div>
-                                {/* Preview Image */}
-                                {(imageUrl || previewImage) && (
-                                    <img
-                                        src={previewImage || imageUrl}
-                                        alt="Preview"
-                                        className="mt-2 w-32 h-32 object-cover rounded-md"
-                                    />
-                                )}
-                            </div>
-
-                            {/* Submit Button */}
-                            {/* <button type="submit" className="px-4 py-2 bg-primary text-primary-content rounded-md hover:bg-primary-focus transition-colors">
-                                Add Category
-                            </button> */}
-
-                            <div className="flex justify-end gap-3">
-                                <button
-                                    onClick={() => setIsModalOpen(false)}
-                                    className="px-4 py-2 bg-base-300  text-base-content rounded-md hover:bg-base-400 transition-colors cursor-pointer"
-                                >
+                            <div className=" flex justify-end gap-3">
+                                {/* <button type='button' onClick={() => setIsModalOpen(false)} className="px-4 py-2 bg-base-300  text-base-content rounded-md hover:bg-base-400 transition-colors cursor-pointer">
                                     Cancel
-                                </button>
-
+                                </button> */}
+                                <button type='button' onClick={() => setIsModalOpen(false)} className='btn'>Cancel</button>
                                 <Button
+                                    disabled={isSubmitting}
+                                    spinner={isSubmitting}
                                     type='submit'
                                     text='Add Category'
-                                    className='px-4 py-2 rounded-md'
+                                    className='px-4 py-2 rounded-md w-40'
                                 />
                             </div>
                         </form>
-
-
-
-
-                        {/* Footer Buttons */}
-                        {/* <div className="mt-6 flex justify-end gap-3">
-                            <button onClick={() => setIsModalOpen(false)} className="px-4 py-2 bg-base-300  text-base-content rounded-md hover:bg-base-400 transition-colors cursor-pointer">
-                                Cancel
-                            </button>
-
-                            <Button text='Add Category'
-                                className='px-4 py-2 rounded-md'
-                            ></Button>
-                        </div> */}
                     </DialogPanel>
                 </div>
             </Dialog>
-
         </div>
     );
 };
 
 export default ManageCategory;
+
+
+
+
+
