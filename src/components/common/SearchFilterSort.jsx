@@ -4,18 +4,19 @@ import PropTypes from 'prop-types';
 import { FaFilter, FaSearch, FaSortAmountDown } from 'react-icons/fa';
 import { CheckIcon, } from '@heroicons/react/20/solid'
 import { useLocation } from 'react-router';
+import { useCategories } from '../../services/categoryService';
 
-const categories = [
-    'All Categories',
-    'Tablet',
-    'Capsule',
-    'Syrup',
-    'Injection',
-    'Drops', 'Inhaler',
-    'Powder',
-    'Ointment',
-    'Other',
-]
+// const categories = [
+//     'All Categories',
+//     'Tablet',
+//     'Capsule',
+//     'Syrup',
+//     'Injection',
+//     'Drops', 'Inhaler',
+//     'Powder',
+//     'Ointment',
+//     'Other',
+// ]
 
 const sortOptions = [
     { value: '', label: 'Sort By' },
@@ -25,7 +26,11 @@ const sortOptions = [
 
 const SearchFilterSort = ({ setSearch, category, setCategory, sortBy, setSortBy }) => {
     const { pathname } = useLocation();
-    // console.log(pathname);
+
+    //API Call
+    const { data } = useCategories();
+    // console.log(data);
+
     const hideCategory = pathname !== '/shop'
 
     return (
@@ -105,14 +110,14 @@ const SearchFilterSort = ({ setSearch, category, setCategory, sortBy, setSortBy 
                                 'transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0 '
                             )}
                         >
-                            {categories.map((category, index) => (
+                            {data?.map((category, index) => (
                                 <ListboxOption
                                     key={index}
-                                    value={category}
+                                    value={category.categoryName}
                                     className="group flex cursor-pointer items-center gap-2 rounded-lg py-1.5 px-3  data-[focus]:bg-[#0D6FEC] "
                                 >
                                     <CheckIcon className="invisible size-4 group-hover:fill-white fill-base-content group-data-[selected]:visible " />
-                                    <div className="text-sm/6 text-base-content group-hover:text-white ">{category}</div>
+                                    <div className="text-sm/6 text-base-content group-hover:text-white ">{category.categoryName}</div>
                                 </ListboxOption>
                             ))}
                         </ListboxOptions>

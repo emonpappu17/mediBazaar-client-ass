@@ -4,8 +4,6 @@ import useAxiosInstance from "./axiosInstance";
 
 const fetchCategories = async () => {
     const res = await axiosPublic('/categories')
-    console.log(res.data);
-
     return res.data;
 }
 
@@ -23,10 +21,8 @@ export const useAddCategory = () => {
     const axiosInstance = useAxiosInstance();
     return useMutation({
         mutationFn: async (category) => {
-            console.log('useAddCategory category', category);
-
             const data = await axiosInstance.post('/categories', category)
-            return data
+            return data.data
         },
         onSuccess: () => {
             queryClient.invalidateQueries(['categories'])
@@ -37,23 +33,17 @@ export const useAddCategory = () => {
 
 // Deleting Category
 const deleteCategory = async ({ id, axiosInstance }) => {
-    // console.log(email);
-    console.log('id paisi deleteCategory theke?', id);
     await axiosInstance.delete(`/categories/${id}`)
 }
 
 export const useDeleteCategory = () => {
     const queryClient = useQueryClient();
     const axiosInstance = useAxiosInstance();
-
     return useMutation({
         mutationFn: (id) => {
-            console.log('id paisi?', id);
             deleteCategory({ id, axiosInstance })
         },
         onSuccess: () => {
-            console.log('touched');
-
             queryClient.invalidateQueries(['categories']);
         }
     })
@@ -68,7 +58,7 @@ const fetchCategoryMedicines = async (category, sortBy, search) => {
 }
 
 export const useCategoryMedicines = (category, sortBy, search) => {
-    console.log('category', category, sortBy, search);
+    // console.log('category', category, sortBy, search);
     return useQuery({
         queryKey: ['categoryMedicines', category, sortBy, search],
         queryFn: () => fetchCategoryMedicines(category, sortBy, search),
