@@ -49,16 +49,36 @@ export const useDeleteCategory = () => {
     })
 }
 
+// Updating Category
+const updateCategory = async ({ id, data, axiosInstance }) => {
+    const res = await axiosInstance.put(`/categories/${id}`, data)
+    console.log(res.data);
+
+    return res.data;
+}
+
+export const useUpdateCategory = () => {
+    const queryClient = useQueryClient();
+    const axiosInstance = useAxiosInstance();
+    return useMutation({
+        mutationFn: ({ id, data }) => {
+            console.log(data);
+            return updateCategory({ id, data, axiosInstance })
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['categories']);
+        }
+    })
+}
+
 
 // Category Medicines Filter
 const fetchCategoryMedicines = async (category, sortBy, search) => {
     const { data } = await axiosPublic(`/medicines/category/${category}?sortBy=${sortBy}&search=${search}`);
-    // console.log('fetchCategoryMedicines', data);
     return data;
 }
 
 export const useCategoryMedicines = (category, sortBy, search) => {
-    // console.log('category', category, sortBy, search);
     return useQuery({
         queryKey: ['categoryMedicines', category, sortBy, search],
         queryFn: () => fetchCategoryMedicines(category, sortBy, search),

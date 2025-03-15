@@ -34,7 +34,6 @@ const UserRow = ({ user }) => {
 
         try {
             await mutateAsync({ email: user.email, role: selectedRole })
-
             setIsModalOpen(false);
             toast.success('Role changed successfully')
         } catch (err) {

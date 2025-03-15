@@ -43,23 +43,6 @@ const AdminDashboard = () => {
                 label={'Manage Advertise'}
                 icon={<FaBullhorn />}>
             </DashboardNav>
-
-
-            {/* <NavLink to="/dashboard/users" className=" flex items-center gap-2 p-3 hover:bg-primary rounded-md">
-                <FaUsers /> Manage Users
-            </NavLink>
-            <NavLink to="/dashboard" className=" flex items-center gap-2 p-3 hover:bg-primary rounded-md">
-                <FaClipboardList /> Manage Category
-            </NavLink>
-            <NavLink to="/dashboard" className=" flex items-center gap-2 p-3 hover:bg-primary rounded-md">
-                <MdPayment /> Payment Management
-            </NavLink>
-            <NavLink to="/dashboard" className=" flex items-center gap-2 p-3 hover:bg-primary rounded-md">
-                <FaChartLine /> Sales Report
-            </NavLink>
-            <NavLink to="/dashboard" className=" flex items-center gap-2 p-3 hover:bg-primary rounded-md">
-                <FaBullhorn /> Manage Advertise
-            </NavLink> */}
         </>
     );
 };
