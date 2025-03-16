@@ -18,8 +18,8 @@ import ManageSales from "../components/AdminDashboard/sales/ManageSales";
 import ManageAdvertise from "../components/AdminDashboard/advertise/ManageAdvertise";
 import ManageAccount from "../components/AdminDashboard/account/ManageAccount";
 import ManageMedicines from "../components/SellerDashboard/medicine/ManageMedicines";
-import AskAdvertise from "../components/SellerDashboard/askAdvertise/AskAdvertise";
 import PaymentHistory from "../components/SellerDashboard/paymentHistory/PaymentHistory";
+import AskAdvertise from "../components/SellerDashboard/askAdvertise/AskAdvertise";
 
 const AppRoutes = () => {
     return (
@@ -52,7 +52,7 @@ const AppRoutes = () => {
                     <Route path="account" element={<ManageAccount />}></Route>
                     <Route path="medicines" element={<ManageMedicines />}></Route>
                     <Route path="paymentHistory" element={<PaymentHistory />}></Route>
-                    <Route path="askAdvertise" element={<AskAdvertise />}></Route>
+                    <Route path="askAdvertise" element={<AskAdvertise></AskAdvertise>}></Route>
                 </Route>
 
                 {/* Error Page */}
