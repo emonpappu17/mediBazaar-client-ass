@@ -91,7 +91,6 @@ const ManageCategory = () => {
                 formData = {
                     categoryName: data.categoryName,
                     categoryImage: imageUrl,
-
                 };
             }
 

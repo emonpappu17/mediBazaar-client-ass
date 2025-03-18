@@ -320,49 +320,82 @@
 import { Dialog, DialogPanel, DialogTitle, Listbox, ListboxButton, ListboxOption, ListboxOptions } from "@headlessui/react";
 import { useState } from "react";
 import { FaChevronDown, FaEdit, FaTrashAlt } from "react-icons/fa";
-import { useBanners, useSellerMedicineName } from "../../../services/bannerService";
+import { useAskAdvertisement, useBanners, useSellerMedicineName } from "../../../services/bannerService";
 import { MdCheck } from "react-icons/md";
+import toast from "react-hot-toast";
+import uploadImageToImgBB from "../../../services/imgbbService";
+import { Flag } from "lucide";
+import Button from "../../common/Button";
+import useAuth from "../../../hooks/useAuth";
 
 const AskAdvertise = () => {
     const [isModalOpen, setIsModalOpen] = useState(false); // State for modal open/close
     const [imagePreview, setImagePreview] = useState(null); // State for image preview
     const [imageText, setImageText] = useState("Upload Image"); // State for image upload text
+    const [imageFile, setImageFile] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false); // State for loading during submission
     const [selectedMedicine, setSelectedMedicine] = useState(null);
+    const [description, setDescription] = useState("");
+    const { user } = useAuth()
 
-
-
-    // const fakeMedicineNames = [
-    //     "Paracetamol",
-    //     "Ibuprofen",
-    //     "Amoxicillin",
-    //     "Cetirizine",
-    //     "Metformin",
-    //     "Azithromycin",
-    //     "Loratadine",
-    //     "Aspirin",
-    //     "Ciprofloxacin",
-    //     "Doxycycline",
-    // ];
+    // console.log(imageFile, selectedMedicine, description);
 
     // API Call
     const { data: advertises } = useBanners();
     const { data: sellerMedicine } = useSellerMedicineName();
-    console.log('MedicineName', sellerMedicine);
+    const { mutateAsync: askAdvertise } = useAskAdvertisement();
+    // console.log('MedicineName', sellerMedicine);
     // console.log(advertises);
 
     // Handle image upload
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(reader.result);
-            };
-            reader.readAsDataURL(file);
             setImageText(file.name);
+            const imageUrl = URL.createObjectURL(file);
+            setImagePreview(imageUrl)
+            setImageFile(file)
         }
     };
+
+    // handleSubmit 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsSubmitting(true)
+
+        try {
+            if (!selectedMedicine || !imageFile || !description) {
+                setIsSubmitting(false)
+                return toast.error('All fields are required!');
+            }
+
+            const imageUrl = await uploadImageToImgBB(imageFile);
+            // console.log('go the url', imageUrl);
+            const formData = {
+                name: selectedMedicine,
+                image: imageUrl,
+                description: description,
+                sellerEmail: user?.email,
+                status: 'Pending'
+            }
+            const data = await askAdvertise(formData)
+            if (data.insertedId) {
+                toast.success('Request for advertisement is sent successfully')
+            }
+            // close modal
+            setIsModalOpen(false)
+
+            // reset form
+            setSelectedMedicine(null);
+            setImageFile(null);
+            setDescription('');
+        } catch (err) {
+            console.log(err);
+            toast.error(err)
+        } finally {
+            setIsSubmitting(false);
+        }
+    }
 
 
     return (
@@ -453,7 +486,7 @@ const AskAdvertise = () => {
                                 Select a medicine, upload an image, and provide a description for your advertisement.
                             </p>
                             {/* Form */}
-                            <form className="grid gap-4 mt-4">
+                            <form onSubmit={handleSubmit} className="grid gap-4 mt-4">
 
                                 {/* Medicine Selection Dropdown */}
                                 <div className="grid gap-2">
@@ -500,10 +533,12 @@ const AskAdvertise = () => {
                                                 accept="image/*"
                                                 className="hidden"
                                                 id="fileUpload"
+
                                                 onChange={handleImageUpload}
                                             />
                                             <label htmlFor="fileUpload" className="btn cursor-pointer">
-                                                {imageText.length > 20 ? imageText.slice(0, 15) + "..." : imageText}
+                                                {/* {imageText.length > 20 ? imageText.slice(0, 15) + "..." : imageText} */}
+                                                {imageText.length > 20 ? imageText.split('.')[0].slice(0, 15) + '....' + (imageText.split('.')[1]?.slice(0, 3) || '') : imageText}
                                             </label>
                                         </div>
                                         {imagePreview && (
@@ -520,6 +555,8 @@ const AskAdvertise = () => {
                                 <div className="grid gap-2">
                                     <label className="text-sm font-medium text-base-content">Advertisement Description</label>
                                     <textarea
+                                        required
+                                        onChange={(e) => setDescription(e.target.value)}
                                         placeholder="Write a promotional description..."
                                         className="min-h-20 w-full rounded-md p-2 text-sm bg-base-200 border-0 outline-base-content focus:outline-1"
                                     />
@@ -534,12 +571,14 @@ const AskAdvertise = () => {
                                     >
                                         Cancel
                                     </button>
-                                    <button
-                                        type="submit"
-                                        className="btn bg-[#0D6FEC] hover:bg-[#35C7DF] text-white px-4 py-2 rounded-md w-40"
-                                    >
-                                        Add
-                                    </button>
+
+                                    <Button
+                                        disabled={isSubmitting}
+                                        spinner={isSubmitting}
+                                        type='submit'
+                                        text='Add advertise'
+                                        className='px-4 py-2 rounded-md w-40'
+                                    />
                                 </div>
                             </form>
                         </DialogPanel>
