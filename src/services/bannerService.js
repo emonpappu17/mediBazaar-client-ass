@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axiosPublic from "./axiosPublic";
 import useAxiosInstance from "./axiosInstance";
 import useAuth from "../hooks/useAuth";
@@ -33,12 +33,32 @@ export const useSellerMedicineName = () => {
 
 // Asking advertisement
 export const useAskAdvertisement = () => {
+    const queryClient = useQueryClient();
     const axiosInstance = useAxiosInstance();
+
     return useMutation({
-        mutationFn: async (formData) => {
-            const { data } = await axiosInstance.post('/advertisements', formData)
+        mutationFn: async ({ formData, controller }) => {
+            const { data } = await axiosInstance.post('/advertisements', formData, { signal: controller.signal })
             console.log(data);
             return data
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['Banners'])
+        }
+    })
+}
+
+export const useDeleteAdvertise = () => {
+    const queryClient = useQueryClient();
+    const axiosInstance = useAxiosInstance();
+    return useMutation({
+        mutationFn: async (id) => {
+            const { data } = await axiosInstance.delete(`/advertisements/${id}`)
+            console.log(data);
+            return data
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['Banners']);
         }
     })
 }

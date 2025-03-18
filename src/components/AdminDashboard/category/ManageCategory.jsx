@@ -14,6 +14,7 @@ const ManageCategory = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [currentCategory, setCurrentCategory] = useState(null);
+    const [controller, setController] = useState(null);
     const { register, handleSubmit, setValue, reset } = useForm();
 
     // API Calls
@@ -72,6 +73,10 @@ const ManageCategory = () => {
             let imageUrl = data.categoryImage;
             let formData = {};
 
+            // for cancel api execution
+            const newController = new AbortController();
+            setController(newController)
+
             // If in edit mode and no new image is uploaded, use the existing image
             if (editMode && !data.categoryImage && currentCategory.categoryImage) {
                 formData = {
@@ -81,7 +86,7 @@ const ManageCategory = () => {
             } else {
                 // Upload Image if new image is selected
                 if (data.categoryImage instanceof File) {
-                    imageUrl = await uploadImageToImgBB(data.categoryImage);
+                    imageUrl = await uploadImageToImgBB(data.categoryImage, newController);
                 } else if (!imageUrl && !editMode) {
                     toast.error('Please upload a category image.');
                     setIsSubmitting(false);
@@ -96,13 +101,13 @@ const ManageCategory = () => {
 
             // let result;
             if (editMode) {
-                const result = await updateCategory({ id: currentCategory._id, data: formData })
+                const result = await updateCategory({ id: currentCategory._id, data: formData, controller: newController })
                 if (result.modifiedCount > 0) {
                     toast.success('Category updated successfully!');
                 }
                 else { toast.success(result.message); }
             } else {
-                const result = await addCategory(formData);
+                const result = await addCategory({ formData, controller: newController });
                 if (result.message) {
                     toast.error(result.message);
                 } else {
@@ -117,7 +122,7 @@ const ManageCategory = () => {
             // Close Modal
             setIsModalOpen(false);
         } catch (err) {
-            console.log(err);
+            console.log(err.message);
             toast.error(`Failed to ${editMode ? 'update' : 'add'} category. Please try again.`);
         } finally {
             setIsSubmitting(false);
@@ -125,6 +130,10 @@ const ManageCategory = () => {
     };
 
     const handleCloseModal = () => {
+        if (controller) {
+            controller.abort();
+            console.log("API requests aborted");
+        }
         if (isSubmitting) {
             setIsSubmitting(false);
         }
@@ -133,6 +142,7 @@ const ManageCategory = () => {
         setEditMode(false);
         setCurrentCategory(null);
         setIsModalOpen(false);
+        setController(null)
     };
 
     if (isLoading) return <p>loading...</p>;

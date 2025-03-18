@@ -319,33 +319,33 @@
 
 import { Dialog, DialogPanel, DialogTitle, Listbox, ListboxButton, ListboxOption, ListboxOptions } from "@headlessui/react";
 import { useState } from "react";
-import { FaChevronDown, FaEdit, FaTrashAlt } from "react-icons/fa";
-import { useAskAdvertisement, useBanners, useSellerMedicineName } from "../../../services/bannerService";
+import { FaChevronDown, FaTrashAlt } from "react-icons/fa";
+import { useAskAdvertisement, useBanners, useDeleteAdvertise, useSellerMedicineName } from "../../../services/bannerService";
 import { MdCheck } from "react-icons/md";
 import toast from "react-hot-toast";
 import uploadImageToImgBB from "../../../services/imgbbService";
-import { Flag } from "lucide";
 import Button from "../../common/Button";
 import useAuth from "../../../hooks/useAuth";
+import Swal from "sweetalert2";
+import { format } from "date-fns";
 
 const AskAdvertise = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false); // State for modal open/close
-    const [imagePreview, setImagePreview] = useState(null); // State for image preview
-    const [imageText, setImageText] = useState("Upload Image"); // State for image upload text
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [imagePreview, setImagePreview] = useState(null);
+    const [imageText, setImageText] = useState("Upload Image");
     const [imageFile, setImageFile] = useState(null);
-    const [isSubmitting, setIsSubmitting] = useState(false); // State for loading during submission
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [selectedMedicine, setSelectedMedicine] = useState(null);
     const [description, setDescription] = useState("");
+    const [controller, setController] = useState(null);
+
     const { user } = useAuth()
 
-    // console.log(imageFile, selectedMedicine, description);
-
-    // API Call
+    // API Calls
     const { data: advertises } = useBanners();
     const { data: sellerMedicine } = useSellerMedicineName();
     const { mutateAsync: askAdvertise } = useAskAdvertisement();
-    // console.log('MedicineName', sellerMedicine);
-    // console.log(advertises);
+    const { mutate: deleteAdvertise } = useDeleteAdvertise();
 
     // Handle image upload
     const handleImageUpload = (e) => {
@@ -362,15 +362,19 @@ const AskAdvertise = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true)
-
         try {
             if (!selectedMedicine || !imageFile || !description) {
                 setIsSubmitting(false)
                 return toast.error('All fields are required!');
             }
 
-            const imageUrl = await uploadImageToImgBB(imageFile);
-            // console.log('go the url', imageUrl);
+            // for cancel api call
+            const newController = new AbortController();
+            setController(newController)
+
+            // uploading image to imgBB
+            const imageUrl = await uploadImageToImgBB(imageFile, newController);
+
             const formData = {
                 name: selectedMedicine,
                 image: imageUrl,
@@ -378,25 +382,45 @@ const AskAdvertise = () => {
                 sellerEmail: user?.email,
                 status: 'Pending'
             }
-            const data = await askAdvertise(formData)
+
+            // asking for advertisement
+            const data = await askAdvertise({ formData, controller: newController })
+
             if (data.insertedId) {
                 toast.success('Request for advertisement is sent successfully')
             }
-            // close modal
-            setIsModalOpen(false)
 
-            // reset form
-            setSelectedMedicine(null);
-            setImageFile(null);
-            setDescription('');
+            // close modal and reset form
+            resetForm();
         } catch (err) {
-            console.log(err);
-            toast.error(err)
+            toast.error(err.message)
         } finally {
             setIsSubmitting(false);
         }
     }
 
+    // Cancel modal
+    const handleCloseModal = () => {
+        if (controller) {
+            controller.abort();
+            console.log("API requests aborted");
+        }
+
+        // close modal and reset form
+        resetForm()
+    }
+
+    // reset form
+    const resetForm = () => {
+        setSelectedMedicine(null);
+        setImagePreview(null)
+        setImageText('Upload Image')
+        setImageFile(null);
+        setDescription('');
+        setIsModalOpen(false);
+        setIsSubmitting(false);
+        setController(null)
+    }
 
     return (
         <>
@@ -434,13 +458,12 @@ const AskAdvertise = () => {
                                     </td>
                                     <td className="py-3 px-4 text-sm text-base-content font-medium">{add.name}</td>
                                     <td className="py-3 px-4">
-                                        <p className={'bg-blue-50 text-blue-700 border-blue-200 w-fit px-2 py-1 inline-flex text-xs font-semibold rounded-full capitalize'}>
+                                        <p className={' inline-flex text-xs font-semibold  capitalize'}>
                                             {add.description}
                                         </p>
                                     </td>
                                     <td className="py-3 px-4 text-sm text-base-content text-nowrap">
-                                        {/* {format(new Date(add.createdAt), "yyyy-MM-dd")} */}
-                                        35-37-4787
+                                        {add.createdAt ? format(new Date(add.createdAt), "yyyy-MM-dd") : '2025-03-15'}
                                     </td>
                                     <td className="py-3 px-4">
                                         <span
@@ -457,13 +480,45 @@ const AskAdvertise = () => {
                                     <td className="py-3 px-4 text-sm text-base-content">
                                         <div className="flex gap-4">
                                             {/* Edit Button */}
-                                            <button
+                                            {/* <button
                                                 className="p-2 rounded-full transition-all duration-300 bg-blue-100 hover:bg-blue-500 text-blue-500 hover:text-white shadow-md hover:shadow-lg cursor-pointer">
                                                 <FaEdit className="text-lg" />
-                                            </button>
+                                            </button> */}
 
                                             {/* Delete Button */}
                                             <button
+                                                onClick={() => {
+                                                    Swal.fire({
+                                                        title: "Are you sure?",
+                                                        text: `You won't be able to revert this again`,
+                                                        icon: "warning",
+                                                        showCancelButton: true,
+                                                        confirmButtonColor: "#3085d6",
+                                                        cancelButtonColor: "#d33",
+                                                        confirmButtonText: "Yes, delete it!"
+                                                    }).then(async (result) => {
+                                                        if (result.isConfirmed) {
+                                                            deleteAdvertise(add._id, {
+                                                                onSuccess: () => {
+                                                                    Swal.fire({
+                                                                        title: "Deleted!",
+                                                                        text: `Category has been removed successfully.`,
+                                                                        icon: "success"
+                                                                    });
+                                                                    // refetch();
+                                                                },
+                                                                onError: () => {
+                                                                    Swal.fire({
+                                                                        title: "Error!",
+                                                                        text: "Failed to delete category. Please try again.",
+                                                                        icon: "error"
+                                                                    });
+                                                                }
+                                                            });
+                                                        }
+                                                    });
+                                                }}
+
                                                 className="p-2 rounded-full transition-all duration-300 bg-red-100 hover:bg-red-500 text-red-500 hover:text-white shadow-md hover:shadow-lg cursor-pointer">
                                                 <FaTrashAlt className="text-lg"
                                                 />
@@ -477,7 +532,10 @@ const AskAdvertise = () => {
                 </div>
 
                 {/* Modal for new advertisement request */}
-                <Dialog open={isModalOpen} onClose={() => setIsModalOpen(false)} className="relative z-50">
+                <Dialog
+                    open={isModalOpen}
+                    onClose={handleCloseModal}
+                    className="relative z-50">
                     <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
                     <div className="fixed inset-0 flex items-center justify-center p-4">
                         <DialogPanel className="w-full max-w-md bg-base-100 rounded-lg shadow-xl p-6">
@@ -533,7 +591,6 @@ const AskAdvertise = () => {
                                                 accept="image/*"
                                                 className="hidden"
                                                 id="fileUpload"
-
                                                 onChange={handleImageUpload}
                                             />
                                             <label htmlFor="fileUpload" className="btn cursor-pointer">
@@ -557,7 +614,7 @@ const AskAdvertise = () => {
                                     <textarea
                                         required
                                         onChange={(e) => setDescription(e.target.value)}
-                                        placeholder="Write a promotional description..."
+                                        placeholder="Write a beautiful promotional description..."
                                         className="min-h-20 w-full rounded-md p-2 text-sm bg-base-200 border-0 outline-base-content focus:outline-1"
                                     />
                                 </div>
@@ -566,7 +623,8 @@ const AskAdvertise = () => {
                                 <div className="flex justify-end gap-3">
                                     <button
                                         type="button"
-                                        onClick={() => setIsModalOpen(false)}
+                                        onClick={handleCloseModal}
+                                        // onClick={() => setIsModalOpen(false)}
                                         className="btn"
                                     >
                                         Cancel

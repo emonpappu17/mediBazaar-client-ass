@@ -20,8 +20,8 @@ export const useAddCategory = () => {
     const queryClient = useQueryClient();
     const axiosInstance = useAxiosInstance();
     return useMutation({
-        mutationFn: async (category) => {
-            const data = await axiosInstance.post('/categories', category)
+        mutationFn: async ({ category, controller }) => {
+            const data = await axiosInstance.post('/categories', category, { signal: controller.signal })
             return data.data
         },
         onSuccess: () => {
@@ -50,8 +50,8 @@ export const useDeleteCategory = () => {
 }
 
 // Updating Category
-const updateCategory = async ({ id, data, axiosInstance }) => {
-    const res = await axiosInstance.put(`/categories/${id}`, data)
+const updateCategory = async ({ id, data, axiosInstance, controller }) => {
+    const res = await axiosInstance.put(`/categories/${id}`, data, { signal: controller.signal })
     console.log(res.data);
 
     return res.data;
@@ -61,9 +61,9 @@ export const useUpdateCategory = () => {
     const queryClient = useQueryClient();
     const axiosInstance = useAxiosInstance();
     return useMutation({
-        mutationFn: ({ id, data }) => {
+        mutationFn: ({ id, data, controller }) => {
             console.log(data);
-            return updateCategory({ id, data, axiosInstance })
+            return updateCategory({ id, data, axiosInstance, controller })
         },
         onSuccess: () => {
             queryClient.invalidateQueries(['categories']);
