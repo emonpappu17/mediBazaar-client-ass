@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useAllAdvertisement, useBanners, useDeleteAdvertise, useUpdateAdvertiseStatus } from "../../../services/bannerService";
+import { useAllAdvertisement, useDeleteAdvertise, useUpdateAdvertiseStatus } from "../../../services/bannerService";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import { format } from "date-fns";
-import { FaCheck, FaChevronDown, FaExchangeAlt, FaTimes, FaToggleOff, FaToggleOn, FaTrashAlt } from "react-icons/fa";
+import { FaChevronDown, FaExchangeAlt, FaTrashAlt } from "react-icons/fa";
 import { Dialog, DialogPanel, DialogTitle, Listbox, ListboxButton, ListboxOption, ListboxOptions } from "@headlessui/react";
 import { MdCheck } from "react-icons/md";
 
@@ -11,49 +11,41 @@ const ManageAdvertise = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedAdvertise, setSelectedAdvertise] = useState(null);
     const [selectedAction, setSelectedAction] = useState(null); // "approve" or "reject"
-    // const [selectedAction, setSelectedAction] = useState(selectedAdvertise?.status); // "approve" or "reject"
 
-    console.log(selectedAdvertise);
-
+    // console.log(selectedAdvertise);
 
     // API Calls
     const { data: advertises } = useAllAdvertisement();
-    const { mutate: deleteAdvertise } = useDeleteAdvertise();
+    // const { mutate: deleteAdvertise } = useDeleteAdvertise();
     const { mutate: updateAdvertiseStatus } = useUpdateAdvertiseStatus();
-
-    // const { data: advertises, refetch } = useBanners();
-
-    // Open modal for approve/reject
-    // const openActionModal = (advertise, type) => {
-    //     setSelectedAdvertise(advertise);
-    //     setActionType(type);
-    //     setIsModalOpen(true);
-    // };
 
     // Open modal for action (approve/reject)
     const openActionModal = (advertise) => {
 
         setSelectedAdvertise(advertise);
-        setSelectedAction(advertise.status)
+        // setSelectedAction(advertise.status)
         setIsModalOpen(true);
     };
 
     // Handle approve/reject action
     const handleAction = () => {
-        console.log('hi');
+        // console.log('hi');
 
-        if (!selectedAdvertise || !selectedAction) return;
-        console.log('good bye');
+        if (!selectedAdvertise || !selectedAction) return toast.error("Choose an acton first.");;
+        // console.log('good bye');
 
+        console.log('selectedAction', selectedAction);
 
-        const newStatus = selectedAction === "approve" ? "Approved" : "Rejected";
+        const newStatus = selectedAction === "Approve" ? "Approved" : "Rejected";
+        console.log('newStatus', newStatus);
+
         updateAdvertiseStatus(
             { id: selectedAdvertise._id, status: newStatus },
             {
                 onSuccess: () => {
                     toast.success(`Advertisement ${newStatus.toLowerCase()} successfully!`);
-                    // refetch();
-                    setIsModalOpen(false); // Close modal after action
+                    setIsModalOpen(false);
+                    setSelectedAction(null) // Close modal after action
                 },
                 onError: () => {
                     toast.error("Failed to update advertisement status.");
@@ -62,49 +54,29 @@ const ManageAdvertise = () => {
         );
     };
 
-    // const { mutate: deleteAdvertise } = useDeleteAdvertise();
-    // const { mutate: updateAdvertiseStatus } = useUpdateAdvertiseStatus();
-
-    // Handle status change (Approve/Reject)
-    // const handleStatusChange = (id, newStatus) => {
-    //     updateAdvertiseStatus(
-    //         { id, status: newStatus },
-    //         {
-    //             onSuccess: () => {
-    //                 toast.success(`Advertisement ${newStatus.toLowerCase()} successfully!`);
-    //                 refetch();
-    //             },
-    //             onError: () => {
-    //                 toast.error("Failed to update advertisement status.");
-    //             },
-    //         }
-    //     );
-    // };
-
     // Handle delete advertisement
-    const handleDelete = (id) => {
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                deleteAdvertise(id, {
-                    onSuccess: () => {
-                        Swal.fire("Deleted!", "Advertisement has been deleted.", "success");
-                        // refetch();
-                    },
-                    onError: () => {
-                        Swal.fire("Error!", "Failed to delete advertisement.", "error");
-                    },
-                });
-            }
-        });
-    };
+    // const handleDelete = (id) => {
+    //     Swal.fire({
+    //         title: "Are you sure?",
+    //         text: "You won't be able to revert this!",
+    //         icon: "warning",
+    //         showCancelButton: true,
+    //         confirmButtonColor: "#3085d6",
+    //         cancelButtonColor: "#d33",
+    //         confirmButtonText: "Yes, delete it!",
+    //     }).then((result) => {
+    //         if (result.isConfirmed) {
+    //             deleteAdvertise(id, {
+    //                 onSuccess: () => {
+    //                     Swal.fire("Deleted!", "Advertisement has been deleted.", "success");
+    //                 },
+    //                 onError: () => {
+    //                     Swal.fire("Error!", "Failed to delete advertisement.", "error");
+    //                 },
+    //             });
+    //         }
+    //     });
+    // };
     return (
         // deepSeek 
         <div className="drop-shadow-md lg:mx-16">
@@ -151,13 +123,6 @@ const ManageAdvertise = () => {
                                 <td className="py-3 px-4 text-sm text-base-content">
                                     <div className="flex gap-4">
                                         {/* Action Button */}
-                                        {/* <button
-                                            onClick={() => openActionModal(ad)}
-                                            className="p-2 rounded-full transition-all duration-300 bg-blue-100 hover:bg-blue-500 text-blue-500 hover:text-white shadow-md hover:shadow-lg cursor-pointer"
-                                        >
-                                            Action
-                                        </button> */}
-
                                         <button
                                             onClick={() => openActionModal(ad)}
                                             className="p-2 rounded-full transition-all duration-300 bg-purple-100 hover:bg-purple-600 text-purple-600 hover:text-white shadow-md hover:shadow-lg cursor-pointer"
@@ -166,12 +131,12 @@ const ManageAdvertise = () => {
                                         </button>
 
                                         {/* Delete Button */}
-                                        <button
+                                        {/* <button
                                             onClick={() => handleDelete(ad._id)}
                                             className="p-2 rounded-full transition-all duration-300 bg-red-100 hover:bg-red-500 text-red-500 hover:text-white shadow-md hover:shadow-lg cursor-pointer"
                                         >
                                             <FaTrashAlt className="text-lg" />
-                                        </button>
+                                        </button> */}
                                     </div>
                                 </td>
                             </tr>
@@ -181,15 +146,16 @@ const ManageAdvertise = () => {
             </div>
 
             {/* Modal for Action (Approve/Reject) */}
-            <Dialog open={isModalOpen} onClose={() => setIsModalOpen(false)} className="relative z-50">
+            <Dialog open={isModalOpen} onClose={() => { setSelectedAction(null), setIsModalOpen(false) }} className="relative z-50">
                 <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
                 <div className="fixed inset-0 flex items-center justify-center p-4">
-                    <DialogPanel className="w-full max-w-md bg-base-100 rounded-lg shadow-xl p-6">
+                    <DialogPanel   transition className="w-full max-w-md bg-base-100 rounded-lg shadow-xl p-6   duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0">
                         <DialogTitle className="text-lg font-medium text-base-content">
                             Update Advertisement Status
                         </DialogTitle>
                         <p className="mt-2 text-sm text-base-content/70">
-                            Select an action for this advertisement.
+                            {/* Select an action for this advertisement. */}
+                            Approve advertisement will be shown in the banner
                         </p>
 
                         {/* Advertisement Details */}
@@ -218,7 +184,7 @@ const ManageAdvertise = () => {
                                         <p>{selectedAction ? selectedAction : "Choose an action"}</p>
                                         <FaChevronDown className="text-sm opacity-60" />
                                     </ListboxButton>
-                                    <ListboxOptions className="absolute mt-1 w-full bg-base-100 rounded-md shadow-lg max-h-60 overflow-auto border border-base-300">
+                                    {/* <ListboxOptions className="absolute mt-1 w-full bg-base-100 rounded-md shadow-lg max-h-60 overflow-auto border border-base-300">
                                         <ListboxOption
                                             value="approve"
                                             className="cursor-pointer select-none py-2 px-4 text-base-content hover:bg-base-200 flex justify-between items-center"
@@ -241,6 +207,55 @@ const ManageAdvertise = () => {
                                                 </>
                                             )}
                                         </ListboxOption>
+                                    </ListboxOptions> */}
+                                    <ListboxOptions className="absolute mt-1 w-full bg-base-100 rounded-md shadow-lg max-h-60 overflow-auto border border-base-300">
+
+                                        <ListboxOption
+                                            value={'Approve'}
+                                            className="cursor-pointer select-none py-2 px-4 text-base-content hover:bg-base-200 flex justify-between items-center"
+                                        >
+                                            {({ selected }) => (
+                                                <>
+                                                    <p className={selected ? "font-semibold" : "font-normal"}>
+                                                        {'Approve'}
+                                                    </p>
+                                                    {selected && <MdCheck className="h-5 w-5 text-[#0D6FEC]" />}
+                                                </>
+                                            )}
+                                        </ListboxOption>
+                                        <ListboxOption
+                                            value={'Reject'}
+                                            className="cursor-pointer select-none py-2 px-4 text-base-content hover:bg-base-200 flex justify-between items-center"
+                                        >
+                                            {({ selected }) => (
+                                                <>
+                                                    <p className={selected ? "font-semibold" : "font-normal"}>
+                                                        {'Reject'}
+                                                    </p>
+                                                    {selected && <MdCheck className="h-5 w-5 text-[#0D6FEC]" />}
+                                                </>
+                                            )}
+                                        </ListboxOption>
+
+                                        {/* advertises?.map((advertise) => (
+                                                <ListboxOption
+                                                    key={advertise._id}
+                                                    value={advertise.status}
+                                                    className="cursor-pointer select-none py-2 px-4 text-base-content hover:bg-base-200 flex justify-between items-center"
+                                                >
+                                                    {({ selected }) => (
+                                                        <>
+                                                            <p className={selected ? "font-semibold" : "font-normal"}>
+                                                                {advertise.status}
+                                                            </p>
+                                                            {selected && <MdCheck className="h-5 w-5 text-[#0D6FEC]" />}
+                                                        </>
+                                                    )}
+                                                </ListboxOption>
+                                            ))
+                                        ) : (
+                                            <p className="py-2 px-4 text-gray-400">No medicines available</p>
+                                        )} */}
                                     </ListboxOptions>
                                 </div>
                             </Listbox>
@@ -250,7 +265,7 @@ const ManageAdvertise = () => {
                         <div className="mt-6 flex justify-end gap-3">
                             <button
                                 type="button"
-                                onClick={() => setIsModalOpen(false)}
+                                onClick={() => { setSelectedAction(null), setIsModalOpen(false) }}
                                 className="btn"
                             >
                                 Cancel
@@ -258,12 +273,13 @@ const ManageAdvertise = () => {
                             <button
                                 type="button"
                                 onClick={handleAction}
-                                className={`btn ${selectedAction === "approve"
+                                className={`btn ${selectedAction === "Approve"
                                     ? "bg-green-500 hover:bg-green-600"
-                                    : "bg-red-500 hover:bg-red-600"
+                                    : selectedAction === "Reject" ? "bg-red-500 hover:bg-red-600" : 'bg-[#0D6FEC] hover:bg-[#35C7DF]'
+                                    // : "bg-red-500 hover:bg-red-600"
                                     } text-white`}
                             >
-                                {selectedAction === "approve" ? "Approve" : "Reject"}
+                                {selectedAction === "Approve" ? "Approve" : selectedAction === "Reject" ? "Reject" : 'Update'}
                             </button>
                         </div>
                     </DialogPanel>

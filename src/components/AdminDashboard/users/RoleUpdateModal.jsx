@@ -2,6 +2,7 @@ import { Dialog, DialogPanel, DialogTitle, Listbox, ListboxButton, ListboxOption
 import PropTypes from 'prop-types';
 import { MdCheck } from 'react-icons/md';
 import Button from '../../common/Button';
+import { FaChevronDown } from 'react-icons/fa';
 
 const roles = ["admin", "seller", "user"];
 
@@ -19,9 +20,10 @@ const RoleUpdateModal = ({ user, isModalOpen, selectedRole, setSelectedRole, clo
 
                     <Listbox value={selectedRole} onChange={setSelectedRole}>
                         <div className="relative mt-4">
-                            <ListboxButton className="w-full bg-base-200  text-base-content rounded-md py-2 px-3 flex justify-between">
+                            <ListboxButton className="w-full bg-base-200  text-base-content rounded-md py-2 px-3 flex justify-between items-center">
                                 <p>{selectedRole}</p>
-                                <p className="pointer-events-none">▼</p>
+                                {/* <p className="pointer-events-none">▼</p> */}
+                                <FaChevronDown className="text-sm opacity-60" />
                             </ListboxButton>
                             <ListboxOptions className="absolute mt-1 w-full bg-base-100 dark:bg-base-800 rounded-md shadow-lg max-h-60 overflow-auto z-10">
                                 {roles.map((role) => (

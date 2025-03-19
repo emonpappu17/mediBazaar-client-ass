@@ -20,7 +20,7 @@ export const useAddCategory = () => {
     const queryClient = useQueryClient();
     const axiosInstance = useAxiosInstance();
     return useMutation({
-        mutationFn: async ({ category, controller }) => {
+        mutationFn: async ({ formData: category, controller }) => {
             const data = await axiosInstance.post('/categories', category, { signal: controller.signal })
             return data.data
         },
