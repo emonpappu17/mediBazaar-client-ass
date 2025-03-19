@@ -15,7 +15,7 @@ export const useBanners = () => {
     })
 }
 
-// Getting Added medicine name
+// Getting Added medicine name (Seller)
 export const useSellerMedicineName = () => {
     const axiosSecure = useAxiosInstance();
     const { user, tokenStored } = useAuth()
@@ -31,7 +31,20 @@ export const useSellerMedicineName = () => {
     })
 }
 
-// Asking advertisement
+// Getting all advertisements for (Admin)
+export const useAllAdvertisement = () => {
+    // const queryClient = useQueryClient();
+    const axiosInstance = useAxiosInstance();
+    return useQuery({
+        queryKey: ['allAdvertisement'],
+        queryFn: async () => {
+            const res = await axiosInstance('/advertisements');
+            return res.data;
+        }
+    })
+}
+
+// Asking advertisement (Seller)
 export const useAskAdvertisement = () => {
     const queryClient = useQueryClient();
     const axiosInstance = useAxiosInstance();
@@ -48,6 +61,7 @@ export const useAskAdvertisement = () => {
     })
 }
 
+// Delete
 export const useDeleteAdvertise = () => {
     const queryClient = useQueryClient();
     const axiosInstance = useAxiosInstance();
@@ -59,6 +73,22 @@ export const useDeleteAdvertise = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries(['Banners']);
+        }
+    })
+}
+
+// Change status
+export const useUpdateAdvertiseStatus = () => {
+    const queryClient = useQueryClient();
+    const axiosInstance = useAxiosInstance();
+    return useMutation({
+        mutationFn: async ({ id, status }) => {
+            const { data } = await axiosInstance.patch(`/advertisements/${id}`, { status })
+            console.log(data);
+            return data
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['allAdvertisement']);
         }
     })
 }
