@@ -10,6 +10,7 @@ import SellerDashboard from "./seller/SellerDashboard";
 
 const Sidebar = ({ isActive }) => {
     const [role] = useRole();
+   
 
     return (
         <>
@@ -23,7 +24,8 @@ const Sidebar = ({ isActive }) => {
                     </Link>
                     <nav className="space-y-2">
                         {/* Dynamic admin layout */}
-                        {role === 'admin' || role === 'user' && <AdminDashboard />}
+                        {role === 'admin' && <AdminDashboard />}
+                        {/* {role === 'admin' || role === 'user' && <AdminDashboard />} */}
                         {role === 'seller' && <SellerDashboard />}
                     </nav>
                 </div>

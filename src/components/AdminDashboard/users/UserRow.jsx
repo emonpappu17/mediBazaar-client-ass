@@ -79,7 +79,6 @@ const UserRow = ({ user }) => {
     );
 };
 
-
 UserRow.propTypes = {
     user: PropTypes.shape({
         name: PropTypes.string.isRequired,
@@ -89,6 +88,5 @@ UserRow.propTypes = {
         createdAt: PropTypes.string.isRequired,
     }).isRequired,
 };
-
 
 export default UserRow;

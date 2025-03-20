@@ -4,10 +4,15 @@ import useAxiosInstance from "./axiosInstance";
 import useAuth from "../hooks/useAuth";
 
 const fetchBanners = async () => {
-    const res = await axiosPublic('/advertised-medicines');
+    const res = await axiosPublic('/advertisements/approved');
     return res.data;
 }
+// const fetchBanners = async () => {
+//     const res = await axiosPublic('/advertised-medicines');
+//     return res.data;
+// }
 
+// Get advertisement for Banner (Banner)
 export const useBanners = () => {
     return useQuery({
         queryKey: ['Banners'],
@@ -15,16 +20,28 @@ export const useBanners = () => {
     })
 }
 
-// Getting Added medicine name (Seller)
+// Getting seller Added medicine name (Seller)
 export const useSellerMedicineName = () => {
     const axiosSecure = useAxiosInstance();
     const { user, tokenStored } = useAuth()
     return useQuery({
         queryKey: ['sellerMedicineName', user?.email],
         queryFn: async () => {
-            // console.log(user?.email);
             const { data } = await axiosSecure(`/sellerMedicine/${user?.email}`)
-            // console.log('useSellerMedicineName data', data);
+            return data
+        },
+        enabled: !!user?.email && tokenStored
+    })
+}
+
+// Getting seller added advertisements (Seller)
+export const useSellerAds = () => {
+    const axiosSecure = useAxiosInstance();
+    const { user, tokenStored } = useAuth()
+    return useQuery({
+        queryKey: ['sellerAdds', user?.email],
+        queryFn: async () => {
+            const { data } = await axiosSecure(`/advertisements?sellerEmail=${user?.email}`)
             return data
         },
         enabled: !!user?.email && tokenStored
@@ -52,7 +69,7 @@ export const useAskAdvertisement = () => {
     return useMutation({
         mutationFn: async ({ formData, controller }) => {
             const { data } = await axiosInstance.post('/advertisements', formData, { signal: controller.signal })
-            console.log(data);
+            // console.log(data);
             return data
         },
         onSuccess: () => {
@@ -61,14 +78,14 @@ export const useAskAdvertisement = () => {
     })
 }
 
-// Delete
+// Delete (Seller)
 export const useDeleteAdvertise = () => {
     const queryClient = useQueryClient();
     const axiosInstance = useAxiosInstance();
     return useMutation({
         mutationFn: async (id) => {
             const { data } = await axiosInstance.delete(`/advertisements/${id}`)
-            console.log(data);
+            // console.log(data);
             return data
         },
         onSuccess: () => {
@@ -84,7 +101,7 @@ export const useUpdateAdvertiseStatus = () => {
     return useMutation({
         mutationFn: async ({ id, status }) => {
             const { data } = await axiosInstance.patch(`/advertisements/${id}`, { status })
-            console.log(data);
+            // console.log(data);
             return data
         },
         onSuccess: () => {
