@@ -1,6 +1,7 @@
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import Button from "../../common/Button";
 import PropTypes from "prop-types";
+import ImageUpload from "../../common/ImageUpload";
 
 const CategoryModal = ({ isModalOpen, handleCloseModal, editMode, handleSubmit, onSubmit, register, handleImageUpload, imageText, previewImage, isSubmitting }) => {
     return (
@@ -40,36 +41,12 @@ const CategoryModal = ({ isModalOpen, handleCloseModal, editMode, handleSubmit, 
                         </div>
 
                         {/* Image */}
-                        <div className="grid gap-2">
-                            <label className="text-sm font-medium text-base-content">Category Image Upload</label>
-                            <div className="flex items-center justify-between gap-2">
-                                <div className='px-5 py-3 border-4 border-dotted border-base-300 rounded-lg'>
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        className="hidden"
-                                        id="fileUpload"
-                                        onChange={handleImageUpload}
-                                    />
-                                    <label htmlFor="fileUpload" className="btn cursor-pointer">
-                                        {/* Image Text */}
-                                        {imageText.length > 20 ? imageText.split('.')[0].slice(0, 15) + '....' + (imageText.split('.')[1]?.slice(0, 3) || '') : imageText}
-                                    </label>
-                                </div>
-                                {previewImage && (
-                                    <img
-                                        src={previewImage}
-                                        alt="Preview"
-                                        className="size-20 object-cover rounded-md"
-                                    />
-                                )}
-                            </div>
-                            {editMode && (
-                                <p className="text-xs text-base-content/70">
-                                    Leave blank to keep the current image
-                                </p>
-                            )}
-                        </div>
+                        <ImageUpload
+                            handleImageUpload={handleImageUpload}
+                            imageText={imageText}
+                            previewImage={previewImage}
+                            editMode={editMode}
+                            title={'Category Image Upload'} />
 
                         {/* Description */}
                         <div className="grid gap-2">

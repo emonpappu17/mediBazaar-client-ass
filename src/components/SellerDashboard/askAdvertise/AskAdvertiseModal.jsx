@@ -3,6 +3,7 @@ import { Dialog, DialogPanel, DialogTitle, Listbox, ListboxButton, ListboxOption
 import PropTypes from 'prop-types';
 import { FaChevronDown } from 'react-icons/fa';
 import { MdCheck } from 'react-icons/md';
+import ImageUpload from '../../common/ImageUpload';
 
 const AskAdvertiseModal = ({ isModalOpen, handleCloseModal, handleSubmit, selectedMedicine, setSelectedMedicine, sellerMedicine, handleImageUpload, imageText, imagePreview, isSubmitting, setDescription }) => {
     return (
@@ -12,7 +13,7 @@ const AskAdvertiseModal = ({ isModalOpen, handleCloseModal, handleSubmit, select
             className="relative z-50">
             <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
             <div className="fixed inset-0 flex items-center justify-center p-4">
-                <DialogPanel className="w-full max-w-md bg-base-100 rounded-lg shadow-xl p-6">
+                <DialogPanel transition className="w-full max-w-md bg-base-100 rounded-lg shadow-xl p-6 duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0">
                     <DialogTitle className="text-lg font-medium text-base-content">Ask for Advertisement</DialogTitle>
                     <p className="mt-2 text-sm text-base-content/70">
                         Select a medicine, upload an image, and provide a description for your advertisement.
@@ -56,30 +57,12 @@ const AskAdvertiseModal = ({ isModalOpen, handleCloseModal, handleSubmit, select
                         </div>
 
                         {/* Image Upload */}
-                        <div className="grid gap-2">
-                            <label className="text-sm font-medium text-base-content">Advertisement Image</label>
-                            <div className="flex items-center justify-between gap-2">
-                                <div className="px-5 py-3 border-4 border-dotted border-base-300 rounded-lg">
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        className="hidden"
-                                        id="fileUpload"
-                                        onChange={handleImageUpload}
-                                    />
-                                    <label htmlFor="fileUpload" className="btn cursor-pointer">
-                                        {imageText.length > 20 ? imageText.split('.')[0].slice(0, 15) + '....' + (imageText.split('.')[1]?.slice(0, 3) || '') : imageText}
-                                    </label>
-                                </div>
-                                {imagePreview && (
-                                    <img
-                                        src={imagePreview}
-                                        alt="Preview"
-                                        className="size-20 object-cover rounded-md"
-                                    />
-                                )}
-                            </div>
-                        </div>
+                        <ImageUpload
+                            handleImageUpload={handleImageUpload}
+                            imageText={imageText}
+                            previewImage={imagePreview}
+                            title={'Advertisement Image Upload'}
+                        />
 
                         {/* Description */}
                         <div className="grid gap-2">

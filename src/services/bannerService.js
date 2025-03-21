@@ -7,10 +7,6 @@ const fetchBanners = async () => {
     const res = await axiosPublic('/advertisements/approved');
     return res.data;
 }
-// const fetchBanners = async () => {
-//     const res = await axiosPublic('/advertised-medicines');
-//     return res.data;
-// }
 
 // Get advertisement for Banner (Banner)
 export const useBanners = () => {
@@ -50,7 +46,6 @@ export const useSellerAds = () => {
 
 // Getting all advertisements for (Admin)
 export const useAllAdvertisement = () => {
-    // const queryClient = useQueryClient();
     const axiosInstance = useAxiosInstance();
     return useQuery({
         queryKey: ['allAdvertisement'],
@@ -69,7 +64,6 @@ export const useAskAdvertisement = () => {
     return useMutation({
         mutationFn: async ({ formData, controller }) => {
             const { data } = await axiosInstance.post('/advertisements', formData, { signal: controller.signal })
-            // console.log(data);
             return data
         },
         onSuccess: () => {
@@ -85,7 +79,6 @@ export const useDeleteAdvertise = () => {
     return useMutation({
         mutationFn: async (id) => {
             const { data } = await axiosInstance.delete(`/advertisements/${id}`)
-            // console.log(data);
             return data
         },
         onSuccess: () => {
@@ -94,14 +87,13 @@ export const useDeleteAdvertise = () => {
     })
 }
 
-// Change status
+// Change status (Admin)
 export const useUpdateAdvertiseStatus = () => {
     const queryClient = useQueryClient();
     const axiosInstance = useAxiosInstance();
     return useMutation({
         mutationFn: async ({ id, status }) => {
             const { data } = await axiosInstance.patch(`/advertisements/${id}`, { status })
-            // console.log(data);
             return data
         },
         onSuccess: () => {

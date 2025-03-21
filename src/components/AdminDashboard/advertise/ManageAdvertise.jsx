@@ -16,9 +16,7 @@ const ManageAdvertise = () => {
 
     // Open modal for action (approve/reject)
     const openActionModal = (advertise) => {
-
         setSelectedAdvertise(advertise);
-        // setSelectedAction(advertise.status)
         setIsModalOpen(true);
     };
 
@@ -44,29 +42,6 @@ const ManageAdvertise = () => {
         );
     };
 
-    // Handle delete advertisement
-    // const handleDelete = (id) => {
-    //     Swal.fire({
-    //         title: "Are you sure?",
-    //         text: "You won't be able to revert this!",
-    //         icon: "warning",
-    //         showCancelButton: true,
-    //         confirmButtonColor: "#3085d6",
-    //         cancelButtonColor: "#d33",
-    //         confirmButtonText: "Yes, delete it!",
-    //     }).then((result) => {
-    //         if (result.isConfirmed) {
-    //             deleteAdvertise(id, {
-    //                 onSuccess: () => {
-    //                     Swal.fire("Deleted!", "Advertisement has been deleted.", "success");
-    //                 },
-    //                 onError: () => {
-    //                     Swal.fire("Error!", "Failed to delete advertisement.", "error");
-    //                 },
-    //             });
-    //         }
-    //     });
-    // };
     return (
         <div className="drop-shadow-md lg:mx-16">
 
