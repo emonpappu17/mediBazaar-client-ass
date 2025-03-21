@@ -7,7 +7,18 @@ import { useForm } from "react-hook-form";
 import { Dialog, DialogPanel, DialogTitle, Listbox, ListboxButton, ListboxOption, ListboxOptions } from "@headlessui/react";
 import { MdCheck } from "react-icons/md";
 import ImageUpload from "../../common/ImageUpload";
+import { useCategories } from "../../../services/categoryService";
+import toast from "react-hot-toast";
 
+const companies = [
+    'XYZ Pharma',
+    'ABC Pharma',
+    'DEF Pharma',
+    'GHI Pharma',
+    'PQR Pharma',
+    'STU Pharma',
+    'XIZ Pharma'
+]
 
 const ManageMedicines = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -15,12 +26,16 @@ const ManageMedicines = () => {
     const [imageText, setImageText] = useState('Upload image');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [editMode, setEditMode] = useState(false);
-    const [currentCategory, setCurrentCategory] = useState(null);
-    const [controller, setController] = useState(null);
+    // const [currentCategory, setCurrentCategory] = useState(null);
+    // const [controller, setController] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState(null)
+    const [selectedCompany, setSelectedCompany] = useState(null)
     const { register, handleSubmit, setValue, reset } = useForm();
 
     // API Calls
     const { data: medicines } = useSellerMedicines();
+    const { data: categories } = useCategories();
+    // console.log('useCategories', categories);
 
     // Handle Image
     const handleImageUpload = (e) => {
@@ -29,7 +44,7 @@ const ManageMedicines = () => {
             setImageText(file.name);
             const imageUrl = URL.createObjectURL(file);
             setPreviewImage(imageUrl);
-            setValue("categoryImage", file);
+            setValue("image", file);
         }
     };
 
@@ -37,7 +52,7 @@ const ManageMedicines = () => {
     const openAddModal = () => {
         resetForm();
         setEditMode(false);
-        setCurrentCategory(null);
+        // setCurrentCategory(null);
         setIsModalOpen(true);
     };
 
@@ -66,67 +81,23 @@ const ManageMedicines = () => {
     };
 
     // Submitting form
-    // const onSubmit = async (data) => {
-    //     try {
-    //         setIsSubmitting(true);
-    //         let imageUrl = data.categoryImage;
-    //         let formData = {};
+    const onSubmit = (data) => {
+        // console.log(data);
+        if (!selectedCategory || !selectedCompany || !data.image) {
+            // console.log("Please select both category and company.");
+            toast.error("Please select all category, company and image")
+            return;
+        }
 
-    //         // for cancel api execution
-    //         const newController = new AbortController();
-    //         setController(newController)
+        // Merge selected values into the form data
+        const finalData = {
+            ...data,
+            category: selectedCategory,
+            company: selectedCompany,
+        };
 
-    //         // If in edit mode and no new image is uploaded, use the existing image
-    //         if (editMode && !data.categoryImage && currentCategory.categoryImage) {
-    //             formData = {
-    //                 categoryName: data.categoryName,
-    //                 categoryImage: currentCategory.categoryImage,
-    //             };
-    //         } else {
-    //             // Upload Image if new image is selected
-    //             if (data.categoryImage instanceof File) {
-    //                 imageUrl = await uploadImageToImgBB(data.categoryImage, newController);
-    //             } else if (!imageUrl && !editMode) {
-    //                 toast.error('Please upload a category image.');
-    //                 setIsSubmitting(false);
-    //                 return;
-    //             }
-
-    //             formData = {
-    //                 categoryName: data.categoryName,
-    //                 categoryImage: imageUrl,
-    //             };
-    //         }
-
-    //         // let result;
-    //         if (editMode) {
-    //             const result = await updateCategory({ id: currentCategory._id, data: formData, controller: newController })
-    //             if (result.modifiedCount > 0) {
-    //                 toast.success('Category updated successfully!');
-    //             }
-    //             else { toast.success(result.message); }
-    //         } else {
-    //             const result = await addCategory({ formData, controller: newController });
-    //             if (result.message) {
-    //                 toast.error(result.message);
-    //             } else {
-    //                 toast.success('Category added successfully!');
-    //             }
-    //         }
-
-    //         // Reset form and state
-    //         resetForm();
-    //         refetch();
-
-    //         // Close Modal
-    //         setIsModalOpen(false);
-    //     } catch (err) {
-    //         console.log(err.message);
-    //         toast.error(`Failed to ${editMode ? 'update' : 'add'} category. Please try again.`);
-    //     } finally {
-    //         setIsSubmitting(false);
-    //     }
-    // };
+        console.log("Final form submission data:", finalData);
+    }
 
     const handleCloseModal = () => {
         // if (controller) {
@@ -139,9 +110,9 @@ const ManageMedicines = () => {
         // Reset form 
         resetForm();
         setEditMode(false);
-        setCurrentCategory(null);
+        // setCurrentCategory(null);
         setIsModalOpen(false);
-        setController(null)
+        // setController(null)
     };
     return (
         // <div className="container mx-auto px-4 py-8 max-w-[1100px]">
@@ -311,7 +282,7 @@ const ManageMedicines = () => {
             </div>
 
             {/* Category Modal (Add/Edit) */}
-            <Dialog
+            {/* <Dialog
                 open={isModalOpen}
                 as="div"
                 onClose={handleCloseModal}
@@ -320,7 +291,7 @@ const ManageMedicines = () => {
                 <div className="fixed inset-0 flex items-center justify-center p-4">
                     <DialogPanel
                         transition
-                        className="w-full max-w-md bg-base-100 rounded-lg shadow-xl p-6 duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0">
+                        className="w-full max-w-md bg-base-100 rounded-lg shadow-xl p-6 duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0  overflow-y-auto h-[500px] md:h-[700px]">
                         <DialogTitle className="text-lg font-medium text-base-content">
                             {editMode ? "Update Medicine" : "Add New Medicine"}
                         </DialogTitle>
@@ -330,12 +301,10 @@ const ManageMedicines = () => {
                                 : "Enter the details below to add a new medicine."}
                         </p>
 
-                        {/* Form */}
                         <form
                             //  onSubmit={handleSubmit(onSubmit)} 
-                            className="grid gap-4 mt-4">
+                            className="grid gap-4 mt-4 ">
 
-                            {/* Medicine Name */}
                             <div className="grid gap-2">
                                 <label htmlFor="medicineName" className="text-sm font-medium text-base-content">Medicine Name</label>
                                 <input
@@ -348,7 +317,6 @@ const ManageMedicines = () => {
                                 />
                             </div>
 
-                            {/* Generic Name */}
                             <div className="grid gap-2">
                                 <label htmlFor="genericName" className="text-sm font-medium text-base-content">Generic Name</label>
                                 <input
@@ -361,16 +329,15 @@ const ManageMedicines = () => {
                                 />
                             </div>
 
-                            {/* Category Dropdown */}
-                            {/* <div className="grid gap-2">
+                            <div className="grid gap-2">
                                 <label className="text-sm font-medium text-base-content">Select Category</label>
                                 <Listbox value={selectedCategory} onChange={setSelectedCategory}>
                                     <div className="relative">
-                                        <ListboxButton className="w-full bg-base-200 text-base-content rounded-md py-2 px-3 flex justify-between items-center border border-base-300">
+                                        <ListboxButton className="w-full bg-base-200 text-base-content rounded-md py-2 px-3 flex justify-between items-center ">
                                             <p>{selectedCategory || "Choose a Category"}</p>
                                             <FaChevronDown className="text-sm opacity-60" />
                                         </ListboxButton>
-                                        <ListboxOptions className="absolute mt-1 w-full bg-base-100 rounded-md shadow-lg max-h-60 overflow-auto border border-base-300">
+                                        <ListboxOptions className="absolute mt-1 w-full bg-base-100 rounded-md shadow-lg max-h-60 overflow-auto border border-base-300 z-20">
                                             {categories?.length > 0 ? (
                                                 categories.map((category) => (
                                                     <ListboxOption
@@ -394,19 +361,228 @@ const ManageMedicines = () => {
                                         </ListboxOptions>
                                     </div>
                                 </Listbox>
-                            </div> */}
+                            </div>
 
-                            {/* Company Name */}
                             <div className="grid gap-2">
-                                <label htmlFor="company" className="text-sm font-medium text-base-content">Company Name</label>
+                                <label className="text-sm font-medium text-base-content">Select Company</label>
+                                <Listbox value={selectedCompany} onChange={setSelectedCompany}>
+                                    <div className="relative">
+                                        <ListboxButton className="w-full bg-base-200 text-base-content rounded-md py-2 px-3 flex justify-between items-center ">
+                                            <p>{selectedCompany || "Choose a Company"}</p>
+                                            <FaChevronDown className="text-sm opacity-60" />
+                                        </ListboxButton>
+                                        <ListboxOptions className="absolute mt-1 w-full bg-base-100 rounded-md shadow-lg max-h-60 overflow-auto border border-base-300">
+                                            {
+                                                companies.map((company, indx) => (
+                                                    <ListboxOption
+                                                        key={indx}
+                                                        value={company}
+                                                        className="cursor-pointer select-none py-2 px-4 text-base-content hover:bg-base-200 flex justify-between items-center"
+                                                    >
+                                                        {({ selected }) => (
+                                                            <>
+                                                                <p className={selected ? "font-semibold" : "font-normal"}>
+                                                                    {company}
+                                                                </p>
+                                                                {selected && <MdCheck className="h-5 w-5 text-[#0D6FEC]" />}
+                                                            </>
+                                                        )}
+                                                    </ListboxOption>
+                                                ))
+                                            }
+                                        </ListboxOptions>
+                                    </div>
+                                </Listbox>
+                            </div>
+
+
+
+                            <div className="grid gap-2">
+                                <label htmlFor="massUnit" className="text-sm font-medium text-base-content">Dosage (Mass Unit)</label>
                                 <input
-                                    id="company"
+                                    id="massUnit"
                                     type="text"
-                                    placeholder="Enter company name"
+                                    placeholder="E.g., 500mg, 10ml"
                                     required
-                                    {...register("company")}
+                                    {...register("massUnit")}
                                     className="w-full rounded-md text-sm p-2 bg-base-200 border-0 outline-base-content focus:outline-1"
                                 />
+                            </div>
+                            <div className="grid gap-2">
+                                <label htmlFor="price" className="text-sm font-medium text-base-content">Price ($)</label>
+                                <input
+                                    id="price"
+                                    type="number"
+                                    placeholder="Enter price"
+                                    required
+                                    {...register("price")}
+                                    className="w-full rounded-md text-sm p-2 bg-base-200 border-0 outline-base-content focus:outline-1"
+                                />
+                            </div>
+
+                            <div className="grid gap-2">
+                                <label htmlFor="discount" className="text-sm font-medium text-base-content">Discount (%)</label>
+                                <input
+                                    id="discount"
+                                    type="number"
+                                    placeholder="Enter discount percentage"
+                                    required
+                                    {...register("discount")}
+                                    className="w-full rounded-md text-sm p-2 bg-base-200 border-0 outline-base-content focus:outline-1"
+                                />
+                            </div>
+
+                            <div className="grid gap-2">
+                                <label htmlFor="stock" className="text-sm font-medium text-base-content">Stock Quantity</label>
+                                <input
+                                    id="stock"
+                                    type="number"
+                                    placeholder="Enter stock quantity"
+                                    required
+                                    {...register("stock")}
+                                    className="w-full rounded-md text-sm p-2 bg-base-200 border-0 outline-base-content focus:outline-1"
+                                />
+                            </div>
+
+                            <ImageUpload
+                                handleImageUpload={handleImageUpload}
+                                imageText={imageText}
+                                previewImage={previewImage}
+                                editMode={editMode}
+                                title={"Medicine Image Upload"}
+                            />
+
+                            <div className="flex justify-end gap-3">
+                                <button type="button" onClick={handleCloseModal} className="btn">Cancel</button>
+                                <Button
+                                    disabled={isSubmitting}
+                                    spinner={isSubmitting}
+                                    type="submit"
+                                    text={editMode ? "Update Medicine" : "Add Medicine"}
+                                    className="px-4 py-2 rounded-md w-40" />
+                            </div>
+                        </form>
+                    </DialogPanel>
+                </div>
+            </Dialog> */}
+
+            <Dialog
+                open={isModalOpen}
+                as="div"
+                onClose={handleCloseModal}
+                className="relative z-50">
+
+                {/* Background Overlay */}
+                <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+
+                <div className="fixed inset-0 flex items-center justify-center p-4">
+                    <DialogPanel
+                        transition
+                        className="w-full max-w-md bg-base-100 rounded-lg shadow-xl px-4 pt-4 sm:pt-6 sm:px-6  max-h-[80vh] overflow-y-auto duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0 ">
+
+                        {/* Modal Title */}
+                        <DialogTitle className="text-lg font-medium text-base-content">
+                            {editMode ? "Update Medicine" : "Add New Medicine"}
+                        </DialogTitle>
+                        <p className="mt-2 text-sm text-base-content/70">
+                            {editMode
+                                ? "Update the details below to modify this medicine."
+                                : "Enter the details below to add a new medicine."}
+                        </p>
+
+                        {/* Form */}
+                        <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4 mt-4">
+
+                            {/* Medicine Name */}
+                            <div className="grid gap-2">
+                                <label htmlFor="medicineName" className="text-sm font-medium text-base-content">Medicine Name</label>
+                                <input
+                                    id="medicineName"
+                                    type="text"
+                                    placeholder="Enter medicine name"
+                                    required
+                                    {...register("name")}
+                                    className="w-full rounded-md text-sm p-2 bg-base-200 border-0 outline-base-content focus:outline-1"
+                                />
+                            </div>
+
+                            {/* Generic Name */}
+                            <div className="grid gap-2">
+                                <label htmlFor="genericName" className="text-sm font-medium text-base-content">Generic Name</label>
+                                <input
+                                    id="genericName"
+                                    type="text"
+                                    placeholder="Enter generic name"
+                                    required
+                                    {...register("genericName")}
+                                    className="w-full rounded-md text-sm p-2 bg-base-200 border-0 outline-base-content focus:outline-1"
+                                />
+                            </div>
+
+                            {/* Category Dropdown */}
+                            <div className="grid gap-2">
+                                <label className="text-sm font-medium text-base-content">Select Category</label>
+                                <Listbox value={selectedCategory} onChange={setSelectedCategory}>
+                                    <div className="relative">
+                                        <ListboxButton className="w-full bg-base-200 text-base-content rounded-md py-2 px-3 flex justify-between items-center">
+                                            <p>{selectedCategory || "Choose a Category"}</p>
+                                            <FaChevronDown className="text-sm opacity-60" />
+                                        </ListboxButton>
+                                        <ListboxOptions className="absolute mt-1 w-full bg-base-100 rounded-md shadow-lg max-h-60 overflow-auto border border-base-300 z-20">
+                                            {categories?.length > 0 ? (
+                                                categories.map((category) => (
+                                                    <ListboxOption
+                                                        key={category._id}
+                                                        value={category.categoryName}
+                                                        className="cursor-pointer select-none py-2 px-4 text-base-content hover:bg-base-200 flex justify-between items-center"
+                                                    >
+                                                        {({ selected }) => (
+                                                            <>
+                                                                <p className={selected ? "font-semibold" : "font-normal"}>
+                                                                    {category.categoryName}
+                                                                </p>
+                                                                {selected && <MdCheck className="h-5 w-5 text-[#0D6FEC]" />}
+                                                            </>
+                                                        )}
+                                                    </ListboxOption>
+                                                ))
+                                            ) : (
+                                                <p className="py-2 px-4 text-gray-400">No categories available</p>
+                                            )}
+                                        </ListboxOptions>
+                                    </div>
+                                </Listbox>
+                            </div>
+
+                            {/* Company Dropdown */}
+                            <div className="grid gap-2">
+                                <label className="text-sm font-medium text-base-content">Select Company</label>
+                                <Listbox value={selectedCompany} onChange={setSelectedCompany}>
+                                    <div className="relative">
+                                        <ListboxButton className="w-full bg-base-200 text-base-content rounded-md py-2 px-3 flex justify-between items-center">
+                                            <p>{selectedCompany || "Choose a Company"}</p>
+                                            <FaChevronDown className="text-sm opacity-60" />
+                                        </ListboxButton>
+                                        <ListboxOptions className="absolute mt-1 w-full bg-base-100 rounded-md shadow-lg max-h-60 overflow-auto border border-base-300 z-20">
+                                            {companies.map((company, indx) => (
+                                                <ListboxOption
+                                                    key={indx}
+                                                    value={company}
+                                                    className="cursor-pointer select-none py-2 px-4 text-base-content hover:bg-base-200 flex justify-between items-center"
+                                                >
+                                                    {({ selected }) => (
+                                                        <>
+                                                            <p className={selected ? "font-semibold" : "font-normal"}>
+                                                                {company}
+                                                            </p>
+                                                            {selected && <MdCheck className="h-5 w-5 text-[#0D6FEC]" />}
+                                                        </>
+                                                    )}
+                                                </ListboxOption>
+                                            ))}
+                                        </ListboxOptions>
+                                    </div>
+                                </Listbox>
                             </div>
 
                             {/* Dosage (Mass Unit) */}
@@ -461,6 +637,18 @@ const ManageMedicines = () => {
                                 />
                             </div>
 
+                            {/* Description */}
+                            <div className="grid gap-2">
+                                <label htmlFor="description" className="text-sm font-medium text-base-content">Description</label>
+                                <textarea
+                                    id="description"
+                                    placeholder="Brief description of this medicine"
+                                    required
+                                    {...register("description")}
+                                    className="min-h-20 w-full rounded-md p-2 text-sm bg-base-200 border-0 outline-base-content focus:outline-1"
+                                />
+                            </div>
+
                             {/* Image Upload */}
                             <ImageUpload
                                 handleImageUpload={handleImageUpload}
@@ -470,16 +658,21 @@ const ManageMedicines = () => {
                                 title={"Medicine Image Upload"}
                             />
 
-                            {/* Submit & Cancel Buttons */}
-                            <div className="flex justify-end gap-3">
+                            {/* Buttons - Stick to Bottom */}
+                            <div className="sticky bottom-0 bg-base-100 py-3 flex justify-end gap-3">
                                 <button type="button" onClick={handleCloseModal} className="btn">Cancel</button>
-                                <Button disabled={isSubmitting} spinner={isSubmitting} type="submit" text={editMode ? "Update Medicine" : "Add Medicine"} className="px-4 py-2 rounded-md w-40" />
+                                <Button
+                                    disabled={isSubmitting}
+                                    spinner={isSubmitting}
+                                    type="submit"
+                                    text={editMode ? "Update Medicine" : "Add Medicine"}
+                                    className="px-4 py-2 rounded-md w-40"
+                                />
                             </div>
                         </form>
                     </DialogPanel>
                 </div>
             </Dialog>
-
         </div >
     );
 };
