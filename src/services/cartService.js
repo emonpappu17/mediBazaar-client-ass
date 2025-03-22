@@ -23,7 +23,7 @@ export const useAddToCart = () => {
 
 
 const fetchCart = async ({ email, axiosInstance }) => {
-    console.log('fetchCart 2nd');
+    // console.log('fetchCart 2nd');
 
     const { data } = await axiosInstance(`/cart/${email}`)
     // console.log('cart all data', data);

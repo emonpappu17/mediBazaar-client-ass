@@ -5,7 +5,7 @@ const uploadImageToImgBB = async (imageFile, controller) => {
     formData.append("image", imageFile);
     try {
         //  1. Upload Image and Get Image Url
-        const response = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API_KEY}`, formData, { signal: controller.signal })
+        const response = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API_KEY}`, formData, { signal: controller?.signal })
         if (response.data.success) {
             return response.data.data.display_url
         }

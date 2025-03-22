@@ -53,7 +53,6 @@ export const useDeleteCategory = () => {
 const updateCategory = async ({ id, data, axiosInstance, controller }) => {
     const res = await axiosInstance.put(`/categories/${id}`, data, { signal: controller.signal })
     console.log(res.data);
-
     return res.data;
 }
 
