@@ -19,7 +19,7 @@ const ManageMedicines = () => {
     const [controller, setController] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState(null)
     const [selectedCompany, setSelectedCompany] = useState(null)
-    const { register, handleSubmit, setValue, reset } = useForm();
+    const { register, handleSubmit, setValue, reset, formState: { errors } } = useForm();
     const { user } = useAuth()
 
     // API Calls
@@ -88,6 +88,7 @@ const ManageMedicines = () => {
 
     // Submitting form
     const onSubmit = async (data) => {
+
         if (!selectedCategory || !selectedCompany || !data.image) {
             toast.error("Please select all category, company and image")
             return;
@@ -214,7 +215,8 @@ const ManageMedicines = () => {
                 handleImageUpload={handleImageUpload}
                 imageText={imageText}
                 previewImage={previewImage}
-                isSubmitting={isSubmitting} />
+                isSubmitting={isSubmitting}
+                errors={errors} />
         </div >
     );
 };

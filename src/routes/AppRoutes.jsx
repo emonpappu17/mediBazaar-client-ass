@@ -39,9 +39,7 @@ const AppRoutes = () => {
 
                 {/* Dashboard Routes */}
                 <Route path="/dashboard" element={
-                    <PrivateRoute>
-                        <Dashboard />
-                    </PrivateRoute>
+                    <PrivateRoute> <Dashboard /></PrivateRoute>
                 }>
                     <Route index element={<DashboardHome />}></Route>
                     <Route path="users" element={<ManageUsers />}></Route>

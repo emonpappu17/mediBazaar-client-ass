@@ -20,7 +20,8 @@ const ManageMedicinesModal = ({
     handleImageUpload,
     imageText,
     previewImage,
-    isSubmitting }) => {
+    isSubmitting,
+    errors }) => {
     const companies = [
         'XYZ Pharma',
         'ABC Pharma',
@@ -171,9 +172,14 @@ const ManageMedicinesModal = ({
                                 type="number"
                                 placeholder="Enter price"
                                 required
-                                {...register("price")}
+                                // {...register("price")}
+                                {...register("price", {
+                                    min: { value: 0, message: "Price cannot be negative" },
+                                    // max: { value: 400, message: "Price cannot exceed $400" }
+                                })}
                                 className="w-full rounded-md text-sm p-2 bg-base-200 border-0 outline-base-content focus:outline-1"
                             />
+                            {errors?.price && <p className="text-red-500 text-xs">{errors?.price?.message}</p>}
                         </div>
 
                         {/* Discount */}
@@ -184,9 +190,14 @@ const ManageMedicinesModal = ({
                                 type="number"
                                 placeholder="Enter discount percentage"
                                 // required
-                                {...register("discount")}
+                                // {...register("discount")}
+                                {...register("discount", {
+                                    min: { value: 0, message: "Discount cannot be negative" },
+                                    max: { value: 100, message: "Discount cannot exceed 100%" }
+                                })}
                                 className="w-full rounded-md text-sm p-2 bg-base-200 border-0 outline-base-content focus:outline-1"
                             />
+                            {errors?.discount && <p className="text-red-500 text-xs">{errors?.discount?.message}</p>}
                         </div>
 
                         {/* Stock */}
@@ -197,9 +208,12 @@ const ManageMedicinesModal = ({
                                 type="number"
                                 placeholder="Enter stock quantity"
                                 required
-                                {...register("stock")}
+                                {...register("stock", {
+                                    min: { value: 0, message: 'Stock quantity cannot be negative' }
+                                })}
                                 className="w-full rounded-md text-sm p-2 bg-base-200 border-0 outline-base-content focus:outline-1"
                             />
+                            {errors?.stock && <p className="text-red-500 text-xs">{errors?.stock?.message}</p>}
                         </div>
 
                         {/* Description */}
@@ -263,6 +277,7 @@ ManageMedicinesModal.propTypes = {
     imageText: PropTypes.string.isRequired,
     previewImage: PropTypes.string,
     isSubmitting: PropTypes.bool.isRequired,
+    errors: PropTypes.object
 };
 
 
