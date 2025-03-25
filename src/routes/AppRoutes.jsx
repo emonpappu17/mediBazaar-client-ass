@@ -20,6 +20,11 @@ import ManageAccount from "../components/AdminDashboard/account/ManageAccount";
 import ManageMedicines from "../components/SellerDashboard/medicine/ManageMedicines";
 import PaymentHistory from "../components/SellerDashboard/paymentHistory/PaymentHistory";
 import AskAdvertise from "../components/SellerDashboard/askAdvertise/AskAdvertise";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+
 
 const AppRoutes = () => {
     return (
@@ -35,7 +40,12 @@ const AppRoutes = () => {
                 </Route>
 
                 {/* Checkout Page (without Navbar/Footer) */}
-                <Route path="/checkout" element={<PrivateRoute><Checkout /></PrivateRoute>} />
+                <Route path="/checkout" element={<PrivateRoute>
+                    {/* <Checkout /> */}
+                    <Elements stripe={stripePromise}>
+                        <Checkout />
+                    </Elements>
+                </PrivateRoute>} />
 
                 {/* Dashboard Routes */}
                 <Route path="/dashboard" element={

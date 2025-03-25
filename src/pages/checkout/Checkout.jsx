@@ -1,17 +1,13 @@
-// import { useState } from "react";
-// import useAuth from "../../hooks/useAuth";
-// import { useCart } from "../../services/cartService";
-// import Button from "../../components/common/Button";
-
 import { useCart } from "../../services/cartService";
 import Button from "../../components/common/Button";
+import PaymentForm from "./PaymentForm";
 
 const Checkout = () => {
-
 
     // API Calls
     const { data: cartData } = useCart();
 
+    const totalAmount = cartData?.totalPrice || 0;
 
     return (
         <div className="min-h-screen base-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -100,8 +96,8 @@ const Checkout = () => {
                     {/* Payment Section */}
                     <div className="lg:col-span-2 bg-base-100 rounded-lg border border-base-300 p-6">
                         <h2 className="text-2xl font-semibold text-base-content mb-6">Payment Information</h2>
-                        <div className="space-y-6">
-                            {/* Card Information */}
+                        {/* <div className="space-y-6 border border-amber-300">
+                      
                             <div>
                                 <label className="block text-sm font-medium text-base-content mb-2">
                                     Card Number
@@ -138,22 +134,17 @@ const Checkout = () => {
                                 </div>
                             </div>
 
-                            {/* Pay Button */}
-                            {/* <button
-                                onClick={handlePayment}
-                                disabled={loading}
-                                className={`btn btn-primary w-full ${loading ? 'loading' : ''}`}
-                            >
-                                {loading ? 'Processing...' : `Pay $${grandTotal.toFixed(2)}`}
-                            </button> */}
+                      
                             <Button
                                 text={`Pay $${cartData?.totalPrice.toFixed(2)}`}
                                 // onClick={handlePayment}
                                 // disabled={loading}
-                                className={`p-3 rounded-[10px] w-full `}
+                                className={`p-3 rounded-[10px] w-full`}
                             >
                             </Button>
-                        </div>
+                        </div> */}
+                        
+                        <PaymentForm amount={totalAmount}></PaymentForm>
                     </div>
                 </div>
 
