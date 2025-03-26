@@ -1,14 +1,12 @@
 import { useCart } from "../../services/cartService";
 import Button from "../../components/common/Button";
-import PaymentForm from "./PaymentForm";
+import PaymentForm from "../../components/checkout/PaymentForm";
 
 const Checkout = () => {
-
     // API Calls
     const { data: cartData } = useCart();
 
     const totalAmount = cartData?.totalPrice || 0;
-
     return (
         <div className="min-h-screen base-100 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-5xl mx-auto">
@@ -143,8 +141,8 @@ const Checkout = () => {
                             >
                             </Button>
                         </div> */}
-                        
-                        <PaymentForm amount={totalAmount}></PaymentForm>
+
+                        <PaymentForm amount={totalAmount} cartData={cartData}></PaymentForm>
                     </div>
                 </div>
 

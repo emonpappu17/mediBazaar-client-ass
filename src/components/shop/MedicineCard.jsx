@@ -14,7 +14,13 @@ const MedicineCard = ({ medicine, layout, }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
     const { user } = useAuth();
+
+    // API Calls
     const { mutate: addToCart } = useAddToCart();
+
+
+    console.log('medicine', medicine);
+
 
     // Determine if the product has a discount
     const hasDiscount = medicine.discount > 0;
@@ -30,6 +36,7 @@ const MedicineCard = ({ medicine, layout, }) => {
                 image: medicine.image,
                 price: medicine.price,
                 discount: medicine.discount,
+                sellerEmail: medicine.sellerEmail,
                 quantity: 1,
             }
 

@@ -16,6 +16,7 @@ const Shop = () => {
     const [sortBy, setSortBy] = useState("");
     const [page, setPage] = useState(1);
 
+    // API Calls
     const { data = [], isLoading, error } = useMedicines(page, 6, sortBy, category, search);
 
     //  FIX: Reset `page` to 1 when category, search, or sort changes

@@ -13,8 +13,10 @@ import toast from 'react-hot-toast';
 const MedicineModal = ({ isOpen, closeModal, medicine }) => {
     const { user } = useAuth();
     const [quantity, setQuantity] = useState(1);
-    const { mutate: addToCart, } = useAddToCart();
     const navigate = useNavigate();
+    
+    // API Calls
+    const { mutate: addToCart, } = useAddToCart();
 
     // Determine if the product has a discount
     const hasDiscount = medicine.discount > 0;
@@ -32,6 +34,7 @@ const MedicineModal = ({ isOpen, closeModal, medicine }) => {
                 image: medicine.image,
                 price: medicine.price,
                 discount: medicine.discount,
+                sellerEmail: medicine.sellerEmail,
                 quantity,
             }
 

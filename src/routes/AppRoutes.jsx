@@ -22,6 +22,8 @@ import PaymentHistory from "../components/SellerDashboard/paymentHistory/Payment
 import AskAdvertise from "../components/SellerDashboard/askAdvertise/AskAdvertise";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
+import Invoice from "../pages/invoice/Invoice";
+// import Invoice from "../pages/invoice/Invoice";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
@@ -41,10 +43,14 @@ const AppRoutes = () => {
 
                 {/* Checkout Page (without Navbar/Footer) */}
                 <Route path="/checkout" element={<PrivateRoute>
-                    {/* <Checkout /> */}
                     <Elements stripe={stripePromise}>
                         <Checkout />
                     </Elements>
+                </PrivateRoute>} />
+
+                {/* Invoice Page (without Navbar/Footer) */}
+                <Route path="/invoice" element={<PrivateRoute>
+                    <Invoice></Invoice>
                 </PrivateRoute>} />
 
                 {/* Dashboard Routes */}
