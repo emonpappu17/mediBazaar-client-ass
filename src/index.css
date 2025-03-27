@@ -14,3 +14,15 @@ body {
     font-family: 'Nunito Sans', sans-serif;
 }
 
+/* @media print {
+    body {
+        background: white !important;
+        color: black !important;
+    }
+
+    .invoice-container {
+        padding: 20px !important;
+        background-color: white !important;
+        color: black !important;
+    }
+} */
