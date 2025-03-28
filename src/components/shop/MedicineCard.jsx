@@ -156,6 +156,7 @@ MedicineCard.propTypes = {
         _id: PropTypes.string.isRequired,
         price: PropTypes.number.isRequired,
         discount: PropTypes.number.isRequired,
+        sellerEmail: PropTypes.string.isRequired
     }).isRequired,
     layout: PropTypes.oneOf(["grid", "list"]).isRequired,
 };

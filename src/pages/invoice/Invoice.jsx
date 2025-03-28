@@ -1,224 +1,23 @@
-// import { FaDownload, FaPrint } from "react-icons/fa";
-// import { PDFDownloadLink, Document, Page, View, Text, StyleSheet, PDFViewer, Image } from '@react-pdf/renderer';
-// import logo from '../../assets/websiteLogo.png'
-
-import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 import InvoicePDF from "../../components/invoice/InvoicePDF";
-import { FaDownload, FaPrint } from "react-icons/fa";
+import { FaDownload, FaPrint, FaHome } from "react-icons/fa";
 import logo from '../../assets/websiteLogo.png'
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { usePayment } from "../../services/paymentService";
-
-// // Define styles for PDF
-// const styles = StyleSheet.create({
-//     page: {
-//         padding: 40,
-//         fontFamily: 'Helvetica'
-//     },
-//     section: {
-//         marginBottom: 20
-//     },
-//     header: {
-//         flexDirection: 'row',
-//         alignItems: 'center',
-//         justifyContent: 'space-between',
-//         marginBottom: 30
-//     },
-//     title: {
-//         // fontSize: 20,
-//         fontSize: 24,
-//         fontWeight: 'bold',
-//         color: '#0D6FEC'
-//     },
-//     invoiceNumber: {
-//         fontSize: 14,
-//         color: '#666'
-//     },
-//     twoColumn: {
-//         flexDirection: 'row',
-//         justifyContent: 'space-between',
-//         marginBottom: 20,
-//         paddingBottom: 20,
-//         borderBottom: '1px solid #eee'
-//     },
-//     column: {
-//         width: '48%'
-//     },
-//     subtitle: {
-//         fontSize: 16,
-//         fontWeight: 'bold',
-//         marginBottom: 10,
-//         color: '#333'
-//     },
-//     text: {
-//         fontSize: 12,
-//         marginBottom: 5,
-//         color: '#555'
-//     },
-//     table: {
-//         width: '100%',
-//         marginBottom: 20,
-//         borderBottom: '1px solid #eee',
-//         paddingBottom: 20
-//     },
-//     tableHeader: {
-//         flexDirection: 'row',
-//         backgroundColor: '#f5f5f5',
-//         padding: 8,
-//         fontWeight: 'bold'
-//     },
-//     tableRow: {
-//         flexDirection: 'row',
-//         padding: 8,
-//         borderBottom: '1px solid #f5f5f5'
-//     },
-//     col1: { width: '30%' },
-//     col2: { width: '15%' },
-//     col3: { width: '15%' },
-//     col4: { width: '20%' },
-//     col5: { width: '15%' },
-//     totalContainer: {
-//         flexDirection: 'row',
-//         justifyContent: 'space-between',
-//         marginTop: 20,
-//         paddingTop: 10,
-//         borderTop: '1px solid #eee'
-//     },
-//     totalText: {
-//         fontSize: 16,
-//         fontWeight: 'bold'
-//     },
-//     totalAmount: {
-//         fontSize: 18,
-//         fontWeight: 'bold',
-//         color: '#0D6FEC'
-//     },
-//     statusPaid: {
-//         color: '#22c55e',
-//         fontWeight: 'bold'
-//     }
-// });
-
-// // PDF Document Component
-// const InvoicePDF = ({ invoiceData }) => (
-//     <Document>
-//         <Page
-//             size="A4"
-//             style={styles.page}>
-//             {/* Header */}
-//             <View style={[styles.section, styles.header]}>
-//                 <View style={{
-//                     flexDirection: 'row',
-//                     alignItems: 'center',
-//                 }}>
-//                     <Image src={logo} style={{
-//                         width: '65px',
-//                         height: '65px',
-//                     }}></Image>
-//                     <Text style={styles.title}>Invoice</Text>
-//                 </View>
-//                 <Text style={styles.invoiceNumber}>#{invoiceData.invoiceNumber}</Text>
-//             </View>
-
-//             {/* Customer & Seller Info */}
-//             <View style={[styles.section, styles.twoColumn]}>
-//                 <View style={styles.column}>
-//                     <Text style={styles.subtitle}>Customer Details</Text>
-//                     <Text style={styles.text}>{invoiceData.customerName}</Text>
-//                     <Text style={styles.text}>{invoiceData.customerEmail}</Text>
-//                     <Text style={styles.text}>{invoiceData.customerAddress}</Text>
-//                 </View>
-//                 <View style={styles.column}>
-//                     <Text style={styles.subtitle}>Seller Details</Text>
-//                     <Text style={styles.text}>{invoiceData.sellerName}</Text>
-//                     <Text style={styles.text}>{invoiceData.sellerEmail}</Text>
-//                 </View>
-//             </View>
-
-//             {/* Order Summary */}
-//             <View style={styles.section}>
-//                 <Text style={styles.subtitle}>Order Summary</Text>
-//                 <View style={styles.table}>
-//                     {/* Table Header */}
-//                     <View style={styles.tableHeader}>
-//                         <Text style={styles.col1}>Medicine</Text>
-//                         <Text style={styles.col2}>Qty</Text>
-//                         <Text style={styles.col3}>Price</Text>
-//                         <Text style={styles.col4}>Discount</Text>
-//                         <Text style={styles.col5}>Total</Text>
-//                     </View>
-
-//                     {/* Table Rows */}
-//                     {invoiceData.orderItems.map((item, index) => (
-//                         <View key={index} style={styles.tableRow}>
-//                             <Text style={styles.col1}>{item.name}</Text>
-//                             <Text style={styles.col2}>{item.quantity}</Text>
-//                             <Text style={styles.col3}>${item.price.toFixed(2)}</Text>
-//                             <Text style={styles.col4}>{item.discount}%</Text>
-//                             <Text style={styles.col5}>${item.total.toFixed(2)}</Text>
-//                         </View>
-//                     ))}
-//                 </View>
-//             </View>
-
-//             {/* Payment Info */}
-//             <View style={styles.section}>
-//                 <Text style={styles.subtitle}>Payment Information</Text>
-//                 <Text style={styles.text}>Payment Method: <Text style={{ fontWeight: 'bold' }}>{invoiceData.paymentMethod}</Text></Text>
-//                 <Text style={styles.text}>Transaction ID: <Text style={{ fontWeight: 'bold' }}>{invoiceData.transactionId}</Text></Text>
-//                 <Text style={styles.text}>Payment Status: <Text style={styles.statusPaid}>{invoiceData.paymentStatus}</Text></Text>
-//             </View>
-
-//             {/* Grand Total */}
-//             <View style={styles.totalContainer}>
-//                 <Text style={styles.totalText}>Grand Total:</Text>
-//                 <Text style={styles.totalAmount}>${invoiceData.orderItems.reduce((acc, item) => acc + item.total, 0).toFixed(2)}</Text>
-//             </View>
-//         </Page>
-//     </Document >
-// );
+import { format } from "date-fns";
+import Button from "../../components/common/Button";
+import Lottie from "lottie-react";
+import loader from '../../assets/loaderAnimation.json'
 
 const Invoice = () => {
     const { id } = useParams();
 
-    console.log('params', id);
-    const { data, isLoading, error } = usePayment(id);
-    console.log('invoiceData', data);
+    // API Calls
+    const { data: invoiceData, isLoading, error } = usePayment(id);
 
-    // Invoice data
-    const invoiceData = {
-        invoiceNumber: "INV-20250401",
-        date: "2025-04-01",
-        customerName: "John Doe",
-        customerEmail: "john.doe@example.com",
-        customerAddress: "123 Main Street, New York, USA",
-        paymentMethod: "Stripe",
-        transactionId: "txn_123456789",
-        paymentStatus: "Paid",
-        sellerName: "MediBazaar Pharmacy",
-        sellerEmail: "seller@medibazaar.com",
-        orderItems: [
-            {
-                name: "Paracetamol",
-                quantity: 2,
-                price: 10,
-                discount: 5,
-                total: 19,
-            },
-            {
-                name: "Ibuprofen",
-                quantity: 1,
-                price: 15,
-                discount: 0,
-                total: 15,
-            },
-        ],
-    };
-
-    // Calculate grand total
-    // const grandTotal = invoiceData.orderItems.reduce((acc, item) => acc + item.total, 0);
-    if (isLoading) return <p>Loading..........</p>
+    if (isLoading) return <div className="flex items-center justify-center min-h-screen"><Lottie className="w-20" animationData={loader}></Lottie></div>
     if (error) return <p>got error</p>
+    
     return (
         <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-base-200">
             {/* Display invoice */}
@@ -236,15 +35,14 @@ const Invoice = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 border-b pb-4 border-base-300">
                     <div>
                         <h3 className="text-lg font-semibold text-base-content">Customer Details</h3>
-                        <p className="text-base-content/70">Emon Howlader</p>
-                        <p className="text-base-content/70">{data.userEmail}</p>
-                        <p className="text-base-content/70">{invoiceData.customerAddress}</p>
+                        <p className="text-base-content/70">{invoiceData.name}</p>
+                        <p className="text-base-content/70">{invoiceData.userEmail}</p>
+                        <p className="text-base-content/70">{invoiceData.address}</p>
                     </div>
                     <div>
                         <h3 className="text-lg font-semibold text-base-content">Shop Details</h3>
                         <p className="text-base-content/70">MediBazaar Pharmacy</p>
                         <p className="text-base-content/70">medibazaar@gmail.com</p>
-                        {/* <p className="text-base-content/70">{invoiceData.sellerEmail}</p> */}
                     </div>
                 </div>
 
@@ -263,16 +61,21 @@ const Invoice = () => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-base-300">
-                                {data.items.map((item, index) => (
-                                    <tr key={index} className="hover:bg-base-200">
-                                        <td className="py-3 px-4 text-sm text-base-content">{item.name}</td>
-                                        <td className="py-3 px-4 text-sm text-base-content">{item.quantity}</td>
-                                        <td className="py-3 px-4 text-sm text-base-content">${item.price.toFixed(2)}</td>
-                                        <td className="py-3 px-4 text-sm text-base-content">{item.discount}%</td>
-                                        <td className="py-3 px-4 text-sm text-base-content">${item.finalPrice.toFixed(2)}</td>
-                                    </tr>
-                                ))}
+                                {invoiceData.items.map((item, index) => {
 
+                                    // Calculating itemTotal price
+                                    const itemTotal = item.finalPrice * item.quantity
+
+                                    return (
+                                        <tr key={index} className="hover:bg-base-200">
+                                            <td className="py-3 px-4 text-sm text-base-content">{item.name}</td>
+                                            <td className="py-3 px-4 text-sm text-base-content">{item.quantity}</td>
+                                            <td className="py-3 px-4 text-sm text-base-content">${item.price.toFixed(2)}</td>
+                                            <td className="py-3 px-4 text-sm text-base-content">{item.discount}%</td>
+                                            <td className="py-3 px-4 text-sm text-base-content">${itemTotal.toFixed(2)}</td>
+                                        </tr>
+                                    )
+                                })}
                             </tbody>
                         </table>
                     </div>
@@ -281,36 +84,48 @@ const Invoice = () => {
                 {/* Payment Info */}
                 <div className="mt-6">
                     <h3 className="text-lg font-semibold text-base-content mb-2">Payment Information</h3>
-                    <p className="text-base-content/70">Payment Method: <strong>{data.paymentMethod}</strong></p>
-                    <p className="text-base-content/70">Transaction ID: <strong>{data.transactionId}</strong></p>
+                    <p className="text-base-content/70">Payment Method: <strong>{invoiceData.paymentMethod}</strong></p>
+                    <p className="text-base-content/70">Transaction ID: <strong>{invoiceData.transactionId}</strong></p>
+                    <p className="text-base-content/70">Payment Date: <strong> {invoiceData.createdAt ? format(new Date(invoiceData.createdAt), "yyyy-MM-dd") : '2025-03-15'}</strong></p>
                     <p className="text-base-content/70">Payment Status: <span className="font-semibold text-green-600">Paid</span></p>
                 </div>
 
                 {/* Grand Total */}
                 <div className="mt-6 flex justify-between items-center border-t pt-4 border-base-300">
                     <h3 className="text-xl font-semibold text-base-content">Grand Total:</h3>
-                    <span className="text-2xl font-bold text-[#0D6FEC]">${data.totalAmount.toFixed(2)}</span>
+                    <span className="text-2xl font-bold text-[#0D6FEC]">${invoiceData.totalAmount.toFixed(2)}</span>
                 </div>
             </div>
 
             {/* Buttons */}
-            <div className="mt-6 flex justify-center gap-4">
-                <button
-                    onClick={() => window.print()}
-                    className="btn bg-[#35C7DF] hover:bg-[#0D6FEC] text-white flex items-center gap-2 px-6"
-                >
-                    <FaPrint /> Print Invoice
-                </button>
+            <div className="mt-6 flex justify-center flex-wrap gap-4">
+                {/* Print */}
+                <Button
+                    onclick={() => window.print()}
+                    text="Print Invoice"
+                    className="px-6 rounded-[3px] h-10 flex items-center"
+                    doubleBtn={true}
+                    icon={FaPrint} />
 
+                {/* Download */}
                 <PDFDownloadLink
                     document={<InvoicePDF invoiceData={invoiceData} />}
-                    fileName={`invoice-${invoiceData.invoiceNumber}.pdf`}
-                    className="btn bg-[#0D6FEC] hover:bg-[#35C7DF] text-white flex items-center gap-2 px-6"
+                    fileName={`invoice.pdf`}
+                    className=" bg-[#0D6FEC] hover:bg-[#35C7DF] text-white flex items-center gap-2 px-6 h-10 rounded-[3px]"
                 >
                     {({ loading }) => (
                         loading ? 'Preparing document...' : <><FaDownload /> Download PDF</>
                     )}
                 </PDFDownloadLink>
+
+                {/* Navigate to home */}
+                <Link to={'/'}>
+                    <Button
+                        icon={FaHome}
+                        text="Go to home"
+                        className="px-6 rounded-[3px] h-10 flex items-center"
+                        doubleBtn={true} />
+                </Link>
             </div>
         </div>
         // <PDFViewer style={{ width: '100%', height: '100vh' }}>

@@ -1,8 +1,13 @@
 import { useCart } from "../../services/cartService";
-import Button from "../../components/common/Button";
 import PaymentForm from "../../components/checkout/PaymentForm";
+import { useState } from "react";
+import useAuth from "../../hooks/useAuth";
 
 const Checkout = () => {
+    const { user } = useAuth();
+    const [name, setName] = useState(user?.displayName);
+    const [address, setAddress] = useState('')
+
     // API Calls
     const { data: cartData } = useCart();
 
@@ -27,11 +32,6 @@ const Checkout = () => {
                         <div className="space-y-6">
                             {cartData?.items?.map((item, index) => {
                                 const hasDiscount = item.discount !== 0;
-                                // const discountPercentage = hasDiscount
-                                //     ? Math.round(((item.price - item.finalPrice) / item.price) * 100)
-                                //     : 0;
-                                // if (hasDiscount) {
-                                // }
                                 const itemTotal = item.finalPrice * item.quantity
 
                                 return (
@@ -59,7 +59,6 @@ const Checkout = () => {
                                                         </span>
                                                         <span className="badge bg-[#35C7DF] badge-sm ml-2 text-white">
                                                             {item.discount}% OFF
-                                                            {/* {discountPercentage}% OFF */}
                                                         </span>
                                                     </div>
                                                 ) :
@@ -94,55 +93,45 @@ const Checkout = () => {
                     {/* Payment Section */}
                     <div className="lg:col-span-2 bg-base-100 rounded-lg border border-base-300 p-6">
                         <h2 className="text-2xl font-semibold text-base-content mb-6">Payment Information</h2>
-                        {/* <div className="space-y-6 border border-amber-300">
-                      
+                        <div className="space-y-3 mb-3">
                             <div>
                                 <label className="block text-sm font-medium text-base-content mb-2">
-                                    Card Number
+                                    Name
                                 </label>
                                 <input
                                     type="text"
-                                    placeholder="1234 5678 9012 3456"
-                                    // className="input input-bordered w-full focus:input-primary transition-all"
+                                    placeholder="Name"
+                                    defaultValue={name}
+                                    onChange={(e) => setName(e.target.value)}
                                     className=" p-3 w-full  rounded border border-base-300 outline-base-content focus:outline-1"
                                 />
                             </div>
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-base-content mb-2">
-                                        Expiry Date
-                                    </label>
-                                    <input
-                                        type="text"
-                                        placeholder="MM/YY"
-                                        // className="input input-bordered w-full focus:input-primary transition-all"
-                                        className=" p-3 w-full  rounded border border-base-300 outline-base-content focus:outline-1"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-base-content mb-2">
-                                        CVV
-                                    </label>
-                                    <input
-                                        type="text"
-                                        placeholder="123"
-                                        // className="input input-bordered w-full focus:input-primary transition-all"
-                                        className=" p-3 w-full  rounded border border-base-300 outline-base-content focus:outline-1"
-                                    />
-                                </div>
+                            <div>
+                                <label className="block text-sm font-medium text-base-content mb-2">
+                                    Email
+                                </label>
+                                <input
+                                    type="text"
+                                    placeholder="Email"
+                                    readOnly
+                                    value={user?.email}
+                                    className=" p-3 w-full rounded border border-base-300 outline-base-content focus:outline-1"
+                                />
                             </div>
-
-                      
-                            <Button
-                                text={`Pay $${cartData?.totalPrice.toFixed(2)}`}
-                                // onClick={handlePayment}
-                                // disabled={loading}
-                                className={`p-3 rounded-[10px] w-full`}
-                            >
-                            </Button>
-                        </div> */}
-
-                        <PaymentForm amount={totalAmount} cartData={cartData}></PaymentForm>
+                            <div>
+                                <label className="block text-sm font-medium text-base-content mb-2">
+                                    Address
+                                </label>
+                                <input
+                                    type="text"
+                                    placeholder="Eg.. 123 Main Street, New York, USA"
+                                    onChange={(e) => setAddress(e.target.value)}
+                                    className=" p-3 w-full rounded border border-base-300 outline-base-content focus:outline-1"
+                                />
+                            </div>
+                        </div>
+                        {/* </PaymentForm> */}
+                        <PaymentForm amount={totalAmount} cartData={cartData} name={name} address={address} />
                     </div>
                 </div>
 

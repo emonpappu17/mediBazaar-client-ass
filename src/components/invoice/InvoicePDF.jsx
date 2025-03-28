@@ -1,6 +1,7 @@
-import { FaDownload, FaPrint } from "react-icons/fa";
-import { PDFDownloadLink, Document, Page, View, Text, StyleSheet, PDFViewer, Image } from '@react-pdf/renderer';
+import { Document, Page, View, Text, StyleSheet, Image } from '@react-pdf/renderer';
 import logo from '../../assets/websiteLogo.png'
+import { format } from "date-fns";
+import PropTypes from 'prop-types';
 
 // Define styles for PDF
 const styles = StyleSheet.create({
@@ -30,6 +31,7 @@ const styles = StyleSheet.create({
     twoColumn: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems: 'center',
         marginBottom: 20,
         paddingBottom: 20,
         borderBottom: '1px solid #eee'
@@ -50,6 +52,7 @@ const styles = StyleSheet.create({
     },
     table: {
         width: '100%',
+        fontSize: 12,
         marginBottom: 20,
         borderBottom: '1px solid #eee',
         paddingBottom: 20
@@ -66,10 +69,10 @@ const styles = StyleSheet.create({
         borderBottom: '1px solid #f5f5f5'
     },
     col1: { width: '30%' },
-    col2: { width: '15%' },
-    col3: { width: '15%' },
-    col4: { width: '20%' },
-    col5: { width: '15%' },
+    col2: { width: '17%' },
+    col3: { width: '17%' },
+    col4: { width: '17%' },
+    col5: { width: '17%' },
     totalContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -110,21 +113,21 @@ const InvoicePDF = ({ invoiceData }) => (
                     }}></Image>
                     <Text style={styles.title}>Invoice</Text>
                 </View>
-                <Text style={styles.invoiceNumber}>#{invoiceData.invoiceNumber}</Text>
+                <Text style={styles.invoiceNumber}>##INV-20250401</Text>
             </View>
 
             {/* Customer & Seller Info */}
             <View style={[styles.section, styles.twoColumn]}>
                 <View style={styles.column}>
                     <Text style={styles.subtitle}>Customer Details</Text>
-                    <Text style={styles.text}>{invoiceData.customerName}</Text>
-                    <Text style={styles.text}>{invoiceData.customerEmail}</Text>
-                    <Text style={styles.text}>{invoiceData.customerAddress}</Text>
+                    <Text style={styles.text}>{invoiceData.name}</Text>
+                    <Text style={styles.text}>{invoiceData.userEmail}</Text>
+                    <Text style={styles.text}>{invoiceData.address}</Text>
                 </View>
                 <View style={styles.column}>
-                    <Text style={styles.subtitle}>Seller Details</Text>
-                    <Text style={styles.text}>{invoiceData.sellerName}</Text>
-                    <Text style={styles.text}>{invoiceData.sellerEmail}</Text>
+                    <Text style={styles.subtitle}>Shop Details</Text>
+                    <Text style={styles.text}>MediBazaar Pharmacy</Text>
+                    <Text style={styles.text}>medibazaar@gmail.com</Text>
                 </View>
             </View>
 
@@ -142,15 +145,21 @@ const InvoicePDF = ({ invoiceData }) => (
                     </View>
 
                     {/* Table Rows */}
-                    {invoiceData.orderItems.map((item, index) => (
-                        <View key={index} style={styles.tableRow}>
-                            <Text style={styles.col1}>{item.name}</Text>
-                            <Text style={styles.col2}>{item.quantity}</Text>
-                            <Text style={styles.col3}>${item.price.toFixed(2)}</Text>
-                            <Text style={styles.col4}>{item.discount}%</Text>
-                            <Text style={styles.col5}>${item.total.toFixed(2)}</Text>
-                        </View>
-                    ))}
+                    {invoiceData.items.map((item, index) => {
+
+                        // Calculating itemTotal price
+                        const itemTotal = item.finalPrice * item.quantity
+
+                        return (
+                            <View key={index} style={styles.tableRow}>
+                                <Text style={styles.col1}>{item.name}</Text>
+                                <Text style={styles.col2}>{item.quantity}</Text>
+                                <Text style={styles.col3}>${item.price.toFixed(2)}</Text>
+                                <Text style={styles.col4}>{item.discount}%</Text>
+                                <Text style={styles.col5}>${itemTotal.toFixed(2)}</Text>
+                            </View>
+                        )
+                    })}
                 </View>
             </View>
 
@@ -159,17 +168,37 @@ const InvoicePDF = ({ invoiceData }) => (
                 <Text style={styles.subtitle}>Payment Information</Text>
                 <Text style={styles.text}>Payment Method: <Text style={{ fontWeight: 'bold' }}>{invoiceData.paymentMethod}</Text></Text>
                 <Text style={styles.text}>Transaction ID: <Text style={{ fontWeight: 'bold' }}>{invoiceData.transactionId}</Text></Text>
-                <Text style={styles.text}>Payment Status: <Text style={styles.statusPaid}>{invoiceData.paymentStatus}</Text></Text>
+                <Text style={styles.text}>Payment Date: <Text style={{ fontWeight: 'bold' }}>{invoiceData.createdAt ? format(new Date(invoiceData.createdAt), "yyyy-MM-dd") : '2025-03-15'}</Text></Text>
+                <Text style={styles.text}>Payment Status: <Text style={styles.statusPaid}>Paid</Text></Text>
             </View>
 
             {/* Grand Total */}
             <View style={styles.totalContainer}>
                 <Text style={styles.totalText}>Grand Total:</Text>
-                <Text style={styles.totalAmount}>${invoiceData.orderItems.reduce((acc, item) => acc + item.total, 0).toFixed(2)}</Text>
+                <Text style={styles.totalAmount}>${invoiceData.totalAmount.toFixed(2)}</Text>
             </View>
         </Page>
     </Document >
 );
-
+InvoicePDF.propTypes = {
+    invoiceData: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        userEmail: PropTypes.string.isRequired,
+        address: PropTypes.string.isRequired,
+        items: PropTypes.arrayOf(
+            PropTypes.shape({
+                name: PropTypes.string.isRequired,
+                quantity: PropTypes.number.isRequired,
+                price: PropTypes.number.isRequired,
+                discount: PropTypes.number.isRequired,
+                finalPrice: PropTypes.number.isRequired,
+            })
+        ).isRequired,
+        paymentMethod: PropTypes.string.isRequired,
+        transactionId: PropTypes.string.isRequired,
+        createdAt: PropTypes.string, // Assuming createdAt is an ISO date string
+        totalAmount: PropTypes.number.isRequired,
+    }).isRequired,
+};
 
 export default InvoicePDF;
