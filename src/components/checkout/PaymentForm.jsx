@@ -18,8 +18,6 @@ const PaymentForm = ({ amount, cartData }) => {
     // API Calls
     const { mutate: savePayment } = useSavePayment();
 
-    console.log('amount', amount);
-
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -66,7 +64,7 @@ const PaymentForm = ({ amount, cartData }) => {
                     onSuccess: () => {
 
                         // navigating to invoice page
-                        navigate('/invoice')
+                        navigate(`/invoice/${result.paymentIntent.id}`)
                         toast.success("Payment Successful!");
                     },
                     onError: () => {
@@ -85,7 +83,6 @@ const PaymentForm = ({ amount, cartData }) => {
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
             <div className="border border-base-300 p-4 rounded-md">
-                {/* <CardElement className="text-white" /> */}
                 <CardElement className="p-2 bg-base-200 rounded-md " />
             </div>
             <Button

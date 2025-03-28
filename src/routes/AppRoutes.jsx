@@ -49,7 +49,7 @@ const AppRoutes = () => {
                 </PrivateRoute>} />
 
                 {/* Invoice Page (without Navbar/Footer) */}
-                <Route path="/invoice" element={<PrivateRoute>
+                <Route path="/invoice/:id" element={<PrivateRoute>
                     <Invoice></Invoice>
                 </PrivateRoute>} />
 
