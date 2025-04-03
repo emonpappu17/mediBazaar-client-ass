@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 import useAxiosInstance from "./axiosInstance"
+import useAuth from "../hooks/useAuth"
 
 // Saving payment to db
 export const useSavePayment = () => {
@@ -22,5 +23,20 @@ export const usePayment = (id) => {
             const { data } = await axiosInstance(`/payments/${id}`)
             return data
         },
+    })
+}
+
+// Get payment history for seller
+export const useSellerPayments = () => {
+    const { user } = useAuth();
+    const axiosInstance = useAxiosInstance();
+
+    return useQuery({
+        queryKey: ['sellerPayments'],
+        queryFn: async () => {
+            const { data } = await axiosInstance(`/seller-payment/${user?.email}`)
+            return data
+        },
+        enabled: !!user?.email
     })
 }

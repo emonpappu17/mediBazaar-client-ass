@@ -19,9 +19,9 @@ const Invoice = () => {
     if (error) return <p>got error</p>
     
     return (
-        <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-base-200">
+        <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-base-200 ">
             {/* Display invoice */}
-            <div className="max-w-3xl mx-auto bg-base-100 p-6 rounded-lg shadow-lg border border-base-300">
+            <div className=" max-w-3xl mx-auto bg-base-100 p-6 rounded-lg shadow-lg border border-base-300 ">
                 {/* Header */}
                 <div className="flex justify-between items-center mb-6">
                     <div className="flex items-center  ">
