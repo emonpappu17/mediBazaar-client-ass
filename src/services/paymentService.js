@@ -47,9 +47,7 @@ export const useSellerReceived = () => {
     const axiosInstance = useAxiosInstance();
     return useMutation({
         mutationFn: async (id) => {
-            console.log('role form useSellerReceived', id);
             const { data } = await axiosInstance.patch(`/seller-payment/${id}`)
-            console.log('useUpdateUserRole', data);
             return data
         },
         onSuccess: () => {
