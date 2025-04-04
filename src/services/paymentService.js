@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import useAxiosInstance from "./axiosInstance"
 import useAuth from "../hooks/useAuth"
 
@@ -38,5 +38,22 @@ export const useSellerPayments = () => {
             return data
         },
         enabled: !!user?.email
+    })
+}
+
+// Update seller received
+export const useSellerReceived = () => {
+    const queryClient = useQueryClient();
+    const axiosInstance = useAxiosInstance();
+    return useMutation({
+        mutationFn: async (id) => {
+            console.log('role form useSellerReceived', id);
+            const { data } = await axiosInstance.patch(`/seller-payment/${id}`)
+            console.log('useUpdateUserRole', data);
+            return data
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['sellerPayments'])
+        }
     })
 }
