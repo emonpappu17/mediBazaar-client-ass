@@ -7,13 +7,13 @@ const PaymentHistoryRow = ({ payment, handleViewDetails }) => {
         <tr
             key={payment._id}
             className="hover:bg-base-200">
-            <td className="py-3 px-4 text-sm text-base-content font-medium  font-mono  truncate max-w-xs">{payment.transactionId}</td>
             <td className="py-3 px-4">
                 <div className="flex flex-col">
                     <span className="font-medium text-base-content">{payment.useName || 'Ronaldo'}</span>
                     <span className="text-sm text-base-content/70">{payment.userEmail}</span>
                 </div>
             </td>
+            <td className="py-3 px-4 text-sm text-base-content font-medium  font-mono  truncate max-w-xs">{payment.transactionId}</td>
             <td className="py-3 px-4 text-sm text-base-content/80">
                 {format(new Date(payment.createdAt), 'MMM dd, yyyy')}
             </td>

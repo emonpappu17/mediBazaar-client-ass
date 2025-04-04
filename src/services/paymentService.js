@@ -55,3 +55,30 @@ export const useSellerReceived = () => {
         }
     })
 }
+
+// All payments for admin
+export const useAllPayment = () => {
+    const axiosInstance = useAxiosInstance();
+    return useQuery({
+        queryKey: ['allPayment'],
+        queryFn: async () => {
+            const { data } = await axiosInstance(`/admin-payment-management`)
+            return data
+        },
+    })
+}
+
+// Update admin accepted
+export const useAdminApproval = () => {
+    const queryClient = useQueryClient();
+    const axiosInstance = useAxiosInstance();
+    return useMutation({
+        mutationFn: async (id) => {
+            const { data } = await axiosInstance.patch(`/admin-payment-management/${id}`)
+            return data
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['allPayment'])
+        }
+    })
+}
