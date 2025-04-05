@@ -60,9 +60,23 @@ const UserRow = ({ user }) => {
             </td>
             <td className="py-3 px-4 text-sm text-base-content text-nowrap">{format(new Date(user.createdAt), "yyyy-MM-dd")}</td>
             <td className="py-3 px-4 text-sm text-base-content">
-                <button className="text-base-content cursor-pointer hover:scale-110 hover:bg-base-300 rounded-md p-2 transition-transform"
+                {/* <button className="text-base-content cursor-pointer hover:scale-110 hover:bg-base-300 rounded-md p-2 transition-transform"
                     onClick={() => setIsModalOpen(true)}>
                     <MdMoreVert className="h-5 w-5" />
+                </button> */}
+                {/* 
+                <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="p-2 rounded-full transition-all duration-300 bg-base-200 hover:bg-base-300 text-base-content hover:text-primary shadow-md hover:shadow-lg cursor-pointer"
+                >
+                    <MdMoreVert className="text-lg" />
+                </button> */}
+
+                <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="p-2 rounded-full transition-all duration-300 bg-info/20 hover:bg-info text-info hover:text-white shadow-md hover:shadow-lg cursor-pointer"
+                >
+                    <MdMoreVert className="text-lg" />
                 </button>
 
                 <RoleUpdateModal
@@ -73,7 +87,6 @@ const UserRow = ({ user }) => {
                     closeModal={() => setIsModalOpen(false)}
                     handleRoleUpdate={handleRoleUpdate}
                 />
-
             </td>
         </tr>
     );

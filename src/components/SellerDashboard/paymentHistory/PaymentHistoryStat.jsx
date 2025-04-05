@@ -1,20 +1,20 @@
 import PropTypes from "prop-types";
 import { FaCheckCircle, FaClock, FaMoneyBillWave } from "react-icons/fa";
 
-const PaymentHistoryStat = ({ payments }) => {
+const PaymentHistoryStat = ({ payments, adminPaymentManagement }) => {
     // Total Revenue
     const totalPaid = payments.reduce((sum, payment) => sum + payment.totalAmount, 0).toFixed(2)
 
     // Total Pending Revenue 
-    const pendingTotal = payments.filter(payment => payment.paymentStatus === 'Pending').reduce((sum, payment) => sum + payment.totalAmount, 0)
+    const pendingTotal = payments.filter(payment => payment.paymentStatus === 'Pending').reduce((sum, payment) => sum + payment.totalAmount, 0).toFixed(2)
 
     // Total Paid Revenue
-    const paidTotal = payments.filter(payment => payment.paymentStatus !== 'Pending').reduce((sum, payment) => sum + payment.totalAmount, 0)
+    const paidTotal = payments.filter(payment => payment.paymentStatus !== 'Pending').reduce((sum, payment) => sum + payment.totalAmount, 0).toFixed(2)
 
     return (
         <div className="bg-base-100 rounded-lg drop-shadow-md p-6 mb-6">
-            <h1 className="text-2xl font-bold text-base-content">Payment History</h1>
-            <p className="text-base-content/70">Track and manage all your medicine sales payments</p>
+            <h1 className="text-2xl font-bold text-base-content">{adminPaymentManagement ? 'Payment Management' : 'Payment History'}</h1>
+            <p className="text-base-content/70">{adminPaymentManagement ? 'Track and manage all the medicine sales payments' : 'Track and manage all your medicine sales payments'}</p>
 
             {/* Stats Cards */}
             <div className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
@@ -65,6 +65,7 @@ PaymentHistoryStat.propTypes = {
             paymentStatus: PropTypes.string.isRequired,
         })
     ).isRequired,
+    adminPaymentManagement: PropTypes.bool.isRequired
 };
 
 export default PaymentHistoryStat;
