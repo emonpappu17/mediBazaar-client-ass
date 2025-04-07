@@ -10,6 +10,14 @@ import { useAllPayment } from "../../../services/paymentService";
 import { FaCheckCircle, FaClock, FaEye } from "react-icons/fa";
 import { useRef } from "react";
 import { DownloadTableExcel } from "react-export-table-to-excel";
+import { jsPDF } from 'jspdf'
+import { autoTable } from 'jspdf-autotable'
+import { applyPlugin } from 'jspdf-autotable'
+// import htmlDocx from 'html-docx-js/dist/html-docx';
+// import { saveAs } from 'file-saver';
+import { Document, Packer, Paragraph, Table, TableCell, TableRow, TextRun } from "docx";
+import { saveAs } from "file-saver";
+
 
 //     //dateRangeFilter
 //     const [endDate, setEndDate] = useState('');
@@ -529,23 +537,241 @@ import { DownloadTableExcel } from "react-export-table-to-excel";
 
 //==========================real
 
+// import { jsPDF } from 'jspdf'
+// import { autoTable } from 'jspdf-autotable'
 
+// const ManageSales = () => {
+//     const tableRef = useRef(null);
+
+//     // API Calls
+//     const { data: payments = [] } = useAllPayment();
+
+//     const doc = new jsPDF()
+//     const handleExportPdf = () => {
+//         // autoTable(doc, { html: '#my-table' })
+//         // doc.save('table.pdf')
+
+//         autoTable(doc, { html: '#my-table' })
+//         doc.save('table.pdf')
+//     }
+
+
+//     return (
+//         < div className="overflow-x-auto drop-shadow-md ">
+//             <DownloadTableExcel
+//                 filename="Sales Report"
+//                 sheet="users"
+//                 currentTableRef={tableRef.current}
+//             >
+//                 <button className="btn">Export excel</button>
+//             </DownloadTableExcel>
+//             <button className="btn ml-4" onClick={handleExportPdf}>Export pdf</button>
+//             <table id="my-table" className="min-w-full bg-base-100 rounded-lg" ref={tableRef}>
+//                 <thead className="bg-base-200">
+//                     <tr className="border-b border-base-300">
+//                         <th className="py-3 px-4 text-left text-xs font-semibold text-base-content uppercase tracking-wider">Customer</th>
+//                         <th className="py-3 px-4 text-left text-xs font-semibold text-base-content uppercase tracking-wider">Transaction ID</th>
+//                         <th className="py-3 px-4 text-left text-xs font-semibold text-base-content uppercase tracking-wider">Medicines</th>
+//                         <th className="py-3 px-4 text-left text-xs font-semibold text-base-content uppercase tracking-wider">Seller</th>
+//                         <th className="py-3 px-4 text-left text-xs font-semibold text-base-content uppercase tracking-wider">Date</th>
+//                         <th className="py-3 px-4 text-left text-xs font-semibold text-base-content uppercase tracking-wider">Amount</th>
+//                         <th className="py-3 px-4 text-left text-xs font-semibold text-base-content uppercase tracking-wider">Status</th>
+//                     </tr>
+//                 </thead>
+//                 <tbody className="divide-y divide-base-300" >
+//                     {payments?.map((payment) => (
+//                         // Row
+//                         <tr
+//                             key={payment._id}
+//                             className="hover:bg-base-200">
+//                             <td className="py-3 px-4">
+//                                 <div className="flex flex-col">
+//                                     <span className="font-medium text-base-content">{payment.useName || 'Ronaldo'}</span>
+//                                     <span className="text-sm text-base-content/70">{payment.userEmail}</span>
+//                                 </div>
+//                             </td>
+//                             <td className="py-3 px-4 text-sm text-base-content font-medium  font-mono  truncate max-w-xs">{payment.transactionId}</td>
+//                             <td className="py-3 px-4 text-sm text-base-content font-medium  font-mono  truncate max-w-xs">
+//                                 {payment.items.map((medicine, index) => (
+//                                     <div key={index} className="text-sm">
+//                                         <span className="font-semibold">{medicine.name}</span> (Qty: {medicine.quantity}, Price: ${medicine.finalPrice.toFixed(2)})
+//                                     </div>
+//                                 ))}
+//                             </td>
+//                             <td className="py-3 px-4 text-sm text-base-content font-medium  font-mono  truncate max-w-xs">
+//                                 {payment.items.map((medicine, index) => (
+//                                     <div key={index} className="text-sm">
+//                                         <span className="font-semibold">{medicine.name.length >= 4 ? medicine.name.slice(0, 4) + '...' : medicine.name}</span>
+//                                         ({medicine.sellerEmail || 'Random'})
+//                                     </div>
+//                                 ))}
+//                             </td>
+//                             <td className="py-3 px-4 text-sm text-base-content/80">
+//                                 {format(new Date(payment.createdAt), 'MMM dd, yyyy')}
+//                             </td>
+//                             <td className="py-3 px-4 font-medium">${payment.totalAmount.toFixed(2)}</td>
+//                             <td className="py-3 px-4">
+//                                 {payment.paymentStatus === 'Pending' ? (
+//                                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+//                                         <FaClock className="mr-1 text-amber-500" /> Pending
+//                                     </span>
+//                                 ) : (
+//                                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+//                                         <FaCheckCircle className="mr-1 text-green-500" /> Paid
+//                                     </span>
+//                                 )}
+//                             </td>
+//                         </tr>
+//                     ))}
+//                 </tbody>
+//             </table>
+//         </div>
+//     );
+// };
+
+// export default ManageSales;
+
+
+//===================================
+// import { jsPDF } from 'jspdf';
+// import { autoTable } from 'jspdf-autotable';
+// import { useRef } from 'react';
+// import { FaClock, FaCheckCircle } from 'react-icons/fa';
+// import { format } from 'date-fns'; // Assuming you’re using date-fns for date formatting
+// import DownloadTableExcel from 'react-export-table-to-excel'; // Keep this for Excel export
 
 const ManageSales = () => {
     const tableRef = useRef(null);
 
-    // API Calls
+    // API Calls (assuming useAllPayment is a custom hook)
     const { data: payments = [] } = useAllPayment();
+
+    applyPlugin(jsPDF)
+    const doc = new jsPDF('l');
+
+    // Pdf
+    const handleExportPdf = () => {
+        const table = document.getElementById('my-table');
+        if (!table) {
+            alert('Table not found! This is fake functionality.');
+            return;
+        }
+
+        // Extract headers and rows from the table
+        const headers = Array.from(table.querySelectorAll('thead th'))
+            .map(th => th.textContent);
+
+        const rows = Array.from(table.querySelectorAll('tbody tr'))
+            .map(tr => Array.from(tr.cells)
+                .map(td => td.textContent.replace(/\s*\n\s*/g, ' ').trim()));
+
+        // Add title
+        doc.setFontSize(16);
+        doc.text("Sales Report", 14, 10);
+
+        // Create PDF
+        doc.autoTable({
+            head: [headers],
+            body: rows,
+            startY: 25,
+            theme: 'grid', // Clean, modern table theme
+            // styles: {
+            //     cellPadding: 2,
+            //     fontSize: 10,
+            //     overflow: 'linebreak',
+            //     halign: 'left',
+            // },
+            // headStyles: {
+            //     fillColor: [41, 128, 185], // DaisyUI primary color (blue) approximated
+            //     textColor: [255, 255, 255], // White text
+            //     fontStyle: 'bold',
+            // },
+            // bodyStyles: {
+            //     fillColor: [245, 245, 245], // Light gray for body (matches light theme)
+            //     textColor: [0, 0, 0], // Black text
+            //     alternateRowStyles: { fillColor: [255, 255, 255] }, // White for alternating rows
+            // },
+            horizontalPageBreak: true,
+            horizontalPageBreakBehaviour: 'immediately',
+        });
+
+        // Save the PDF
+        doc.save('sales_report.pdf');
+    };
+
+    //Doc
+    const handleExportDoc = () => {
+        const table = document.getElementById("my-table");
+
+        if (!table) {
+            alert("Table not found! This is fake functionality.");
+            return;
+        }
+
+        const rows = table.querySelectorAll("tr");
+        const docRows = [];
+
+        rows.forEach(row => {
+            const cells = row.querySelectorAll("th, td");
+            const docCells = [];
+
+            cells.forEach(cell => {
+                const cellText = cell.textContent.trim();
+                docCells.push(
+                    new TableCell({
+                        children: [
+                            new Paragraph({
+                                children: [new TextRun(cellText)],
+                            }),
+                        ],
+                    })
+                );
+            });
+
+            docRows.push(new TableRow({ children: docCells }));
+        });
+
+        const doc = new Document({
+            sections: [
+                {
+                    children: [
+                        new Paragraph({
+                            children: [
+                                new TextRun({
+                                    text: "Sales Report",
+                                    bold: true,
+                                    size: 28,
+                                }),
+                            ],
+                        }),
+                        new Table({
+                            rows: docRows,
+                        }),
+                    ],
+                },
+            ],
+        });
+
+        Packer.toBlob(doc).then((blob) => {
+            saveAs(blob, "sales_report.docx");
+        });
+    };
+
     return (
-        < div className="overflow-x-auto drop-shadow-md ">
-            <DownloadTableExcel
-                filename="Sales Report"
-                sheet="users"
-                currentTableRef={tableRef.current}
-            >
-                <button className="btn"> Export excel </button>
-            </DownloadTableExcel>
-            <table className="min-w-full bg-base-100 rounded-lg " ref={tableRef}>
+        <div className="overflow-x-auto drop-shadow-md">
+            <div className="flex justify-start mb-4">
+                <DownloadTableExcel
+                    filename="Sales Report"
+                    sheet="users"
+                    currentTableRef={tableRef.current}
+                >
+                    <button className="btn btn-primary">Export Excel</button>
+                </DownloadTableExcel>
+                <button className="btn btn-primary ml-4" onClick={handleExportPdf}>Export PDF</button>
+                <button className="btn btn-primary ml-4" onClick={handleExportDoc}>Export Word</button>
+
+            </div>
+            <table id="my-table" className="min-w-full bg-base-100 rounded-lg" ref={tableRef}>
                 <thead className="bg-base-200">
                     <tr className="border-b border-base-300">
                         <th className="py-3 px-4 text-left text-xs font-semibold text-base-content uppercase tracking-wider">Customer</th>
@@ -555,30 +781,27 @@ const ManageSales = () => {
                         <th className="py-3 px-4 text-left text-xs font-semibold text-base-content uppercase tracking-wider">Date</th>
                         <th className="py-3 px-4 text-left text-xs font-semibold text-base-content uppercase tracking-wider">Amount</th>
                         <th className="py-3 px-4 text-left text-xs font-semibold text-base-content uppercase tracking-wider">Status</th>
-                        {/* <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Actions</th> */}
                     </tr>
                 </thead>
-                <tbody className="divide-y divide-base-300" >
+                <tbody className="divide-y divide-base-300">
                     {payments?.map((payment) => (
-                        // Row
-                        <tr
-                            key={payment._id}
-                            className="hover:bg-base-200">
+                        <tr key={payment._id} className="hover:bg-base-200">
                             <td className="py-3 px-4">
-                                <div className="flex flex-col">
+                                {/* <div className="flex flex-col">
                                     <span className="font-medium text-base-content">{payment.useName || 'Ronaldo'}</span>
                                     <span className="text-sm text-base-content/70">{payment.userEmail}</span>
-                                </div>
+                                </div> */}
+                                <span className="text-sm text-base-content/70">{payment.userEmail}</span>
                             </td>
-                            <td className="py-3 px-4 text-sm text-base-content font-medium  font-mono  truncate max-w-xs">{payment.transactionId}</td>
-                            <td className="py-3 px-4 text-sm text-base-content font-medium  font-mono  truncate max-w-xs">
+                            <td className="py-3 px-4 text-sm text-base-content font-medium font-mono truncate max-w-xs">{payment.transactionId}</td>
+                            <td className="py-3 px-4 text-sm text-base-content font-medium font-mono truncate max-w-xs">
                                 {payment.items.map((medicine, index) => (
                                     <div key={index} className="text-sm">
                                         <span className="font-semibold">{medicine.name}</span> (Qty: {medicine.quantity}, Price: ${medicine.finalPrice.toFixed(2)})
                                     </div>
                                 ))}
                             </td>
-                            <td className="py-3 px-4 text-sm text-base-content font-medium  font-mono  truncate max-w-xs">
+                            <td className="py-3 px-4 text-sm text-base-content font-medium font-mono truncate max-w-xs">
                                 {payment.items.map((medicine, index) => (
                                     <div key={index} className="text-sm">
                                         <span className="font-semibold">{medicine.name.length >= 4 ? medicine.name.slice(0, 4) + '...' : medicine.name}</span>
@@ -589,26 +812,18 @@ const ManageSales = () => {
                             <td className="py-3 px-4 text-sm text-base-content/80">
                                 {format(new Date(payment.createdAt), 'MMM dd, yyyy')}
                             </td>
-                            <td className="py-3 px-4 font-medium">${payment.totalAmount.toFixed(2)}</td>
+                            <td className="py-3 px-4 font-medium text-base-content">${payment.totalAmount.toFixed(2)}</td>
                             <td className="py-3 px-4">
                                 {payment.paymentStatus === 'Pending' ? (
-                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
-                                        <FaClock className="mr-1 text-amber-500" /> Pending
+                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-warning text-warning-content">
+                                        <FaClock className="mr-1 text-warning" /> Pending
                                     </span>
                                 ) : (
-                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                        <FaCheckCircle className="mr-1 text-green-500" /> Paid
+                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success text-success-content">
+                                        <FaCheckCircle className="mr-1 text-success" /> Paid
                                     </span>
                                 )}
                             </td>
-                            {/* <td className="py-3 px-4">
-                                <button
-                                    // onClick={() => handleViewDetails(payment)}
-                                    className="p-2 rounded-full transition-all duration-300 bg-blue-100 hover:bg-blue-500 text-blue-500 hover:text-white shadow-md hover:shadow-lg cursor-pointer"
-                                >
-                                    <FaEye className="text-lg" />
-                                </button>
-                            </td> */}
                         </tr>
                     ))}
                 </tbody>
