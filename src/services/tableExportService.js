@@ -3,13 +3,14 @@ import { Document, Packer, Paragraph, Table, TableCell, TableRow, TextRun, Width
 import { saveAs } from "file-saver";
 import jsPDF from "jspdf";
 import { applyPlugin } from "jspdf-autotable";
+import toast from "react-hot-toast";
 
 applyPlugin(jsPDF)
 const doc = new jsPDF('l');
 
 // Making PDF
 export const handleExportPdf = (payments) => {
-    console.log('knk knk', payments);
+    if (!payments) return toast.error('Payment data not found')
 
     const table = document.getElementById('my-table');
     if (!table) {
@@ -85,7 +86,7 @@ export const handleExportPdf = (payments) => {
 
 // Making DOC
 export const handleExportDoc = async (payments) => {
-    console.log('knmknknknkn', payments);
+    if (!payments) return toast.error('Payment data not found')
 
     // Prepare the table headers
     const headers = [
@@ -173,3 +174,60 @@ export const handleExportDoc = async (payments) => {
     const blob = await Packer.toBlob(doc);
     saveAs(blob, "payments_report.docx");
 };
+
+// Making CSV
+export const handleExportCsv = (payments) => {
+    if (!payments) return toast.error('Payment data not found')
+
+    // Prepare headers
+    const headers = [
+        'Customer Email',
+        'Transaction ID',
+        'Medicines',
+        'Seller',
+        'Date',
+        'Amount',
+        'Status'
+    ];
+
+    // Prepare data rows
+    const rows = payments?.map(payment => {
+        const medicines = payment.items.map(item =>
+            `${item.name} (Qty: ${item.quantity}, Price: $${item.finalPrice.toFixed(2)})`
+        ).join("\n");
+
+        const sellers = payment.items.map(item =>
+            `${item.name.slice(0, 4)}... (${item.sellerEmail || 'Random'})`
+        ).join("\n");
+
+        return [
+            `"${payment.userEmail}"`,
+            `"${payment.transactionId}"`,
+            `"${medicines}"`,
+            `"${sellers}"`,
+            `"${format(new Date(payment.createdAt), 'MMM dd, yyyy')}"`,
+            `$${payment.totalAmount.toFixed(2)}`,
+            payment.paymentStatus,
+        ];
+    });
+
+    // Combine headers and data
+    const csvContent = [
+        headers.join(','),
+        ...rows.map(row => row.join(','))
+    ].join('\n');
+
+    // Create download link REAL
+    // const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob([csvContent], { type: 'text/csv' })
+
+    // const url = URL.createObjectURL(blob);
+    const url = URL.createObjectURL(blob)
+
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', 'sales_report.csv')
+    document.body.appendChild(link)
+    link.click();
+    document.body.removeChild(link)
+}
