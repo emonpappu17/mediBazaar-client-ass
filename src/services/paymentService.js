@@ -60,14 +60,22 @@ export const useSellerReceived = () => {
 export const useAllPayment = (startDate, endDate) => {
     const axiosInstance = useAxiosInstance();
     return useQuery({
-        queryKey: ['allPayment', startDate, endDate],
+        queryKey: ['allPayment', startDate?.getTime(), endDate?.getTime()],
         queryFn: async () => {
             const params = {}; //query search or parameter pathanor best way axios provide kore
-            console.log('startDate', startDate);
-            console.log('startDate toISOString', startDate.toISOString());
-            console.log('endDate', endDate);
-            if (startDate) params.startDate = startDate.toISOString();
-            if (endDate) params.endDate = endDate.toISOString();
+
+            if (
+                startDate && endDate
+                // startDate instanceof Date && !isNaN(startDate) &&
+                // endDate instanceof Date && !isNaN(endDate)
+            ) {
+                console.log('hello');
+
+                params.startDate = startDate.getTime();
+                params.endDate = endDate.getTime();
+            }
+            // if (startDate) params.startDate = startDate.toISOString();
+            // if (endDate) params.endDate = endDate.toISOString();
 
 
 
