@@ -27,10 +27,7 @@ export const useAddMedicine = () => {
     const axiosInstance = useAxiosInstance();
     return useMutation({
         mutationFn: async ({ medicine, controller }) => {
-            console.log('medicine', medicine);
             const { data } = await axiosInstance.post('/medicines', medicine, { signal: controller.signal })
-            console.log('check', data);
-
             return data
         },
         onSuccess: () => {
@@ -54,7 +51,6 @@ export const useUpdateMedicine = () => {
     const axiosInstance = useAxiosInstance();
     return useMutation({
         mutationFn: async ({ medicine, id, controller }) => {
-            console.log(medicine, id);
             const { data } = await axiosInstance.put(`/medicines/${id}`, medicine, { signal: controller.signal })
             return data
         },

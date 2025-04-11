@@ -73,6 +73,7 @@ const Shop = () => {
 
             {/* Pagination UI */}
             <Pagination currentPage={page} totalPages={data?.totalPages || 1} onPageChange={setPage}></Pagination>
+            
             <BackToTop></BackToTop>
         </div >
     );

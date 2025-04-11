@@ -18,10 +18,6 @@ const MedicineCard = ({ medicine, layout, }) => {
     // API Calls
     const { mutate: addToCart } = useAddToCart();
 
-
-    console.log('medicine', medicine);
-
-
     // Determine if the product has a discount
     const hasDiscount = medicine.discount > 0;
     const originalPrice = medicine.price;
@@ -61,7 +57,6 @@ const MedicineCard = ({ medicine, layout, }) => {
                 confirmButtonText: "Yes, login!"
             }).then((result) => {
                 if (result.isConfirmed) {
-
                     //redirect to login page
                     navigate('/login')
                 }

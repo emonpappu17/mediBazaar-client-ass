@@ -57,12 +57,23 @@ export const useSellerReceived = () => {
 }
 
 // All payments for admin
-export const useAllPayment = () => {
+export const useAllPayment = (startDate, endDate) => {
     const axiosInstance = useAxiosInstance();
     return useQuery({
-        queryKey: ['allPayment'],
+        queryKey: ['allPayment', startDate, endDate],
         queryFn: async () => {
-            const { data } = await axiosInstance(`/admin-payment-management`)
+            const params = {}; //query search or parameter pathanor best way axios provide kore
+            console.log('startDate', startDate);
+            console.log('startDate toISOString', startDate.toISOString());
+            console.log('endDate', endDate);
+            if (startDate) params.startDate = startDate.toISOString();
+            if (endDate) params.endDate = endDate.toISOString();
+
+
+
+            console.log('params', params);
+
+            const { data } = await axiosInstance(`/admin-payment-management`, { params })
             return data
         },
     })
