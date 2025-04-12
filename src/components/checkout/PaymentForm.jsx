@@ -97,7 +97,7 @@ const PaymentForm = ({ amount, cartData, name, address }) => {
                 <CardElement />
             </div>
             <Button
-                text={`Pay $${amount}`}
+                text={`Pay $${amount.toFixed(2)}`}
                 type="submit"
                 spinner={loading}
                 disabled={loading || cartData?.totalPrice === 0}

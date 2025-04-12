@@ -13,7 +13,7 @@ const ManagePayment = () => {
         mutate(id,
             {
                 onSuccess: () => {
-                    toast.success('Accepted')
+                    toast.success('Payment Accepted!!')
                 },
                 onError: () => {
                     toast.error('error')
