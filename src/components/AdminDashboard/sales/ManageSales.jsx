@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import { useAllPayment } from "../../../services/paymentService";
 import { FaCalendarAlt, FaCheckCircle, FaClock, FaFilter, FaSearch } from "react-icons/fa";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ExportBtns from "./ExportBtns";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -9,7 +9,8 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const ManageSales = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [statusFilter, setStatusFilter] = useState("all");
+    const [statusFilter, setStatusFilter] = useState("");
+    const [tableEl, setTableEl] = useState(null);
 
     //For Excel
     const tableRef = useRef(null);
@@ -24,39 +25,18 @@ const ManageSales = () => {
     };
 
     // API Calls 
-    const { data: payments = [] } = useAllPayment(startDate, endDate);
+    const { data: payments = [], isLoading } = useAllPayment(startDate, endDate, searchTerm, statusFilter);
 
-    // Calculate stats
-    const totalSales = payments.reduce((sum, payment) => sum + payment.totalAmount, 0);
-    const paidCount = payments.filter(p => p.paymentStatus === 'Paid').length;
-    const pendingCount = payments.filter(p => p.paymentStatus === 'Pending').length;
+    useEffect(() => {
+        if (tableRef.current) {
+            setTableEl(tableRef.current)
+        }
+    }, [payments]);
 
     return (
         //lg:mx-16
         <div className="drop-shadow-md">
             {/* Date Range Filter */}
-            {/* <div className="md:flex justify-between items-center mb-6 bg-base-200 p-4 rounded-lg">
-                <h2 className="text-xl font-semibold text-base-content">Sales Management</h2>
-                <div className="flex items-center space-x-4">
-                    <div className="flex items-center space-x-2">
-                        <FaCalendarAlt className="text-base-content/70" />
-                        <span className="text-sm font-medium text-base-content">Filter by Date:</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                        <DatePicker
-                            onChange={onChange}
-                            startDate={startDate}
-                            endDate={endDate}
-                            selectsRange
-                            isClearable={true}
-                            dateFormat="MMM d, yyyy"
-                            placeholderText="Select date range"
-                            className="p-2 w-50 rounded border-2 border-base-300 outline-base-content focus:outline-1 text-[13px]"
-                        />
-                    </div>
-                </div>
-            </div> */}
-
             <div className="md:flex justify-between items-center mb-6 bg-base-200 p-4 rounded-lg">
                 <h2 className="text-xl font-semibold text-base-content">Sales Management</h2>
                 <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4 mt-4 md:mt-0">
@@ -79,7 +59,7 @@ const ManageSales = () => {
                             onChange={(e) => setStatusFilter(e.target.value)}
                             className="p-2 pl-8 pr-2 rounded border-none outline-base-content focus:outline-1 text-[13px] w-full bg-base-100 "
                         >
-                            <option value="All">All Statuses</option>
+                            <option value="">All Statuses</option>
                             <option value="Pending">Pending</option>
                             <option value="Paid">Paid</option>
                         </select>
@@ -104,81 +84,99 @@ const ManageSales = () => {
             </div>
 
             {/* Table */}
-            <div className="overflow-x-auto">
-                <table id="my-table" className="min-w-full bg-base-100 rounded-lg" ref={tableRef}>
-                    <thead className="bg-base-200">
-                        <tr className="border-b border-base-300">
-                            <th className="py-3 px-4 text-left text-xs font-semibold text-base-content uppercase tracking-wider">Customer</th>
-                            <th className="py-3 px-4 text-left text-xs font-semibold text-base-content uppercase tracking-wider">Transaction ID</th>
-                            <th className="py-3 px-4 text-left text-xs font-semibold text-base-content uppercase tracking-wider">Medicines</th>
-                            <th className="py-3 px-4 text-left text-xs font-semibold text-base-content uppercase tracking-wider">Seller</th>
-                            <th className="py-3 px-4 text-left text-xs font-semibold text-base-content uppercase tracking-wider">Date</th>
-                            <th className="py-3 px-4 text-left text-xs font-semibold text-base-content uppercase tracking-wider">Amount</th>
-                            <th className="py-3 px-4 text-left text-xs font-semibold text-base-content uppercase tracking-wider">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-base-300">
-                        {payments?.map((payment) => (
-                            <tr key={payment._id} className="hover:bg-base-200">
-                                <td className="py-3 px-4">
-                                    {/* <div className="flex flex-col">
-                                    <span className="font-medium text-base-content">{payment.useName || 'Ronaldo'}</span>
-                                    <span className="text-sm text-base-content/70">{payment.userEmail}</span>
-                                </div> */}
-                                    <span className="font-medium text-base-content">{payment.userEmail}</span>
-                                </td>
-                                <td className="py-3 px-4 text-sm text-base-content font-medium font-mono truncate max-w-xs">{payment.transactionId}</td>
-                                <td className="py-3 px-4 text-sm text-base-content font-medium font-mono truncate max-w-xs">
-                                    {payment.items.map((medicine, index) => (
-                                        <div key={index} className="text-sm">
-                                            <span className="font-semibold">{medicine.name}</span> (Qty: {medicine.quantity}, Price: ${medicine.finalPrice.toFixed(2)})
-                                        </div>
-                                    ))}
-                                </td>
-                                <td className="py-3 px-4 text-sm text-base-content font-medium font-mono truncate max-w-xs">
-                                    {payment.items.map((medicine, index) => (
-                                        <div key={index} className="text-sm">
-                                            <span className="font-semibold">{medicine.name.length >= 4 ? medicine.name.slice(0, 4) + '...' : medicine.name}</span>
-                                            ({medicine.sellerEmail || 'Random'})
-                                        </div>
-                                    ))}
-                                </td>
-                                <td className="py-3 px-4 text-sm text-base-content/80">
-                                    {format(new Date(payment.createdAt), 'MMM dd, yyyy')}
-                                </td>
-                                <td className="py-3 px-4 font-medium text-base-content">${payment.totalAmount.toFixed(2)}</td>
-                                <td className="py-3 px-4">
-                                    {payment.paymentStatus === 'Pending' ? (
-                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
-                                            <FaClock className="mr-1 text-amber-500" /> Pending
-                                        </span>
-                                    ) : (
-                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                            <FaCheckCircle className="mr-1 text-green-500" /> Paid
-                                        </span>
-                                    )}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+            {isLoading ?
+                // Loader
+                <div className=" flex justify-center items-center  h-screen">
+                    <div>
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+                        <p className="mt-2 text-base-content">Loading payments...</p>
+                    </div>
+                </div>
+                :
+                // If payments found
+                payments.length === 0 ?
+                    <div className="p-6 text-center">
+                        <p className="text-base-content">No payment records found.</p>
+                    </div>
+                    :
+                    <div className="overflow-x-auto">
+                        <table id="my-table" className="min-w-full bg-base-100 rounded-lg" ref={tableRef}>
+                            <thead className="bg-base-200">
+                                <tr className="border-b border-base-300">
+                                    {/* Consistent header styling */}
+                                    <th className="py-3 px-4 text-left text-sm font-semibold text-base-content uppercase tracking-wider">Customer</th>
+                                    <th className="py-3 px-4 text-left text-sm font-semibold text-base-content uppercase tracking-wider">Transaction ID</th>
+                                    <th className="py-3 px-4 text-left text-sm font-semibold text-base-content uppercase tracking-wider">Medicines</th>
+                                    <th className="py-3 px-4 text-left text-sm font-semibold text-base-content uppercase tracking-wider">Seller</th>
+                                    <th className="py-3 px-4 text-left text-sm font-semibold text-base-content uppercase tracking-wider">Date</th>
+                                    <th className="py-3 px-4 text-left text-sm font-semibold text-base-content uppercase tracking-wider">Amount</th>
+                                    <th className="py-3 px-4 text-left text-sm font-semibold text-base-content uppercase tracking-wider">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-base-300">
+                                {payments?.map((payment) => (
+                                    <tr key={payment._id} className="hover:bg-base-200">
+                                        {/* Customer Email */}
+                                        <td className="py-3 px-4 text-sm font-medium text-base-content">
+                                            {payment.userEmail}
+                                        </td>
 
-            {/* Stat */}
-            <div className="grid grid-cols-3 gap-4 my-4">
-                <div className="bg-base-200 p-4 rounded-lg">
-                    <h3 className="text-sm font-medium text-base-content/70">Total Sales</h3>
-                    <p className="text-xl font-bold">${totalSales.toFixed(2)}</p>
-                </div>
-                <div className="bg-base-200 p-4 rounded-lg">
-                    <h3 className="text-sm font-medium text-base-content/70">Paid</h3>
-                    <p className="text-xl font-bold text-green-600">{paidCount}</p>
-                </div>
-                <div className="bg-base-200 p-4 rounded-lg">
-                    <h3 className="text-sm font-medium text-base-content/70">Pending</h3>
-                    <p className="text-xl font-bold text-amber-600">{pendingCount}</p>
-                </div>
-            </div>
+                                        {/* Transaction ID  */}
+                                        <td className="py-3 px-4 text-sm font-mono font-medium text-base-content truncate max-w-xs">
+                                            {payment.transactionId}
+                                        </td>
+
+                                        {/* Medicines  */}
+                                        <td className="py-3 px-4 text-sm text-base-content truncate">
+                                            {payment.items.map((medicine, index) => (
+                                                <div key={index}>
+                                                    <span className="font-semibold">{medicine.name}</span>
+                                                    <span className="text-base-content/80"> (Qty: {medicine.quantity}, Price: ${medicine.finalPrice.toFixed(2)})</span>
+                                                </div>
+                                            ))}
+                                        </td>
+
+                                        {/* Seller*/}
+                                        <td className="py-3 px-4 text-sm text-base-content truncate">
+                                            {payment.items.map((medicine, index) => (
+                                                <div key={index}>
+                                                    <span className="font-semibold">
+                                                        {medicine.name.length >= 4 ? `${medicine.name.slice(0, 4)}...` : medicine.name}
+                                                    </span>
+                                                    <span className="text-base-content/80"> ({medicine.sellerEmail || 'Random'})</span>
+                                                </div>
+                                            ))}
+                                        </td>
+
+                                        {/* Date  */}
+                                        <td className="py-3 px-4 text-sm text-base-content/80 truncate">
+                                            {format(new Date(payment.createdAt), 'MMM dd, yyyy')}
+                                        </td>
+
+                                        {/* Amount  */}
+                                        <td className="py-3 px-4 text-sm font-medium text-base-content">
+                                            ${payment.totalAmount.toFixed(2)}
+                                        </td>
+
+                                        {/* Status badges */}
+                                        <td className="py-3 px-4">
+                                            {payment.paymentStatus === 'Pending' ? (
+                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-amber-100 text-amber-800">
+                                                    <FaClock className="mr-1 text-amber-500" /> Pending
+                                                </span>
+                                            ) : (
+                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                                    <FaCheckCircle className="mr-1 text-green-500" /> Paid
+                                                </span>
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+            }
+
 
             {/* Summary and Export */}
             <div className="flex justify-between items-center mt-4 bg-base-200 p-2 rounded-lg ">
@@ -189,7 +187,8 @@ const ManageSales = () => {
                     )}
                 </div>
                 <ExportBtns
-                    tableRef={tableRef.current}
+                    isLoading={isLoading}
+                    tableRef={tableEl}
                     payments={payments}
                 />
             </div>
@@ -199,7 +198,7 @@ const ManageSales = () => {
 
 export default ManageSales;
 
-//==========================================
+
 
 // import { format } from "date-fns";
 // import { useState } from "react";
