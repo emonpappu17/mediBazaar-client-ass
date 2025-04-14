@@ -149,7 +149,7 @@ const ManageCategory = () => {
     if (error) return <p>error</p>;
 
     return (
-        <div className="drop-shadow-md lg:mx-16">
+        <div className="drop-shadow-md">
 
             {/* Add Category */}
             <div className="flex justify-between items-center mb-4">
@@ -167,8 +167,8 @@ const ManageCategory = () => {
                     <thead className="bg-base-200">
                         <tr className="border-b border-base-300">
                             <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Image</th>
-                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Category Name</th>
-                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Total Medicines</th>
+                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider truncate">Category Name</th>
+                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider truncate">Total Medicines</th>
                             <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Created At</th>
                             <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Actions</th>
                         </tr>
@@ -180,7 +180,8 @@ const ManageCategory = () => {
                                 category={category}
                                 openEditModal={openEditModal}
                                 deleteCategory={deleteCategory}
-                                refetch={refetch} />
+                                refetch={refetch}
+                            />
                         ))}
                     </tbody>
                 </table>

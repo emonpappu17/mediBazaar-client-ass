@@ -22,7 +22,6 @@ const RoleUpdateModal = ({ user, isModalOpen, selectedRole, setSelectedRole, clo
                         <div className="relative mt-4">
                             <ListboxButton className="w-full bg-base-200  text-base-content rounded-md py-2 px-3 flex justify-between items-center">
                                 <p>{selectedRole}</p>
-                                {/* <p className="pointer-events-none">▼</p> */}
                                 <FaChevronDown className="text-sm opacity-60" />
                             </ListboxButton>
                             <ListboxOptions className="absolute mt-1 w-full bg-base-100 dark:bg-base-800 rounded-md shadow-lg max-h-60 overflow-auto z-10">
@@ -45,9 +44,6 @@ const RoleUpdateModal = ({ user, isModalOpen, selectedRole, setSelectedRole, clo
                             Close
                         </button>
                         <Button text='Change Role' onclick={handleRoleUpdate} className='px-4 py-2 rounded-md'></Button>
-                        {/* <button onClick={handleRoleUpdate} className="px-4 py-2 bg-[#0D6FEC] text-primary-content rounded-md hover:bg-[#0D6FEC]/90 transition-colors">
-                            Change Role
-                        </button> */}
                     </div>
                 </DialogPanel>
             </div>

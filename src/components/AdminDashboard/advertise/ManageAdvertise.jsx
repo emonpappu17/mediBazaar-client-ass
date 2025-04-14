@@ -43,7 +43,7 @@ const ManageAdvertise = () => {
     };
 
     return (
-        <div className="drop-shadow-md lg:mx-16">
+        <div className="drop-shadow-md">
 
             {/* Status count */}
             <AdvertiseStat advertises={advertises} />
@@ -57,7 +57,7 @@ const ManageAdvertise = () => {
                             <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Name</th>
                             <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Description</th>
                             <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Seller Email</th>
-                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Submitted Date</th>
+                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider truncate">Submitted Date</th>
                             <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Status</th>
                             <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Actions</th>
                         </tr>

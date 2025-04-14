@@ -22,7 +22,7 @@ const ManagePayment = () => {
         )
     }
     return (
-        <div className="drop-shadow-md lg:mx-16">
+        <div className="drop-shadow-md ">
             <PaymentHistoryStat payments={payments} adminPaymentManagement={true} />
             {isLoading ?
                 // Loader
@@ -38,25 +38,26 @@ const ManagePayment = () => {
                     </div>
                     :
                     <div className="overflow-x-auto drop-shadow-md">
-                        <table className="min-w-full bg-base-100 rounded-lg ">
+                        <table className="min-w-full bg-base-100 rounded-lg">
                             <thead className="bg-base-200">
                                 <tr className="border-b border-base-300">
-                                    <th className="py-3 px-4 text-left text-xs font-semibold text-base-content uppercase tracking-wider">Customer</th>
-                                    <th className="py-3 px-4 text-left text-xs font-semibold text-base-content uppercase tracking-wider">Transaction ID</th>
-                                    <th className="py-3 px-4 text-left text-xs font-semibold text-base-content uppercase tracking-wider">Items</th>
-                                    <th className="py-3 px-4 text-left text-xs font-semibold text-base-content uppercase tracking-wider">Date</th>
-                                    <th className="py-3 px-4 text-left text-xs font-semibold text-base-content uppercase tracking-wider">Amount</th>
-                                    <th className="py-3 px-4 text-left text-xs font-semibold text-base-content uppercase tracking-wider">Status</th>
-                                    <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Actions</th>
+                                    {/* Consistent header styling */}
+                                    <th className="py-3 px-4 text-left text-sm font-semibold text-base-content uppercase tracking-wider">Customer</th>
+                                    <th className="py-3 px-4 text-left text-sm font-semibold text-base-content uppercase tracking-wider">Transaction ID</th>
+                                    <th className="py-3 px-4 text-left text-sm font-semibold text-base-content uppercase tracking-wider">Items</th>
+                                    <th className="py-3 px-4 text-left text-sm font-semibold text-base-content uppercase tracking-wider">Date</th>
+                                    <th className="py-3 px-4 text-left text-sm font-semibold text-base-content uppercase tracking-wider">Amount</th>
+                                    <th className="py-3 px-4 text-left text-sm font-semibold text-base-content uppercase tracking-wider">Status</th>
+                                    <th className="py-3 px-4 text-left text-sm font-semibold text-base-content uppercase tracking-wider">Actions</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-base-300">
                                 {payments?.map((payment) => (
-                                    // Row 
                                     <ManagePaymentRow
                                         key={payment._id}
                                         payment={payment}
-                                        handleAcceptPayment={handleAcceptPayment} />
+                                        handleAcceptPayment={handleAcceptPayment}
+                                    />
                                 ))}
                             </tbody>
                         </table>

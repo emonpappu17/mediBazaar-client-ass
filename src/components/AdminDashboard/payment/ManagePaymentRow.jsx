@@ -4,49 +4,67 @@ import { FaCheckCircle, FaClock } from "react-icons/fa";
 
 const ManagePaymentRow = ({ payment, handleAcceptPayment }) => {
     return (
-        <tr
-            key={payment._id}
-            className="hover:bg-base-200">
+        <tr className="hover:bg-base-200">
+            {/* Customer */}
             <td className="py-3 px-4">
                 <div className="flex flex-col">
-                    <span className="font-medium text-base-content">{payment.useName || 'Ronaldo'}</span>
-                    <span className="text-sm text-base-content/70">{payment.userEmail}</span>
+                    <span className="text-sm font-medium text-base-content">
+                        {payment.useName || 'Ronaldo'}
+                    </span>
+                    <span className="text-xs text-base-content/70">
+                        {payment.userEmail}
+                    </span>
                 </div>
             </td>
-            <td className="py-3 px-4 text-sm text-base-content font-medium  font-mono  truncate max-w-xs">{payment.transactionId}</td>
-            <td className="py-3 px-4 text-sm text-base-content font-medium  font-mono  truncate max-w-xs">{payment.items.length} items</td>
 
-            <td className="py-3 px-4 text-sm text-base-content/80">
+            {/* Transaction ID */}
+            <td className="py-3 px-4 text-sm font-medium font-mono text-base-content truncate max-w-xs">
+                {payment.transactionId}
+            </td>
+
+            {/* Items */}
+            <td className="py-3 px-4 text-sm font-medium text-base-content truncate">
+                {payment.items.length} items
+            </td>
+
+            {/* Date */}
+            <td className="py-3 px-4 text-sm text-base-content/80 truncate">
                 {format(new Date(payment.createdAt), 'MMM dd, yyyy')}
             </td>
-            <td className="py-3 px-4 font-medium">${payment.totalAmount.toFixed(2)}</td>
+
+            {/* Amount */}
+            <td className="py-3 px-4 text-sm font-medium text-base-content">
+                ${payment.totalAmount.toFixed(2)}
+            </td>
+
+            {/* Status */}
             <td className="py-3 px-4">
                 {payment.paymentStatus === 'Pending' ? (
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-amber-100 text-amber-800">
                         <FaClock className="mr-1 text-amber-500" /> Pending
                     </span>
                 ) : (
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-green-100 text-green-800">
                         <FaCheckCircle className="mr-1 text-green-500" /> Paid
                     </span>
                 )}
             </td>
+
+            {/* Actions */}
             <td className="py-3 px-4">
-                {
-                    payment.paymentStatus === 'Paid' ?
-                        <span className="text-success font-medium">
-                            {/* flex items-center gap-1 */}
-                            {/* <FaCheckCircle /> */}
-                            Accepted
-                        </span>
-                        :
-                        <button
-                            onClick={() => handleAcceptPayment(payment._id)}
-                            className="p-2 rounded-full transition-all duration-300 bg-success/20 hover:bg-success text-success hover:text-white shadow-md hover:shadow-lg cursor-pointer"
-                        >
-                            <FaCheckCircle className="text-lg" />
-                        </button>
-                }
+                {payment.paymentStatus === 'Paid' ? (
+                    <span className="text-sm font-medium text-success">
+                        Accepted
+                    </span>
+                ) : (
+                    <button
+                        onClick={() => handleAcceptPayment(payment._id)}
+                        className="p-2 rounded-full transition-all duration-300 bg-success/20 hover:bg-success text-success hover:text-white shadow-md hover:shadow-lg cursor-pointer"
+                        aria-label="Accept payment"
+                    >
+                        <FaCheckCircle className="text-lg" />
+                    </button>
+                )}
             </td>
         </tr>
     );

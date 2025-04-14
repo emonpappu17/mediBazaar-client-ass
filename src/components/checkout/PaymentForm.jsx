@@ -93,7 +93,6 @@ const PaymentForm = ({ amount, cartData, name, address }) => {
                 Payment
             </label>
             <div className="border border-base-300 p-4 rounded-md">
-                {/* p-2 bg-base-200 rounded-md */}
                 <CardElement />
             </div>
             <Button

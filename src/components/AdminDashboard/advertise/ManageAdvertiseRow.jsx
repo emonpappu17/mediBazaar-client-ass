@@ -10,49 +10,78 @@ const ManageAdvertiseRow = ({ ad, openActionModal }) => {
         'Insulin Injection'
     ]
     return (
-        <tr
-            className="hover:bg-base-200">
-            <td className="py-3 px-4">
-                <div className="flex items-center">
-                    <img className="size-16 rounded-md object-cover" src={ad?.image} alt={ad.name} />
-                </div>
-            </td>
-            <td className="py-3 px-4 text-sm text-base-content font-medium">{ad.name}</td>
-            <td className="py-3 px-4 text-sm text-base-content">{ad.description}</td>
-            <td className="py-3 px-4 text-sm text-base-content">{ad.sellerEmail ? ad.sellerEmail : 'limon345@gmail.com'}</td>
-            <td className="py-3 px-4 text-sm text-base-content text-nowrap">
-                {ad.createdAt ? format(new Date(ad.createdAt), "yyyy-MM-dd") : "2025-03-15"}
-            </td>
-            <td className="py-3 px-4">
-                <span
-                    className={`px-3 py-1 text-sm font-semibold rounded-full ${ad.status === "Pending"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : ad.status === "Approved"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-red-100 text-red-800"
-                        }`}
-                >
-                    {ad.status}
-                </span>
-            </td>
-            <td className="py-3 px-4 text-sm text-base-content">
-                <div className="flex gap-4">
-                    {/* Action Button */}
-                    <button
-                        onClick={() => {
-                            if (protectedAds.includes(ad.name)) {
-                                toast.error("This advertisement cannot be updated as it is for demo purposes.");
-                                return;
-                            }
-                            openActionModal(ad)
-                        }}
-                        className="p-2 rounded-full transition-all duration-300 bg-purple-100 hover:bg-purple-600 text-purple-600 hover:text-white shadow-md hover:shadow-lg cursor-pointer"
+        <>
+            <tr className="hover:bg-base-200">
+                {/* Image */}
+                <td className="py-3 px-4">
+                    <div className="flex items-center justify-center size-16">
+                        <img
+                            className="size-full rounded-md object-cover"
+                            src={ad?.image}
+                            alt={ad.name}
+                        />
+                    </div>
+                </td>
+
+                {/* Name */}
+                <td className="py-3 px-4 text-sm font-medium text-base-content">
+                    {ad.name}
+                </td>
+
+                {/* Description */}
+                <td className="py-3 px-4 text-sm text-base-content/90">
+                    {ad.description}
+                </td>
+
+                {/* Seller Email */}
+                <td className="py-3 px-4 text-sm text-base-content">
+                    {ad.sellerEmail ? ad.sellerEmail : 'limon345@gmail.com'}
+                </td>
+
+                {/* Date */}
+                <td className="py-3 px-4 text-sm text-base-content text-nowrap">
+                    {ad.createdAt ? format(new Date(ad.createdAt), 'MMM dd, yyyy') : "Mar 12, 2025"}
+                </td>
+
+                {/* Status */}
+                <td className="py-3 px-4">
+                    <span
+                        className={`px-3 py-1 text-xs font-semibold rounded-full ${ad.status === "Pending"
+                            ? "bg-amber-100 text-amber-800"
+                            : ad.status === "Approved"
+                                ? "bg-success/10 text-success"
+                                : "bg-error/10 text-error"
+                            }`}
                     >
-                        <FaExchangeAlt className="text-lg" />
-                    </button>
-                </div>
-            </td>
-        </tr>
+                        {ad.status}
+                    </span>
+                </td>
+
+                {/* Actions */}
+                <td className="py-3 px-4">
+                    <div className="flex  gap-2">
+                        <button
+                            onClick={() => {
+                                if (protectedAds.includes(ad.name)) {
+                                    toast.error("This advertisement cannot be updated as it is for demo purposes.");
+                                    return;
+                                }
+                                openActionModal(ad)
+                            }}
+                            className="
+                            p-2 rounded-full transition-all duration-300
+                            bg-[#0D6FEC]/10 hover:bg-[#0D6FEC]
+                            text-[#0D6FEC] hover:text-white
+                            shadow-sm hover:shadow-md
+                          "
+                            aria-label="Update advertisement"
+                        >
+                            <FaExchangeAlt className="text-base" />
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </>
     );
 };
 

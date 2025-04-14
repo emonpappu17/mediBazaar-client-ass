@@ -45,50 +45,68 @@ const UserRow = ({ user }) => {
     };
 
     return (
-        <tr className="hover:bg-base-200">
-            <td className="py-3 px-4">
-                <div className="flex items-center">
-                    <img className="h-10 w-10 rounded-full object-cover" src={user?.image || avatarImg} alt={`${user.name} avatar`} />
-                    <div className="ml-4 font-medium text-base-content">{user.name}</div>
-                </div>
-            </td>
-            <td className="py-3 px-4 text-sm text-base-content">{user.email}</td>
-            <td className="py-3 px-4">
-                <p className={clsx("px-2 py-1 inline-flex text-xs font-semibold rounded-full capitalize", getRoleBadgeColor(user.role))}>
-                    {user.role}
-                </p>
-            </td>
-            <td className="py-3 px-4 text-sm text-base-content text-nowrap">{format(new Date(user.createdAt), "yyyy-MM-dd")}</td>
-            <td className="py-3 px-4 text-sm text-base-content">
-                {/* <button className="text-base-content cursor-pointer hover:scale-110 hover:bg-base-300 rounded-md p-2 transition-transform"
-                    onClick={() => setIsModalOpen(true)}>
-                    <MdMoreVert className="h-5 w-5" />
-                </button> */}
-                {/* 
-                <button
-                    onClick={() => setIsModalOpen(true)}
-                    className="p-2 rounded-full transition-all duration-300 bg-base-200 hover:bg-base-300 text-base-content hover:text-primary shadow-md hover:shadow-lg cursor-pointer"
-                >
-                    <MdMoreVert className="text-lg" />
-                </button> */}
+        <>
+            <tr className="hover:bg-base-200">
+                {/* User */}
+                <td className="py-3 px-4">
+                    <div className="flex items-center truncate">
+                        <img
+                            className="h-10 w-10 rounded-full object-cover"
+                            src={user?.image || avatarImg}
+                            alt={`${user.name} avatar`}
+                        />
+                        <div className="ml-4 text-sm font-medium text-base-content ">
+                            {user.name}
+                        </div>
+                    </div>
+                </td>
 
-                <button
-                    onClick={() => setIsModalOpen(true)}
-                    className="p-2 rounded-full transition-all duration-300 bg-info/20 hover:bg-info text-info hover:text-white shadow-md hover:shadow-lg cursor-pointer"
-                >
-                    <MdMoreVert className="text-lg" />
-                </button>
+                {/* Email */}
+                <td className="py-3 px-4 text-sm text-base-content/90">
+                    {user.email}
+                </td>
 
-                <RoleUpdateModal
-                    user={user}
-                    isModalOpen={isModalOpen}
-                    selectedRole={selectedRole}
-                    setSelectedRole={setSelectedRole}
-                    closeModal={() => setIsModalOpen(false)}
-                    handleRoleUpdate={handleRoleUpdate}
-                />
-            </td>
-        </tr>
+                {/* Role */}
+                <td className="py-3 px-4">
+                    <span className={clsx(
+                        "px-2.5 py-1 inline-flex text-xs font-semibold rounded-full capitalize",
+                        getRoleBadgeColor(user.role)
+                    )}>
+                        {user.role}
+                    </span>
+                </td>
+
+                {/* Joined Date */}
+                <td className="py-3 px-4 text-sm text-base-content text-nowrap">
+                    {format(new Date(user.createdAt), 'MMM dd, yyyy')}
+                </td>
+
+                {/* Actions */}
+                <td className="py-3 px-4">
+                    <button
+                        onClick={() => setIsModalOpen(true)}
+                        className="
+                        p-2 rounded-full transition-all duration-300
+                        bg-[#0D6FEC]/10 hover:bg-[#0D6FEC]
+                        text-[#0D6FEC] hover:text-white
+                        shadow-sm hover:shadow-md
+                    "
+                        aria-label="Update user role"
+                    >
+                        <MdMoreVert className="text-base" />
+                    </button>
+
+                    <RoleUpdateModal
+                        user={user}
+                        isModalOpen={isModalOpen}
+                        selectedRole={selectedRole}
+                        setSelectedRole={setSelectedRole}
+                        closeModal={() => setIsModalOpen(false)}
+                        handleRoleUpdate={handleRoleUpdate}
+                    />
+                </td>
+            </tr>
+        </>
     );
 };
 
