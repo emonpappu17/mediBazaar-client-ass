@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { useAddCategory, useCategories, useDeleteCategory, useUpdateCategory } from '../../../services/categoryService';
 import CategoryRow from './CategoryRow';
 import CategoryModal from './CategoryModal ';
+import TableSkeleton from "../../common/TableSkeleton";
 
 const ManageCategory = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,7 +19,7 @@ const ManageCategory = () => {
     const { register, handleSubmit, setValue, reset } = useForm();
 
     // API Calls
-    const { data, isLoading, error, refetch } = useCategories();
+    const { data, isLoading, isError, refetch } = useCategories();
     const { mutateAsync: addCategory } = useAddCategory();
     const { mutateAsync: updateCategory } = useUpdateCategory();
     const { mutate: deleteCategory } = useDeleteCategory();
@@ -145,47 +146,59 @@ const ManageCategory = () => {
         setController(null)
     };
 
-    if (isLoading) return <p>loading...</p>;
-    if (error) return <p>error</p>;
-
     return (
-        <div className="drop-shadow-md">
-
+        <div>
             {/* Add Category */}
             <div className="flex justify-between items-center mb-4">
-                <h1 className='text-2xl font-semibold'>Total Category: {data.length}</h1>
+                <h1 className='text-2xl font-semibold'>Total Category: {data?.length}</h1>
                 <Button
                     onclick={openAddModal}
                     text="+ Add Category"
                     className="rounded-lg py-2 px-3"
                 />
             </div>
-
-            {/* Table */}
-            <div className="overflow-x-auto">
-                <table className="min-w-full bg-base-100 rounded-lg">
-                    <thead className="bg-base-200">
-                        <tr className="border-b border-base-300">
-                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Image</th>
-                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider truncate">Category Name</th>
-                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider truncate">Total Medicines</th>
-                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Created At</th>
-                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-base-300">
-                        {data?.map((category) => (
-                            <CategoryRow
-                                key={category._id}
-                                category={category}
-                                openEditModal={openEditModal}
-                                deleteCategory={deleteCategory}
-                                refetch={refetch}
-                            />
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+            {
+                isLoading ? (
+                    <TableSkeleton />
+                ) : (
+                    isError ? (
+                        <div className="bg-error/10 text-error p-4 rounded-lg mb-6 text-center">
+                            Failed to load category data. Please try again.
+                        </div>
+                    ) : (
+                        data?.length === 0 ? (
+                            <div className="bg-base-200 p-6 rounded-lg text-center">
+                                <p className="text-base-content">No category records found.</p>
+                            </div>
+                        ) : (
+                            <div className="overflow-x-auto drop-shadow-md">
+                                <table className="min-w-full bg-base-100 rounded-lg">
+                                    <thead className="bg-base-200">
+                                        <tr className="border-b border-base-300">
+                                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Image</th>
+                                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider truncate">Category Name</th>
+                                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider truncate">Total Medicines</th>
+                                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Created At</th>
+                                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-base-300">
+                                        {data?.map((category) => (
+                                            <CategoryRow
+                                                key={category._id}
+                                                category={category}
+                                                openEditModal={openEditModal}
+                                                deleteCategory={deleteCategory}
+                                                refetch={refetch}
+                                            />
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )
+                    )
+                )
+            }
 
             {/* Category Modal (Add/Edit) */}
             <CategoryModal

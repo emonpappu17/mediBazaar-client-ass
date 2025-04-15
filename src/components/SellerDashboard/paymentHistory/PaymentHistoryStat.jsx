@@ -3,7 +3,7 @@ import { FaCheckCircle, FaClock, FaMoneyBillWave } from "react-icons/fa";
 import StatCard from "../../common/StatCard";
 import StatsSkeleton from "../../common/StatsSkeleton";
 
-const PaymentHistoryStat = ({ payments, adminPaymentManagement, isError }) => {
+const PaymentHistoryStat = ({ payments, adminPaymentManagement, isLoading, isError }) => {
     // Total Revenue
     const totalPaid = payments.reduce((sum, payment) => sum + payment.totalAmount, 0).toFixed(2)
 
@@ -12,7 +12,7 @@ const PaymentHistoryStat = ({ payments, adminPaymentManagement, isError }) => {
 
     // Total Paid Revenue
     const paidTotal = payments.filter(payment => payment.paymentStatus !== 'Pending').reduce((sum, payment) => sum + payment.totalAmount, 0).toFixed(2)
-    const isLoading = true
+    // const isLoading = true
     return (
         <>
             <div className=" rounded-lg   ">
@@ -28,7 +28,10 @@ const PaymentHistoryStat = ({ payments, adminPaymentManagement, isError }) => {
                     </p>
                 </div>
                 {isLoading ? (
-                    <StatsSkeleton count={3} />
+                    <>
+                        <StatsSkeleton count={3} />
+                    </>
+
                 ) : (
                     isError ? (
                         <div className="bg-error/10 text-error p-4 rounded-lg mb-6 text-center">
