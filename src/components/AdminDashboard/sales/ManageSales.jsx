@@ -298,7 +298,7 @@ const ManageSales = () => {
     );
     //testing
     // const isLoading = false
-    // const isError = true
+    // const isError = false
 
     const onChange = (dates) => {
         const [start, end] = dates;
@@ -314,7 +314,9 @@ const ManageSales = () => {
 
     // Calculate stats for the summary cards
     const totalRevenue = payments.reduce((sum, p) => sum + (p.paymentStatus === 'Paid' ? p.totalAmount : 0), 0);
-    const avgOrderValue = payments.length > 0 ? totalRevenue / payments.length : 0;
+    const avgOrderValue = payments.length
+        ? (payments.reduce((sum, p) => sum + p.totalAmount, 0) / payments.length).toFixed(2)
+        : "0.00";
     const pendingCount = payments.filter(p => p.paymentStatus === 'Pending').length;
     const paidCount = payments.filter(p => p.paymentStatus === 'Paid').length;
 
@@ -386,9 +388,18 @@ const ManageSales = () => {
                 </div>
             </div> */}
 
-            <div className="  mb-4 "> {/* Added container with background */}
+            {/* Title */}
+            {/* <div className="mb-6">
+                <h1 className="text-xl font-bold text-base-content">Manage Sales Report</h1>
+                <p className="text-sm text-base-content/70">
+                    Track and manage all sales report
+                </p>
+            </div> */}
+
+            {/* TItle and Filters */}
+            <div className="mb-4">
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 ">
-                    {/* Title moved inside the same container */}
+                    {/* Title */}
                     <div>
                         <h1 className="text-xl font-bold text-base-content">Manage Sales Report</h1>
                         <p className="text-sm text-base-content/70">
@@ -396,7 +407,7 @@ const ManageSales = () => {
                         </p>
                     </div>
 
-                    {/* Filters Section - Improved layout */}
+                    {/* Filters Section */}
                     <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
                         <div className="relative flex-1 min-w-[200px]">
                             <input
@@ -432,64 +443,24 @@ const ManageSales = () => {
                                 isClearable={true}
                                 dateFormat="MMM d, yyyy"
                                 placeholderText="Date range"
-                                // className="p-2 pl-8 rounded border-none w-full md:min-w-[215px] bg-base-200 text-sm outline-base-content focus:outline-1"
                                 className="p-2 pl-8 w-full rounded border-none outline-base-content focus:outline-1 text-[13px] bg-base-200"
                                 disabled={isLoading}
-                                // wrapperClassName="w-full"
                             />
                             <FaCalendarAlt className="absolute left-2 top-1/2 transform -translate-y-1/2 text-base-content/70" />
                         </div>
-
-                        {/* <div className="relative w-full border"> 
-                            <DatePicker
-                                onChange={onChange}
-                                startDate={startDate}
-                                endDate={endDate}
-                                selectsRange
-                                isClearable={true}
-                                dateFormat="MMM d, yyyy"
-                                placeholderText="Date range"
-                                className="p-2 pl-8 rounded border-none w-full bg-base-200 text-sm outline-base-content focus:outline-1"
-                                disabled={isLoading}
-                            />
-                            <FaCalendarAlt className="absolute left-2 top-1/2 transform -translate-y-1/2 text-base-content/70" />
-                        </div> */}
-
-                        {/* <div className="relative w-full [&>.react-datepicker-wrapper]:w-full min-w-[180px]">
-                            <DatePicker
-                                onChange={onChange}
-                                startDate={startDate}
-                                endDate={endDate}
-                                selectsRange
-                                isClearable={true}
-                                dateFormat="MMM d, yyyy"
-                                placeholderText="Date range"
-                                className="w-full p-2 pl-8 rounded bg-base-200 text-sm border-none focus:ring-1 focus:ring-primary"
-                                // wrapperClassName="w-full" // Crucial for width control
-                                disabled={isLoading}
-                            />
-                            <FaCalendarAlt className="absolute left-2 top-1/2 -translate-y-1/2 text-base-content/70 pointer-events-none" />
-                        </div> */}
                     </div>
                 </div>
             </div>
-            {/* <div className="mb-6">
-                <h1 className="text-2xl font-bold text-base-content mb-1">Manage Sales Report</h1>
-                <p className="text-sm text-base-content/70">
-                    Track and manage all sales report
-                </p>
-            </div> */}
 
             {/* Stats Cards */}
             {isLoading ? (
-                // renderLoadingStats()
                 <StatsSkeleton count={4} />
             ) : isError ? (
-                <div className="bg-error/10 text-error p-4 rounded-lg mb-6">
+                <div className="bg-error/10 text-error p-4 rounded-lg mb-6 text-center">
                     Failed to load statistics
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                     <StatCard
                         title="Total Revenue"
                         value={`$${totalRevenue.toFixed(2)}`}
@@ -498,7 +469,7 @@ const ManageSales = () => {
                     />
                     <StatCard
                         title="Avg. Order Value"
-                        value={`$${avgOrderValue.toFixed(2)}`}
+                        value={`$${avgOrderValue}`}
                         icon={<FaChartLine className="text-info" />}
                         color="info"
                     />
@@ -517,55 +488,8 @@ const ManageSales = () => {
                 </div>
             )}
 
-            {/* Search and Filters */}
-            {/* <div className="md:flex justify-end">
-                <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4 mt-4 md:mt-0 mb-3">
-                    <div className="relative w-full md:w-auto">
-                        <input
-                            type="text"
-                            placeholder="Search transactions..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="p-2 pl-8 rounded border-none outline-base-content focus:outline-1 text-[13px] w-full bg-base-200"
-                        // disabled={isLoading}
-                        />
-                        <FaSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-base-content/70" />
-                    </div>
-
-                    <div className="relative w-full md:w-auto">
-                        <select
-                            value={statusFilter}
-                            onChange={(e) => setStatusFilter(e.target.value)}
-                            className="p-2 pl-8 pr-2 rounded border-none outline-base-content focus:outline-1 text-[13px] w-full bg-base-200"
-                            disabled={isLoading}
-                        >
-                            <option value="">All Statuses</option>
-                            <option value="Pending">Pending</option>
-                            <option value="Paid">Paid</option>
-                        </select>
-                        <FaFilter className="absolute left-2 top-1/2 transform -translate-y-1/2 text-base-content/70" />
-                    </div>
-
-                    <div className="relative">
-                        <DatePicker
-                            onChange={onChange}
-                            startDate={startDate}
-                            endDate={endDate}
-                            selectsRange
-                            isClearable={true}
-                            dateFormat="MMM d, yyyy"
-                            placeholderText="Select date range"
-                            className="p-2 pl-8 w-[215px] rounded border-none outline-base-content focus:outline-1 text-[13px] bg-base-200"
-                            disabled={isLoading}
-                        />
-                        <FaCalendarAlt className="absolute left-2 top-1/2 transform -translate-y-1/2 text-base-content/70" />
-                    </div>
-                </div>
-            </div> */}
-
             {/* Main Content */}
             {isLoading ? (
-                // renderLoadingTable()
                 <TableSkeleton />
             ) : isError ? (
                 <div className="bg-error/10 text-error p-6 rounded-lg text-center">
@@ -576,7 +500,7 @@ const ManageSales = () => {
                     <p className="text-base-content">No payment records found.</p>
                     {startDate && endDate && (
                         <p className="text-sm text-base-content/70 mt-1">
-                            Between {format(startDate, 'MMM d, yyyy')} and {format(endDate, 'MMM d, yyyy')}
+                            Between  {format(startDate, 'MMM d, yyyy')} and {format(endDate, 'MMM d, yyyy')}
                         </p>
                     )}
                 </div>
@@ -584,7 +508,6 @@ const ManageSales = () => {
                 <>
                     <div className="overflow-x-auto drop-shadow-md">
                         <table id="my-table" className="min-w-full bg-base-100 rounded-lg" ref={tableRef}>
-                            {/* Table headers and rows */}
                             <thead className="bg-base-200">
                                 <tr className="border-b border-base-300">
                                     <th className="py-3 px-4 text-left text-sm font-semibold text-base-content uppercase tracking-wider">Customer</th>
@@ -677,25 +600,6 @@ const ManageSales = () => {
         </div>
     );
 };
-
-// StatCard component for reusable stats cards
-// const StatCard = ({ title, value, icon, color }) => (
-//     <div className={`bg-${color}/10 rounded-lg p-4 border-l-4 border-${color}`}>
-//         <div className="flex justify-between items-center">
-//             <div>
-//                 <p className={`text-xs font-medium text-${color} uppercase tracking-wider mb-1`}>
-//                     {title}
-//                 </p>
-//                 <p className="text-2xl font-bold text-base-content">
-//                     {value}
-//                 </p>
-//             </div>
-//             <div className={`bg-${color}/20 p-2 rounded-full`}>
-//                 {icon}
-//             </div>
-//         </div>
-//     </div>
-// );
 
 export default ManageSales;
 

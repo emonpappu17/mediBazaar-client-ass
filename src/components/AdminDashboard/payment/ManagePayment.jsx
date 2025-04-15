@@ -6,7 +6,7 @@ import ManagePaymentRow from './ManagePaymentRow';
 const ManagePayment = () => {
 
     // API Calls
-    const { data: payments = [], isLoading } = useAllPayment();
+    const { data: payments = [], isLoading, isError } = useAllPayment();
     const { mutate } = useAdminApproval();
 
     const handleAcceptPayment = (id) => {
@@ -23,7 +23,7 @@ const ManagePayment = () => {
     }
     return (
         <div className="drop-shadow-md ">
-            <PaymentHistoryStat payments={payments} adminPaymentManagement={true} />
+            <PaymentHistoryStat payments={payments} adminPaymentManagement={true} isLoading={isLoading} isError={isError} />
             {isLoading ?
                 // Loader
                 <div className="p-6 text-center">

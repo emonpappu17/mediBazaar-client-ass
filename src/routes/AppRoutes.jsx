@@ -23,10 +23,8 @@ import AskAdvertise from "../components/SellerDashboard/askAdvertise/AskAdvertis
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import Invoice from "../pages/invoice/Invoice";
-// import Invoice from "../pages/invoice/Invoice";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
-
 
 const AppRoutes = () => {
     return (
