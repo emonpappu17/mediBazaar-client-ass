@@ -1,4 +1,4 @@
-// // import { FaCheckCircle, FaClock, FaMoneyBillWave, FaShoppingCart, FaTable, FaTimesCircle } from "react-icons/fa";
+// import { FaCheckCircle, FaClock, FaMoneyBillWave, FaShoppingCart, FaTable, FaTimesCircle } from "react-icons/fa";
 
 // import { FaMoneyBillWave, FaClock, FaTable, FaCheckCircle, FaTimesCircle, FaShoppingCart } from 'react-icons/fa';
 // import { FiDollarSign, FiPackage, FiUser } from 'react-icons/fi';
@@ -253,6 +253,9 @@ import {
 } from "react-icons/fa";
 import { MdInventory2 } from "react-icons/md";
 import { BiTrendingUp } from "react-icons/bi";
+import StatCard from '../../common/StatCard';
+import { useSellerPayments } from '../../../services/paymentService';
+import { useSellerMedicines } from '../../../services/medicineService';
 
 const DashboardHome = () => {
     // ✅ Fake stats for now
@@ -264,10 +267,28 @@ const DashboardHome = () => {
     //     { name: "Cough Syrup", qty: 19 },
     //     { name: "Amoxicillin", qty: 12 },
 
+    // API Calls
+    const { data: payments = [], isLoading: sellerPaymentLoading, isError: sellerPaymentError } = useSellerPayments();
+    const { data: medicines, isLoading, isError } = useSellerMedicines();
+
+    console.log(payments);
+    console.log(medicines);
+
+
+
     // Fake demo data for now
-    const totalRevenue = 347.5;
-    const pendingRevenue = 122.0;
-    const totalOrders = 34;
+    // const totalRevenue = 347.5;
+    // const totalRevenue = payments?.items?.reduce((sum, i) => sum + i.finalPrice * i.quantity, 0).toFixed(2)
+
+    const totalRevenue = payments.reduce((sum, p) => sum + (p.paymentStatus === 'Paid' ? p.totalAmount : 0), 0).toFixed(2);
+    const pendingRevenue = payments.reduce((sum, p) => sum + (p.paymentStatus === 'Pending' ? p.totalAmount : 0), 0).toFixed(2);
+    const totalOrders = payments.length || 0
+
+    console.log('totalRevenue', totalRevenue);
+
+
+    // const pendingRevenue = 122.0;
+    // const totalOrders = 34;
     const stockCount = 52;
     const topSelling = [
         { name: "Paracetamol", qty: 28 },
@@ -350,13 +371,13 @@ const DashboardHome = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
                     <StatCard
                         title="Total Revenue"
-                        value={`$${totalRevenue.toFixed(2)}`}
+                        value={`$${totalRevenue}`}
                         icon={<FaDollarSign className="text-2xl text-primary" />}
                         color="primary"
                     />
                     <StatCard
                         title="Pending Payments"
-                        value={`$${pendingRevenue.toFixed(2)}`}
+                        value={`$${pendingRevenue}`}
                         icon={<FaSpinner className="text-2xl text-warning animate-spin" />}
                         color="warning"
                     />
@@ -437,21 +458,20 @@ const DashboardHome = () => {
                 </div>
             </div>
         </>
-
     );
 };
 // ✅ Reusable Stat Card
-const StatCard = ({ title, value, icon, color = "primary" }) => (
-    <div className={`bg-${color}/10 border-l-4 border-${color} rounded-lg p-5 shadow-md`}>
-        <div className="flex justify-between items-center">
-            <div>
-                <p className={`text-${color} font-medium`}>{title}</p>
-                <p className={`text-2xl font-bold text-${color}-content`}>{value}</p>
-            </div>
-            <div className={`bg-${color}/20 p-3 rounded-full`}>
-                {icon}
-            </div>
-        </div>
-    </div>
-);
+// const StatCard = ({ title, value, icon, color = "primary" }) => (
+//     <div className={`bg-${color}/10 border-l-4 border-${color} rounded-lg p-5 shadow-md`}>
+//         <div className="flex justify-between items-center">
+//             <div>
+//                 <p className={`text-${color} font-medium`}>{title}</p>
+//                 <p className={`text-2xl font-bold text-${color}-content`}>{value}</p>
+//             </div>
+//             <div className={`bg-${color}/20 p-3 rounded-full`}>
+//                 {icon}
+//             </div>
+//         </div>
+//     </div>
+// );
 export default DashboardHome;

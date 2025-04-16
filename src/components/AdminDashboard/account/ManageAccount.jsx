@@ -7,4 +7,4 @@ const ManageAccount = () => {
     );
 };
 
-export default ManageAccount;
+export default ManageAccount; 
