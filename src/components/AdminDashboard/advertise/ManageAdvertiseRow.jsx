@@ -29,7 +29,7 @@ const ManageAdvertiseRow = ({ ad, openActionModal }) => {
                 </td>
 
                 {/* Description */}
-                <td className="py-3 px-4 text-sm text-base-content/90">
+                <td className="py-3 px-4 text-sm text-base-content/90  max-w-[200px] overflow-auto">
                     {ad.description}
                 </td>
 

@@ -27,7 +27,7 @@ const AdvertiseStat = ({ advertises, isLoading, isError }) => {
                                 {/* Total Advertisements Card */}
                                 <StatCard
                                     title="Total Advertisements"
-                                    value={`$${advertises?.advertisements?.length}`}
+                                    value={`${advertises?.advertisements?.length}`}
                                     icon={<svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                                     </svg>}
@@ -37,7 +37,7 @@ const AdvertiseStat = ({ advertises, isLoading, isError }) => {
                                 {/* Approved Card */}
                                 <StatCard
                                     title="Approved"
-                                    value={`$${advertises?.counts?.approved}`}
+                                    value={`${advertises?.counts?.approved}`}
                                     icon={<svg className="w-5 h-5 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                                     </svg>}
@@ -47,7 +47,7 @@ const AdvertiseStat = ({ advertises, isLoading, isError }) => {
                                 {/* Pending Card */}
                                 <StatCard
                                     title="Pending"
-                                    value={`$${advertises?.counts?.pending}`}
+                                    value={`${advertises?.counts?.pending}`}
                                     icon={<svg className="w-5 h-5 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>}
@@ -57,19 +57,11 @@ const AdvertiseStat = ({ advertises, isLoading, isError }) => {
                                 {/* Rejected Card */}
                                 <StatCard
                                     title="Rejected"
-                                    value={`$${advertises?.counts?.rejected}`}
+                                    value={`${advertises?.counts?.rejected}`}
                                     icon={<svg className="w-5 h-5 text-error" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                                     </svg>}
                                     color="error"
-
-
-                                    // title="Pending"
-                                    // value={`$${advertises?.counts?.pending}`}
-                                    // icon={<svg className="w-5 h-5 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    //     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    // </svg>}
-                                    // color="warning"
                                 />
                             </div>
                         </>
@@ -89,6 +81,8 @@ AdvertiseStat.propTypes = {
             rejected: PropTypes.number,
         }),
     }),
+    isLoading: PropTypes.bool.isRequired,
+    isError: PropTypes.bool.isRequired
 };
 
 export default AdvertiseStat;

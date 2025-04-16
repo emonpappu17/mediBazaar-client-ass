@@ -6,18 +6,6 @@ import { CheckIcon, } from '@heroicons/react/20/solid'
 import { useLocation } from 'react-router';
 import { useCategories } from '../../services/categoryService';
 
-// const categories = [
-//     'All Categories',
-//     'Tablet',
-//     'Capsule',
-//     'Syrup',
-//     'Injection',
-//     'Drops', 'Inhaler',
-//     'Powder',
-//     'Ointment',
-//     'Other',
-// ]
-
 const sortOptions = [
     { value: '', label: 'Sort By' },
     { value: 'priceLow', label: 'Price: Low to High' },
@@ -29,7 +17,6 @@ const SearchFilterSort = ({ setSearch, category, setCategory, sortBy, setSortBy 
 
     //API Call
     const { data } = useCategories();
-    // console.log(data);
 
     const hideCategory = pathname !== '/shop'
 
@@ -46,44 +33,6 @@ const SearchFilterSort = ({ setSearch, category, setCategory, sortBy, setSortBy 
                 />
             </div>
 
-
-            {/* <div className="w-full md:w-1/4">
-                <Combobox value={search} onChange={setSearch}>
-                    <div className="relative">
-                        <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
-                        <ComboboxInput
-                            type="text"
-                            placeholder="Search for medicine..."
-                            className={clsx(
-                                'input input-bordered pl-10 w-full bg-base-200 rounded border-0 focus:outline-1'
-                            )}
-                            onChange={(e) => setSearch(e.target.value)}
-                        />
-                    </div>
-                </Combobox>
-            </div> */}
-
-
-            {/* Category Filter */}
-            {/* <div className="relative w-full md:w-1/4 ">
-                <FaFilter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
-                <select
-                    className="select select-bordered pl-10 w-full bg-base-200 rounded border-0  focus:outline-1 "
-                    onChange={(e) => setCategory(e.target.value)}
-                >
-                    <option value="" >All Categories</option>
-                    <option value="Tablet" className='focus:bg-amber-400'>Tablet</option>
-                    <option value="Capsule">Capsule</option>
-                    <option value="Syrup">Syrup</option>
-                    <option value="Injection">Injection</option>
-                    <option value="Drops">Drops</option>
-                    <option value="Inhaler">Inhaler</option>
-                    <option value="Powder">Powder</option>
-                    <option value="Ointment">Ointment</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div> */}
-
             {/* Category Filter */}
             {!hideCategory &&
                 <div className=' w-full '>
@@ -99,7 +48,6 @@ const SearchFilterSort = ({ setSearch, category, setCategory, sortBy, setSortBy 
                                 aria-hidden="true"
                             />
                             {category === '' ? 'All Categories' : category}
-                            {/* {category} */}
                         </ListboxButton>
                         <ListboxOptions
                             modal={false}
@@ -123,20 +71,6 @@ const SearchFilterSort = ({ setSearch, category, setCategory, sortBy, setSortBy 
                         </ListboxOptions>
                     </Listbox>
                 </div>}
-
-
-            {/* Sort Options */}
-            {/* <div className="relative w-full md:w-1/4 ">
-                <FaSortAmountDown className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
-                <select
-                    className="select select-bordered pl-10 w-full bg-base-200 rounded border-0  focus:outline-1"
-                    onChange={(e) => setSortBy(e.target.value)}
-                >
-                    <option value="">Sort By</option>
-                    <option value="priceLow">Price: Low to High</option>
-                    <option value="priceHigh">Price: High to Low</option>
-                </select>
-            </div> */}
 
             {/* Sort Options */}
             <div className="w-full ">

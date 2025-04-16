@@ -4,10 +4,10 @@ import toast from "react-hot-toast";
 import uploadImageToImgBB from "../../../services/imgbbService";
 import Button from "../../common/Button";
 import useAuth from "../../../hooks/useAuth";
-
 import AdvertiseStat from "../../common/AdvertiseStat";
 import AskAdvertiseRow from "./AskAdvertiseRow";
 import AskAdvertiseModal from "./AskAdvertiseModal";
+import TableSkeleton from "../../common/TableSkeleton";
 
 const AskAdvertise = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,11 +18,10 @@ const AskAdvertise = () => {
     const [selectedMedicine, setSelectedMedicine] = useState(null);
     const [description, setDescription] = useState("");
     const [controller, setController] = useState(null);
-
     const { user } = useAuth()
 
     // API Calls
-    const { data: advertises } = useSellerAds();
+    const { data: advertises, isLoading, isError } = useSellerAds();
     const { data: sellerMedicine } = useSellerMedicineName();
     const { mutateAsync: askAdvertise } = useAskAdvertisement();
     const { mutate: deleteAdvertise } = useDeleteAdvertise();
@@ -104,37 +103,58 @@ const AskAdvertise = () => {
 
     return (
         <>
-            <div className=" drop-shadow-md lg:mx-16 ">
+            <div>
                 {/* Button to open modal */}
                 <Button
                     onclick={() => setIsModalOpen(true)}
                     className="py-2 px-4 mb-6 rounded-lg"
                     text="Ask Advertisement"
-                ></Button>
+                />
 
                 {/* Status count */}
-                <AdvertiseStat advertises={advertises} />
+                <AdvertiseStat
+                    advertises={advertises}
+                    isLoading={isLoading}
+                    isError={isError}
+                />
 
-                {/* Table for existing advertisement requests */}
-                <div className="overflow-x-auto">
-                    <table className="min-w-full bg-base-100 rounded-lg">
-                        <thead className="bg-base-200">
-                            <tr className="border-b border-base-300">
-                                <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Image</th>
-                                <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Name</th>
-                                <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Description</th>
-                                <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider"> Submitted Date</th>
-                                <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Status</th>
-                                <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-base-300">
-                            {advertises?.advertisements?.map((add) => (
-                                <AskAdvertiseRow key={add._id} add={add} deleteAdvertise={deleteAdvertise} />
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                {
+                    isLoading ? (
+                        <TableSkeleton />
+                    ) : isError ? (
+                        <div className="bg-error/10 text-error p-6 rounded-lg text-center">
+                            Failed to load advertise data. Please try again.
+                        </div>
+                    ) : advertises?.length === 0 ? (
+                        <div className="bg-base-200 p-6 rounded-lg text-center">
+                            <p className="text-base-content">No advertise records found.</p>
+                        </div>
+                    ) : (
+                        <>
+                            {/* Table */}
+                            <div className="overflow-x-auto drop-shadow-md">
+                                <table className="min-w-full bg-base-100 rounded-lg">
+                                    <thead className="bg-base-200">
+                                        <tr className="border-b border-base-300">
+                                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Image</th>
+                                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Name</th>
+                                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Description</th>
+                                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Submitted</th>
+                                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Status</th>
+                                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-base-300">
+                                        {advertises?.advertisements?.map((add) => (
+                                            <AskAdvertiseRow key={add._id} add={add} deleteAdvertise={deleteAdvertise} />
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </>
+                    )
+                }
+
 
                 {/* Modal for new advertisement request */}
                 <AskAdvertiseModal

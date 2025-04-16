@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 
 const StatsSkeleton = ({ count = 4 }) => {
     return (
@@ -7,6 +8,10 @@ const StatsSkeleton = ({ count = 4 }) => {
             ))}
         </div>
     );
+};
+
+StatsSkeleton.propTypes = {
+    count: PropTypes.number,
 };
 
 export default StatsSkeleton;

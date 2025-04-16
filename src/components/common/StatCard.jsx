@@ -1,5 +1,8 @@
+import PropTypes from "prop-types";
 
 const StatCard = ({ title, value, icon, color }) => {
+    console.log(color);
+
 
     return (
         <div className={`bg-${color}/10 rounded-lg p-4 border-l-4  border-${color} shadow-sm`}>
@@ -18,6 +21,13 @@ const StatCard = ({ title, value, icon, color }) => {
             </div>
         </div>
     );
+};
+
+StatCard.propTypes = {
+    title: PropTypes.string.isRequired,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    icon: PropTypes.node.isRequired,
+    color: PropTypes.string.isRequired,
 };
 
 export default StatCard;

@@ -8,6 +8,7 @@ import useAuth from "../../../hooks/useAuth";
 import uploadImageToImgBB from "../../../services/imgbbService";
 import ManageMedicinesRow from "./ManageMedicinesRow";
 import ManageMedicinesModal from "./ManageMedicinesModal";
+import TableSkeleton from "../../common/TableSkeleton";
 
 const ManageMedicines = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,7 +24,7 @@ const ManageMedicines = () => {
     const { user } = useAuth()
 
     // API Calls
-    const { data: medicines } = useSellerMedicines();
+    const { data: medicines, isLoading, isError } = useSellerMedicines();
     const { data: categories } = useCategories();
     const { mutateAsync: addMedicine } = useAddMedicine()
     const { mutateAsync: updateMedicine } = useUpdateMedicine()
@@ -161,7 +162,7 @@ const ManageMedicines = () => {
         setController(null)
     };
     return (
-        <div className="drop-shadow-md lg:mx-16">
+        <div>
 
             {/* Add Category */}
             <div className="flex justify-between items-center mb-4">
@@ -173,31 +174,47 @@ const ManageMedicines = () => {
                 />
             </div>
 
-            {/* Table */}
-            <div className="overflow-x-auto">
-                <table className="min-w-full bg-base-100 rounded-lg">
-                    <thead className="bg-base-200">
-                        <tr className="border-b border-base-300">
-                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Image</th>
-                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Name</th>
-                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Stock</th>
-                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Price</th>
-                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Discount</th>
-                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Added Date</th>
-                            <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-base-300">
-                        {medicines?.map((medicine) => (
-                            <ManageMedicinesRow
-                                key={medicine._id}
-                                medicine={medicine}
-                                deleteMedicine={deleteMedicine}
-                                openEditModal={openEditModal} />
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+            {
+                isLoading ? (
+                    <TableSkeleton />
+                ) : isError ? (
+                    <div className="bg-error/10 text-error p-6 rounded-lg text-center">
+                        Failed to load medicine data. Please try again.
+                    </div>
+                ) : medicines?.length === 0 ? (
+                    <div className="bg-base-200 p-6 rounded-lg text-center">
+                        <p className="text-base-content">No medicine records found.</p>
+                    </div>
+                ) : (
+                    <>
+                        {/* Table */}
+                        <div className="overflow-x-auto drop-shadow-md">
+                            <table className="min-w-full bg-base-100 rounded-lg">
+                                <thead className="bg-base-200">
+                                    <tr className="border-b border-base-300">
+                                        <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Image</th>
+                                        <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Name</th>
+                                        <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Stock</th>
+                                        <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Price</th>
+                                        <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Discount</th>
+                                        <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Added Date</th>
+                                        <th className="py-3 px-4 text-left text-xs font-medium text-base-content uppercase tracking-wider">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-base-300">
+                                    {medicines?.map((medicine) => (
+                                        <ManageMedicinesRow
+                                            key={medicine._id}
+                                            medicine={medicine}
+                                            deleteMedicine={deleteMedicine}
+                                            openEditModal={openEditModal} />
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </>
+                )
+            }
 
             {/* Medicine Modal (Add/Edit) */}
             <ManageMedicinesModal

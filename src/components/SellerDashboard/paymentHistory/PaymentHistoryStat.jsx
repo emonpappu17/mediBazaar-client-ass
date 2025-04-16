@@ -68,8 +68,6 @@ const PaymentHistoryStat = ({ payments, adminPaymentManagement, isLoading, isErr
                         </>
                     )
                 )}
-
-
             </div>
         </>
     );
@@ -82,7 +80,9 @@ PaymentHistoryStat.propTypes = {
             paymentStatus: PropTypes.string.isRequired,
         })
     ).isRequired,
-    adminPaymentManagement: PropTypes.bool.isRequired
+    adminPaymentManagement: PropTypes.bool.isRequired,
+    isLoading: PropTypes.bool.isRequired,
+    isError: PropTypes.bool.isRequired
 };
 
 export default PaymentHistoryStat;
