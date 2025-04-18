@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 
 const StatCard = ({ title, value, icon, color }) => {
-    console.log(color);
+    // console.log(color);
 
 
     return (

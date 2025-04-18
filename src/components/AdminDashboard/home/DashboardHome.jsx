@@ -245,7 +245,7 @@
 
 //========================gtp
 
-import { FaDollarSign, FaShoppingBag, FaSpinner } from 'react-icons/fa';
+import { FaClock, FaDollarSign, FaShoppingBag, FaSpinner } from 'react-icons/fa';
 import {
     FaShoppingCart,
     FaStar,
@@ -254,10 +254,12 @@ import {
 import { MdInventory2 } from "react-icons/md";
 import { BiTrendingUp } from "react-icons/bi";
 import StatCard from '../../common/StatCard';
-import { useSellerPayments } from '../../../services/paymentService';
-import { useSellerMedicines } from '../../../services/medicineService';
+import { useSellerStats } from '../../../services/dashboardStats';
+import useAuth from '../../../hooks/useAuth';
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 const DashboardHome = () => {
+    const { user } = useAuth();
     // ✅ Fake stats for now
     // const totalRevenue = 347.5;
     // const pendingRevenue = 122.0;
@@ -268,40 +270,31 @@ const DashboardHome = () => {
     //     { name: "Amoxicillin", qty: 12 },
 
     // API Calls
-    const { data: payments = [], isLoading: sellerPaymentLoading, isError: sellerPaymentError } = useSellerPayments();
-    const { data: medicines, isLoading, isError } = useSellerMedicines();
+    const { data: sellerStats } = useSellerStats();
 
-    console.log(payments);
-    console.log(medicines);
+    console.log('sellerStats', sellerStats?.aggregatedData?.topSelling
+    );
 
-
-
-    // Fake demo data for now
-    // const totalRevenue = 347.5;
-    // const totalRevenue = payments?.items?.reduce((sum, i) => sum + i.finalPrice * i.quantity, 0).toFixed(2)
-
-    const totalRevenue = payments.reduce((sum, p) => sum + (p.paymentStatus === 'Paid' ? p.totalAmount : 0), 0).toFixed(2);
-    const pendingRevenue = payments.reduce((sum, p) => sum + (p.paymentStatus === 'Pending' ? p.totalAmount : 0), 0).toFixed(2);
-    const totalOrders = payments.length || 0
-
-    console.log('totalRevenue', totalRevenue);
-
-
-    // const pendingRevenue = 122.0;
-    // const totalOrders = 34;
-    const stockCount = 52;
-    const topSelling = [
-        { name: "Paracetamol", qty: 28 },
-        { name: "Cough Syrup", qty: 19 },
-        { name: "Amoxicillin", qty: 12 },
-    ];
+    const totalRevenue = sellerStats?.aggregatedData?.revenueSummary[0].totalRevenue;
+    const pendingRevenue = sellerStats?.aggregatedData?.revenueSummary[0].pendingRevenue;
+    const totalOrders = sellerStats?.aggregatedData?.revenueSummary[0].totalOrders
+    const stockCount = sellerStats?.stockCountResult?.stockCount;
+    const topSelling = sellerStats?.aggregatedData?.topSelling
 
     const recentSales = [
         { name: "Heparin", price: 45, qty: 1, total: 45, date: "Apr 16, 2025" },
         { name: "Cough Syrup", price: 8, qty: 2, total: 16, date: "Apr 15, 2025" },
         { name: "Amoxicillin", price: 20, qty: 1, total: 18, date: "Apr 14, 2025" },
     ];
-    // ];
+
+
+    const salesData = [
+        { date: 'Apr 10', totalSales: 120 },
+        { date: 'Apr 11', totalSales: 90 },
+        { date: 'Apr 12', totalSales: 150 },
+        { date: 'Apr 13', totalSales: 180 },
+        { date: 'Apr 14', totalSales: 100 },
+    ];
     return (
         // <div className="px-4 sm:px-8 py-8 space-y-10">
         //     <div className="space-y-1">
@@ -360,10 +353,10 @@ const DashboardHome = () => {
         //     </div>
         // </div>
         <>
-            <div className="px-4 sm:px-8 py-10 space-y-10">
+            <div className=" space-y-8 ">
                 {/* Header */}
                 <div>
-                    <h1 className="text-3xl font-bold text-base-content">👋 Welcome Back, Seller!</h1>
+                    <h1 className="text-3xl font-bold text-base-content">{`👋 Welcome Back, ${user?.displayName}!`}</h1>
                     <p className="text-base-content/70">Track your sales, orders, and performance at MediBazaar.</p>
                 </div>
 
@@ -372,38 +365,38 @@ const DashboardHome = () => {
                     <StatCard
                         title="Total Revenue"
                         value={`$${totalRevenue}`}
-                        icon={<FaDollarSign className="text-2xl text-primary" />}
+                        icon={<FaDollarSign className="text-primary" />}
                         color="primary"
                     />
                     <StatCard
                         title="Pending Payments"
                         value={`$${pendingRevenue}`}
-                        icon={<FaSpinner className="text-2xl text-warning animate-spin" />}
+                        icon={<FaClock className="text-warning" />}
                         color="warning"
                     />
                     <StatCard
                         title="Total Orders"
                         value={totalOrders}
-                        icon={<FaShoppingCart className="text-2xl text-success" />}
+                        icon={<FaShoppingCart className="text-success" />}
                         color="success"
                     />
                     <StatCard
                         title="Total Stock Items"
                         value={stockCount}
-                        icon={<MdInventory2 className="text-2xl text-info" />}
+                        icon={<MdInventory2 className="text-info" />}
                         color="info"
                     />
                 </div>
 
                 {/* Top Selling + Sales Chart Placeholder */}
-                <div className="grid md:grid-cols-2 gap-6">
+                <div className="grid lg:grid-cols-2 gap-6">
                     {/* Top Selling */}
-                    <div className="bg-base-100 p-6 rounded-xl shadow border border-base-300">
+                    {/* <div className="bg-base-100 p-6 rounded-xl shadow border border-base-300">
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-xl font-semibold text-base-content">Top Selling Medicines</h2>
                             <BiTrendingUp className="text-2xl text-[#0D6FEC]" />
                         </div>
-                        <ul className="space-y-3">
+                        <ul className="space-y-2">
                             {topSelling.map((med, index) => (
                                 <li key={index} className="flex justify-between text-base-content/90">
                                     <span className="capitalize">{index + 1}. {med.name}</span>
@@ -411,22 +404,85 @@ const DashboardHome = () => {
                                 </li>
                             ))}
                         </ul>
+                    </div> */}
+
+
+                    {/* Top Selling */}
+                    <div className="bg-base-100 p-6 rounded-xl  border border-base-300 ">
+                        <div className="flex justify-between items-center mb-6">
+                            <h2 className="text-2xl font-bold text-base-content">Top Selling Medicines</h2>
+                            <div className="p-2 rounded-full bg-[#0D6FEC]/10 text-[#0D6FEC]">
+                                <BiTrendingUp className="text-2xl  animate-pulse" />
+                            </div>
+                        </div>
+
+                        <ul className="space-y-3">
+                            {topSelling?.map((med, index) => (
+                                <li key={index} className="flex items-center gap-4 p-3 hover:bg-base-200 rounded-lg transition-colors duration-200">
+                                    <div className="flex items-center gap-4 w-full">
+                                        <span className={`flex items-center justify-center w-8 h-8 rounded-full ${index < 3 ? 'bg-[#0D6FEC]/10 text-[#0D6FEC]' : 'bg-base-300 text-base-content'} font-medium`}>
+                                            {index + 1}
+                                        </span>
+
+                                        <div className="flex-shrink-0">
+                                            <img
+                                                src={med.image}
+                                                alt={med.name}
+                                                className="w-12 h-12 object-contain rounded-lg border border-base-300"
+                                                onError={(e) => {
+                                                    e.target.src = 'https://via.placeholder.com/48?text=Medicine';
+                                                }}
+                                            />
+                                        </div>
+
+                                        <div className="flex-grow min-w-0">
+                                            <h3 className="font-medium text-base-content capitalize truncate">{med.name}</h3>
+                                        </div>
+
+                                        <span className={`px-3 py-1 rounded-full text-sm font-medium whitespace-nowrap ${index < 3 ? 'bg-[#0D6FEC]/10 text-[#0D6FEC]' : 'bg-base-300 text-base-content'}`}>
+                                            {med.qty} Sold
+                                        </span>
+
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
 
                     {/* Sales Chart Placeholder */}
-                    <div className="bg-base-100 p-6 rounded-xl shadow border border-base-300">
+                    <div className="bg-base-100 p-6 rounded-xl  border border-base-300 ">
                         <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-xl font-semibold text-base-content">Sales Chart</h2>
+                            <h2 className="text-2xl font-bold text-base-content">Sales Chart</h2>
                             <FaChartBar className="text-xl text-[#35C7DF]" />
                         </div>
-                        <div className="flex items-center justify-center h-48 text-base-content/60 italic">
-                            (📊 Chart coming soon)
+                        <div>
+                            <ResponsiveContainer className={''} width="100%" height={300}>
+                                <LineChart data={salesData}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="date" stroke="#888" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Line type="monotone" dataKey="totalSales" stroke="#0D6FEC" strokeWidth={3} />
+                                </LineChart>
+                            </ResponsiveContainer>
                         </div>
                     </div>
+                    {/* <div className="bg-base-100 rounded-lg p-6 shadow border border-base-300 ">
+                        <h2 className="text-xl font-semibold text-base-content mb-4">Sales Overview</h2>
+                        <ResponsiveContainer className={'border'} width="100%" height={300}>
+                            <LineChart data={salesData}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="date" stroke="#888" />
+                                <YAxis />
+                                <Tooltip />
+                                <Line type="monotone" dataKey="totalSales" stroke="#0D6FEC" strokeWidth={3} />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </div> */}
                 </div>
 
                 {/* Recent Sales Table */}
-                <div className="bg-base-100 p-6 rounded-xl shadow border border-base-300">
+                <div className="bg-base-100 p-6 rounded-xl  border border-base-300">
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-xl font-semibold text-base-content">Recent Sales</h2>
                         <FaStar className="text-xl text-yellow-500" />
@@ -460,18 +516,5 @@ const DashboardHome = () => {
         </>
     );
 };
-// ✅ Reusable Stat Card
-// const StatCard = ({ title, value, icon, color = "primary" }) => (
-//     <div className={`bg-${color}/10 border-l-4 border-${color} rounded-lg p-5 shadow-md`}>
-//         <div className="flex justify-between items-center">
-//             <div>
-//                 <p className={`text-${color} font-medium`}>{title}</p>
-//                 <p className={`text-2xl font-bold text-${color}-content`}>{value}</p>
-//             </div>
-//             <div className={`bg-${color}/20 p-3 rounded-full`}>
-//                 {icon}
-//             </div>
-//         </div>
-//     </div>
-// );
+
 export default DashboardHome;
