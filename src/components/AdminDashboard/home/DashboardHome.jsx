@@ -245,7 +245,7 @@
 
 //========================gtp
 
-import { FaClock, FaDollarSign, FaShoppingBag, FaSpinner } from 'react-icons/fa';
+import { FaClock, FaDollarSign } from 'react-icons/fa';
 import {
     FaShoppingCart,
     FaStar,
@@ -256,7 +256,7 @@ import { BiTrendingUp } from "react-icons/bi";
 import StatCard from '../../common/StatCard';
 import { useSellerStats } from '../../../services/dashboardStats';
 import useAuth from '../../../hooks/useAuth';
-import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 const DashboardHome = () => {
     const { user } = useAuth();
@@ -272,7 +272,7 @@ const DashboardHome = () => {
     // API Calls
     const { data: sellerStats } = useSellerStats();
 
-    console.log('sellerStats', sellerStats?.aggregatedData?.topSelling
+    console.log('sellerStats', sellerStats
     );
 
     const totalRevenue = sellerStats?.aggregatedData?.revenueSummary[0].totalRevenue;
@@ -280,6 +280,7 @@ const DashboardHome = () => {
     const totalOrders = sellerStats?.aggregatedData?.revenueSummary[0].totalOrders
     const stockCount = sellerStats?.stockCountResult?.stockCount;
     const topSelling = sellerStats?.aggregatedData?.topSelling
+    const lastSevenDaysRevenue = sellerStats?.aggregatedData?.lastSevenDaysRevenue;
 
     const recentSales = [
         { name: "Heparin", price: 45, qty: 1, total: 45, date: "Apr 16, 2025" },
@@ -287,14 +288,6 @@ const DashboardHome = () => {
         { name: "Amoxicillin", price: 20, qty: 1, total: 18, date: "Apr 14, 2025" },
     ];
 
-
-    const salesData = [
-        { date: 'Apr 10', totalSales: 120 },
-        { date: 'Apr 11', totalSales: 90 },
-        { date: 'Apr 12', totalSales: 150 },
-        { date: 'Apr 13', totalSales: 180 },
-        { date: 'Apr 14', totalSales: 100 },
-    ];
     return (
         // <div className="px-4 sm:px-8 py-8 space-y-10">
         //     <div className="space-y-1">
@@ -391,58 +384,34 @@ const DashboardHome = () => {
                 {/* Top Selling + Sales Chart Placeholder */}
                 <div className="grid lg:grid-cols-2 gap-6">
                     {/* Top Selling */}
-                    {/* <div className="bg-base-100 p-6 rounded-xl shadow border border-base-300">
-                        <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-xl font-semibold text-base-content">Top Selling Medicines</h2>
-                            <BiTrendingUp className="text-2xl text-[#0D6FEC]" />
-                        </div>
-                        <ul className="space-y-2">
-                            {topSelling.map((med, index) => (
-                                <li key={index} className="flex justify-between text-base-content/90">
-                                    <span className="capitalize">{index + 1}. {med.name}</span>
-                                    <span className="badge badge-outline badge-primary">{med.qty} Sold</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div> */}
-
-
-                    {/* Top Selling */}
-                    <div className="bg-base-100 p-6 rounded-xl  border border-base-300 ">
+                    <div className="bg-base-100 p-6 rounded-xl  border border-base-300 shadow">
                         <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-2xl font-bold text-base-content">Top Selling Medicines</h2>
+                            <h2 className="text-xl font-bold text-base-content">Top Selling Medicines</h2>
                             <div className="p-2 rounded-full bg-[#0D6FEC]/10 text-[#0D6FEC]">
-                                <BiTrendingUp className="text-2xl  animate-pulse" />
+                                <BiTrendingUp className="text-xl  animate-pulse" />
                             </div>
                         </div>
 
-                        <ul className="space-y-3">
+                        <ul className=" divide-y divide-base-300">
                             {topSelling?.map((med, index) => (
-                                <li key={index} className="flex items-center gap-4 p-3 hover:bg-base-200 rounded-lg transition-colors duration-200">
-                                    <div className="flex items-center gap-4 w-full">
+                                <li key={index} className="flex items-center gap-4 p-3 hover:bg-base-200  transition-colors duration-200 ">
+                                    <div className="flex items-center gap-4 w-full ">
                                         <span className={`flex items-center justify-center w-8 h-8 rounded-full ${index < 3 ? 'bg-[#0D6FEC]/10 text-[#0D6FEC]' : 'bg-base-300 text-base-content'} font-medium`}>
                                             {index + 1}
                                         </span>
-
-                                        <div className="flex-shrink-0">
+                                        <div className="flex-shrink-0 ">
                                             <img
                                                 src={med.image}
                                                 alt={med.name}
-                                                className="w-12 h-12 object-contain rounded-lg border border-base-300"
-                                                onError={(e) => {
-                                                    e.target.src = 'https://via.placeholder.com/48?text=Medicine';
-                                                }}
+                                                className="w-12 h-12 object-contain rounded-lg "
                                             />
                                         </div>
-
-                                        <div className="flex-grow min-w-0">
+                                        <div className="flex-grow min-w-0 ">
                                             <h3 className="font-medium text-base-content capitalize truncate">{med.name}</h3>
                                         </div>
-
-                                        <span className={`px-3 py-1 rounded-full text-sm font-medium whitespace-nowrap ${index < 3 ? 'bg-[#0D6FEC]/10 text-[#0D6FEC]' : 'bg-base-300 text-base-content'}`}>
+                                        <span className={` px-3 py-1 rounded-full text-sm font-medium whitespace-nowrap ${index < 3 ? 'bg-[#0D6FEC]/10 text-[#0D6FEC]' : 'bg-base-300 text-base-content'}`}>
                                             {med.qty} Sold
                                         </span>
-
                                     </div>
                                 </li>
                             ))}
@@ -450,39 +419,45 @@ const DashboardHome = () => {
                     </div>
 
                     {/* Sales Chart Placeholder */}
-                    <div className="bg-base-100 p-6 rounded-xl  border border-base-300 ">
+                    <div className="bg-base-100 p-6 rounded-xl  border border-base-300 shadow">
                         <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-2xl font-bold text-base-content">Sales Chart</h2>
-                            <FaChartBar className="text-xl text-[#35C7DF]" />
+                            <h2 className="text-xl font-bold text-base-content">Sales Overview (Last 7 Days)</h2>
+                            <div className="p-2 rounded-full bg-[#35C7DF]/10 text-[#35C7DF]">
+                                <FaChartBar className="text-xl  animate-pulse" />
+                            </div>
                         </div>
                         <div>
-                            <ResponsiveContainer className={''} width="100%" height={300}>
-                                <LineChart data={salesData}>
+                            <ResponsiveContainer width="100%" height={300}>
+                                <AreaChart data={lastSevenDaysRevenue}>
+                                    <defs>
+                                        <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="5%" stopColor="#0D6FEC" stopOpacity={0.8} />
+                                            <stop offset="95%" stopColor="#0D6FEC" stopOpacity={0} />
+                                        </linearGradient>
+                                    </defs>
                                     <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="date" stroke="#888" />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Line type="monotone" dataKey="totalSales" stroke="#0D6FEC" strokeWidth={3} />
-                                </LineChart>
+                                    <XAxis dataKey="date" className="text-xs fill-base-content" />
+                                    <YAxis className="text-xs fill-base-content" />
+                                    <Tooltip
+                                        contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '6px', color: 'white' }}
+                                        labelStyle={{ color: 'white' }}
+                                        itemStyle={{ color: 'white' }}
+                                    />
+                                    <Area
+                                        type="monotone"
+                                        dataKey="revenue"
+                                        stroke="#0D6FEC"
+                                        fillOpacity={1}
+                                        fill="url(#colorRev)"
+                                    />
+                                </AreaChart>
                             </ResponsiveContainer>
                         </div>
                     </div>
-                    {/* <div className="bg-base-100 rounded-lg p-6 shadow border border-base-300 ">
-                        <h2 className="text-xl font-semibold text-base-content mb-4">Sales Overview</h2>
-                        <ResponsiveContainer className={'border'} width="100%" height={300}>
-                            <LineChart data={salesData}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="date" stroke="#888" />
-                                <YAxis />
-                                <Tooltip />
-                                <Line type="monotone" dataKey="totalSales" stroke="#0D6FEC" strokeWidth={3} />
-                            </LineChart>
-                        </ResponsiveContainer>
-                    </div> */}
                 </div>
 
                 {/* Recent Sales Table */}
-                <div className="bg-base-100 p-6 rounded-xl  border border-base-300">
+                <div className="bg-base-100 p-6 rounded-xl  border border-base-300 shadow">
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-xl font-semibold text-base-content">Recent Sales</h2>
                         <FaStar className="text-xl text-yellow-500" />
