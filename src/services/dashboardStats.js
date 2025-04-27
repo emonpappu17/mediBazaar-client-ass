@@ -10,8 +10,6 @@ export const useSellerStats = () => {
     return useQuery({
         queryKey: ['sellerStats', user?.email],
         queryFn: async () => {
-            console.log(user?.email);
-
             const { data } = await axiosSecure(`/sellerStats/${user?.email}`)
             return data
         },
