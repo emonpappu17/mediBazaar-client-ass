@@ -245,7 +245,7 @@
 
 //========================gtp
 
-import { FaChartPie, FaClock, FaDollarSign } from 'react-icons/fa';
+import { FaClock, FaDollarSign } from 'react-icons/fa';
 import {
     FaShoppingCart,
     FaStar,
@@ -256,20 +256,11 @@ import { BiTrendingUp } from "react-icons/bi";
 import StatCard from '../../common/StatCard';
 import { useSellerStats } from '../../../services/dashboardStats';
 import useAuth from '../../../hooks/useAuth';
-import { Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { Area, AreaChart, Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { Legend } from '@headlessui/react';
 
 const DashboardHome = () => {
     const { user } = useAuth();
-    // ✅ Fake stats for now
-    // const totalRevenue = 347.5;
-    // const pendingRevenue = 122.0;
-    // const totalOrders = 34;
-    // const topSelling = [
-    //     { name: "Paracetamol", qty: 28 },
-    //     { name: "Cough Syrup", qty: 19 },
-    //     { name: "Amoxicillin", qty: 12 },
-
     // API Calls
     const { data: sellerStats } = useSellerStats();
 
@@ -288,59 +279,6 @@ const DashboardHome = () => {
         { name: "Amoxicillin", price: 20, qty: 1, total: 18, date: "Apr 14, 2025" },
     ];
 
-    // const COLORS = ['#0D6FEC', '#35C7DF', '#7DD3FC'];
-
-    // const CustomTooltip = ({ active, payload }) => {
-    //     if (active && payload && payload.length) {
-    //         const item = payload[0].payload;
-    //         return (
-    //             <div className="bg-base-200 p-3 rounded shadow text-sm">
-    //                 <img
-    //                     src={item.image}
-    //                     alt={item.name}
-    //                     className="w-10 h-10 mb-2 rounded object-cover"
-    //                 />
-    //                 <p className="text-base-content font-semibold">{item.name}</p>
-    //                 <p className="text-base-content">Qty Sold: {item.qty}</p>
-    //             </div>
-    //         );
-    //     }
-    //     return null;
-    // };
-
-    // Custom Tooltip component to include product image and name
-    const CustomTooltip = ({ active, payload }) => {
-        if (active && payload && payload.length) {
-            const data = payload[0].payload;
-            return (
-                <div
-                    style={{
-                        backgroundColor: '#1e293b',
-                        border: 'none',
-                        borderRadius: '6px',
-                        padding: '10px',
-                        color: 'white',
-                    }}
-                >
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <img
-                            src={data.image}
-                            alt={data.name}
-                            style={{ width: '40px', height: '40px', marginRight: '10px', borderRadius: '4px' }}
-                        />
-                        <div>
-                            <p style={{ margin: 0, fontWeight: 'bold' }}>{data.name}</p>
-                            <p style={{ margin: 0 }}>Quantity Sold: {data.qty}</p>
-                        </div>
-                    </div>
-                </div>
-            );
-        }
-        return null;
-    };
-
-    const colors = ['#8884d8', '#82ca9d', '#ffc658'];
-    const COLORS = ['#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe', '#dbeafe'];
     return (
         // <div className="px-4 sm:px-8 py-8 space-y-10">
         //     <div className="space-y-1">
@@ -434,259 +372,9 @@ const DashboardHome = () => {
                     />
                 </div>
 
-                {/* Top Selling + Sales Chart Placeholder */}
+                {/* Top Selling + Sales Overview */}
                 <div className="grid lg:grid-cols-2 gap-6">
                     {/* Top Selling */}
-                    {/* <div className="bg-base-100 p-6 rounded-xl  border border-base-300 shadow">
-                        <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-xl font-bold text-base-content">Top Selling Medicines</h2>
-                            <div className="p-2 rounded-full bg-[#0D6FEC]/10 text-[#0D6FEC]">
-                                <BiTrendingUp className="text-xl  animate-pulse" />
-                            </div>
-                        </div>
-
-                        <ul className=" divide-y divide-base-300">
-                            {topSelling?.map((med, index) => (
-                                <li key={index} className="flex items-center gap-4 p-3 hover:bg-base-200  transition-colors duration-200 ">
-                                    <div className="flex items-center gap-4 w-full ">
-                                        <span className={`flex items-center justify-center w-8 h-8 rounded-full ${index < 3 ? 'bg-[#0D6FEC]/10 text-[#0D6FEC]' : 'bg-base-300 text-base-content'} font-medium`}>
-                                            {index + 1}
-                                        </span>
-                                        <div className="flex-shrink-0 ">
-                                            <img
-                                                src={med.image}
-                                                alt={med.name}
-                                                className="w-12 h-12 object-contain rounded-lg "
-                                            />
-                                        </div>
-                                        <div className="flex-grow min-w-0 ">
-                                            <h3 className="font-medium text-base-content capitalize truncate">{med.name}</h3>
-                                        </div>
-                                        <span className={` px-3 py-1 rounded-full text-sm font-medium whitespace-nowrap ${index < 3 ? 'bg-[#0D6FEC]/10 text-[#0D6FEC]' : 'bg-base-300 text-base-content'}`}>
-                                            {med.qty} Sold
-                                        </span>
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
-                    </div> */}
-
-
-                    {/* <div className="w-full">
-                        <h2 className="text-lg font-bold text-base-content mb-4">
-                            Top Selling Products
-                        </h2>
-                        <ResponsiveContainer width="100%" height={300}>
-                            <BarChart data={topSelling}>
-                                <XAxis
-                                    dataKey="name"
-                                    className="text-xs fill-base-content"
-                                    tick={{ fontSize: 12 }}
-                                />
-                                <YAxis className="text-xs fill-base-content" />
-                                <Tooltip content={<CustomTooltip />} />
-                                <Bar dataKey="qty" radius={[6, 6, 0, 0]}>
-                                    {topSelling.map((entry, index) => (
-                                        <Cell
-                                            key={`cell-${index}`}
-                                            fill={COLORS[index % COLORS.length]}
-                                        />
-                                    ))}
-                                </Bar>
-                            </BarChart>
-                        </ResponsiveContainer>
-                    </div> */}
-
-                    {/* deep seek 1 */}
-                    {/* <div className="bg-base-100 p-4 rounded-lg shadow">
-                        <h3 className="text-lg font-semibold mb-4">Top Selling Products</h3>
-                        <ResponsiveContainer width="100%" height={300}>
-                            <BarChart
-                                data={topSelling}
-                                layout="vertical"
-                                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                            >
-                                <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-                                <XAxis type="number" className="text-xs fill-base-content" />
-                                <YAxis
-                                    type="category"
-                                    dataKey="name"
-                                    width={80}
-                                    className="text-xs fill-base-content"
-                                />
-                                <Tooltip
-                                    contentStyle={{
-                                        backgroundColor: '#1e293b',
-                                        border: 'none',
-                                        borderRadius: '6px',
-                                        color: 'white'
-                                    }}
-                                    formatter={(value) => [`${value} units`, 'Quantity']}
-                                    labelStyle={{ color: 'white' }}
-                                    itemStyle={{ color: 'white' }}
-                                />
-                                <Bar
-                                    dataKey="qty"
-                                    name="Quantity"
-                                    radius={[0, 4, 4, 0]}
-                                    animationDuration={1500}
-                                >
-                                    {topSelling.map((entry, index) => (
-                                        <Cell
-                                            key={`cell-${index}`}
-                                            fill={`hsl(${index * 90}, 70%, 50%)`}
-                                        />
-                                    ))}
-                                </Bar>
-                            </BarChart>
-                        </ResponsiveContainer>
-                    </div> */}
-
-                    {/* <div style={{ width: '100%', height: '300px' }}>
-                        <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={topSelling} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                                <defs>
-                                    <linearGradient id="colorQty" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor="#0D6FEC" stopOpacity={0.8} />
-                                        <stop offset="95%" stopColor="#0D6FEC" stopOpacity={0.2} />
-                                    </linearGradient>
-                                </defs>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                                <XAxis
-                                    dataKey="name"
-                                    className="text-xs fill-base-content"
-                                    tick={{ fill: '#4b5563' }}
-                                    tickLine={false}
-                                    axisLine={{ stroke: '#e5e7eb' }}
-                                />
-                                <YAxis
-                                    className="text-xs fill-base-content"
-                                    tick={{ fill: '#4b5563' }}
-                                    tickLine={false}
-                                    axisLine={{ stroke: '#e5e7eb' }}
-                                    label={{
-                                        value: 'Quantity Sold',
-                                        angle: -90,
-                                        position: 'insideLeft',
-                                        offset: -5,
-                                        fill: '#4b5563',
-                                    }}
-                                />
-                                <Tooltip content={<CustomTooltip />} />
-                                <Bar
-                                    dataKey="qty"
-                                    fill="url(#colorQty)"
-                                    radius={[4, 4, 0, 0]} // Rounded top edges
-                                    barSize={60} // Adjust bar width
-                                />
-                            </BarChart>
-                        </ResponsiveContainer>
-                    </div> */}
-
-                    {/* deep seek 2 */}
-                    {/* <div style={{ width: '100%', height: 400 }}>
-                        <h2 style={{ textAlign: 'center', marginBottom: 20, color: '#333', fontFamily: 'Arial, sans-serif' }}>
-                            Top Selling Products
-                        </h2>
-                        <ResponsiveContainer>
-                            <BarChart
-                                data={topSelling}
-                                margin={{
-                                    top: 20,
-                                    right: 30,
-                                    left: 20,
-                                    bottom: 60,
-                                }}
-                                layout="vertical"
-                            >
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis type="number" />
-                                <YAxis
-                                    dataKey="name"
-                                    type="category"
-                                    width={100}
-                                    tick={{ fontSize: 12 }}
-                                />
-                                <Tooltip
-                                    formatter={(value) => [`${value} units`, 'Quantity']}
-                                    labelFormatter={(label) => `Product: ${label}`}
-                                />
-                                <Legend />
-                                <Bar
-                                    dataKey="qty"
-                                    name="Quantity Sold"
-                                    barSize={30}
-                                    label={{ position: 'right', fill: '#333' }}
-                                >
-                                    {topSelling.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
-                                    ))}
-                                </Bar>
-                            </BarChart>
-                        </ResponsiveContainer>
-                        <div style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            marginTop: 20,
-                            gap: 20
-                        }}>
-                            {topSelling.map((item, index) => (
-                                <div key={index} style={{ textAlign: 'center' }}>
-                                    <img
-                                        src={item.image}
-                                        alt={item.name}
-                                        style={{
-                                            width: 50,
-                                            height: 50,
-                                            objectFit: 'contain',
-                                            borderRadius: '50%',
-                                            border: `2px solid ${colors[index]}`,
-                                            padding: 5
-                                        }}
-                                    />
-                                    <div style={{ fontSize: 12, marginTop: 5 }}>{item.name}</div>
-                                </div>
-                            ))}
-                        </div>
-                    </div> */}
-
-                    {/* grok 2 */}
-                    {/* <div className="bg-white p-6 rounded-lg shadow-lg">
-                        <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">Top Selling Products</h2>
-                        <ResponsiveContainer width="100%" height={400}>
-                            <BarChart
-                                data={topSelling}
-                                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                            >
-                                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                                <XAxis
-                                    dataKey="name"
-                                    tick={{ fill: '#4b5563', fontSize: 14 }}
-                                    tickLine={false}
-                                    axisLine={{ stroke: '#d1d5db' }}
-                                />
-                                <YAxis
-                                    label={{ value: 'Quantity Sold', angle: -90, position: 'insideLeft', fill: '#4b5563', fontSize: 16 }}
-                                    tick={{ fill: '#4b5563', fontSize: 14 }}
-                                    tickLine={false}
-                                    axisLine={{ stroke: '#d1d5db' }}
-                                />
-                                <Tooltip
-                                    contentStyle={{ backgroundColor: '#fff', borderRadius: '8px', border: '1px solid #d1d5db' }}
-                                    cursor={{ fill: 'rgba(0, 0, 0, 0.05)' }}
-                                />
-                                <Legend wrapperStyle={{ paddingTop: '20px', fontSize: '14px', color: '#4b5563' }} />
-                                <Bar
-                                    dataKey="qty"
-                                    fill="#3b82f6"
-                                    radius={[4, 4, 0, 0]}
-                                    barSize={100}
-                                />
-                            </BarChart>
-                        </ResponsiveContainer>
-                    </div> */}
-
-                    {/* grok 3 */}
                     <div className="bg-base-100 p-6 rounded-xl border border-base-300 shadow">
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-xl font-bold text-base-content">Top Selling Products</h2>
@@ -694,7 +382,6 @@ const DashboardHome = () => {
                                 <BiTrendingUp className="text-xl animate-pulse" />
                             </div>
                         </div>
-
                         <ResponsiveContainer width="100%" height={300}>
                             <BarChart
                                 data={topSelling}
@@ -703,21 +390,17 @@ const DashboardHome = () => {
                             >
                                 <defs>
                                     <linearGradient id="colorQty" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8} />
-                                        <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                                        <stop offset="5%" stopColor="#0D6FEC" stopOpacity={0.8} />
+                                        <stop offset="95%" stopColor="#0D6FEC" stopOpacity={0} />
                                     </linearGradient>
                                 </defs>
-                                {/* <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" /> */}
                                 <XAxis
                                     dataKey="name"
                                     className="text-xs fill-base-content"
-                                    // tickLine={false}
                                     axisLine={{ stroke: '#d1d5db' }}
                                 />
                                 <YAxis
-                                    label={{ value: 'Quantity Sold', angle: -90, fontSize: 14 }}
                                     className="text-xs fill-base-content"
-                                    // tickLine={false}
                                     axisLine={{ stroke: '#d1d5db' }}
                                 />
                                 <Tooltip
@@ -725,63 +408,21 @@ const DashboardHome = () => {
                                     labelStyle={{ color: 'white' }}
                                     itemStyle={{ color: 'white' }}
                                 />
-                                <Legend wrapperStyle={{ paddingTop: '20px', fontSize: '14px', color: '#4b5563' }} />
+                                <Legend wrapperStyle={{ paddingTop: '20px', fontSize: '14px', color: '#4b5563' }} className={'border'} />
                                 <Bar
                                     dataKey="qty"
                                     fill="url(#colorQty)"
-                                    // stroke="#3b82f6"
                                     radius={[4, 4, 0, 0]}
                                     barSize={90}
+                                    background={false}
+                                    activeBar={false}
+                                    layout='horizontal'
                                 />
                             </BarChart>
                         </ResponsiveContainer>
-
-                        {/* <ResponsiveContainer width="100%" height="100%">
-                            <BarChart width={150} height={40} data={data}>
-                                <Bar dataKey="uv" fill="#8884d8" />
-                            </BarChart>
-                        </ResponsiveContainer> */}
                     </div>
 
-                    {/* gro4 */}
-                    {/* <div className="bg-base-100 p-6 rounded-xl border border-base-300 shadow">
-                        <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-xl font-bold text-base-content">Top Selling Products</h2>
-                            <div className="p-2 rounded-full bg-[#3b82f6]/10 text-[#3b82f6]">
-                                <FaChartPie className="text-xl animate-pulse" />
-                            </div>
-                        </div>
-                        <ResponsiveContainer width="100%" height={300}>
-                            <PieChart>
-                                <Pie
-                                    data={topSelling}
-                                    dataKey="qty"
-                                    nameKey="name"
-                                    cx="50%"
-                                    cy="50%"
-                                    outerRadius={100}
-                                    fill="#3b82f6"
-                                    label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
-                                    labelLine={{ stroke: '#d1d5db' }}
-                                >
-                                    {topSelling?.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                    ))}
-                                </Pie>
-                                <Tooltip
-                                    contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '6px', color: 'white' }}
-                                    labelStyle={{ color: 'white' }}
-                                    itemStyle={{ color: 'white' }}
-                                />
-                                <Legend
-                                    wrapperStyle={{ paddingTop: '20px', fontSize: '14px', color: '#4b5563' }}
-                                    formatter={(value) => <span className="text-base-content">{value}</span>}
-                                />
-                            </PieChart>
-                        </ResponsiveContainer>
-                    </div> */}
-
-                    {/* Sales Chart Placeholder */}
+                    {/* Sales Overview */}
                     <div className="bg-base-100 p-6 rounded-xl  border border-base-300 shadow">
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-xl font-bold text-base-content">Sales Overview (Last 7 Days)</h2>
@@ -798,9 +439,15 @@ const DashboardHome = () => {
                                             <stop offset="95%" stopColor="#0D6FEC" stopOpacity={0} />
                                         </linearGradient>
                                     </defs>
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="date" className="text-xs fill-base-content" />
-                                    <YAxis className="text-xs fill-base-content" />
+                                    <XAxis
+                                        dataKey="date"
+                                        className="text-xs fill-base-content"
+                                        axisLine={{ stroke: '#d1d5db' }}
+                                    />
+                                    <YAxis
+                                        className="text-xs fill-base-content"
+                                        axisLine={{ stroke: '#d1d5db' }}
+                                    />
                                     <Tooltip
                                         contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '6px', color: 'white' }}
                                         labelStyle={{ color: 'white' }}
@@ -809,7 +456,7 @@ const DashboardHome = () => {
                                     <Area
                                         type="monotone"
                                         dataKey="revenue"
-                                        stroke="#0D6FEC"
+                                        stroke='none'
                                         fillOpacity={1}
                                         fill="url(#colorRev)"
                                     />
