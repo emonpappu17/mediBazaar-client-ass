@@ -264,7 +264,7 @@ const DashboardHome = () => {
     // API Calls
     const { data: sellerStats } = useSellerStats();
 
-    console.log('sellerStats', sellerStats);
+    // console.log('sellerStats', sellerStats);
 
     const totalRevenue = sellerStats?.aggregatedData?.revenueSummary[0].totalRevenue;
     const pendingRevenue = sellerStats?.aggregatedData?.revenueSummary[0].pendingRevenue;
@@ -272,70 +272,16 @@ const DashboardHome = () => {
     const stockCount = sellerStats?.stockCountResult?.stockCount;
     const topSelling = sellerStats?.aggregatedData?.topSelling
     const lastSevenDaysRevenue = sellerStats?.aggregatedData?.lastSevenDaysRevenue;
+    const recentSales = sellerStats?.aggregatedData?.recentSales;
+    console.log(recentSales);
 
-    const recentSales = [
-        { name: "Heparin", price: 45, qty: 1, total: 45, date: "Apr 16, 2025" },
-        { name: "Cough Syrup", price: 8, qty: 2, total: 16, date: "Apr 15, 2025" },
-        { name: "Amoxicillin", price: 20, qty: 1, total: 18, date: "Apr 14, 2025" },
-    ];
+    // const recentSales = [
+    //     { name: "Heparin", price: 45, qty: 1, total: 45, date: "Apr 16, 2025" },
+    //     { name: "Cough Syrup", price: 8, qty: 2, total: 16, date: "Apr 15, 2025" },
+    //     { name: "Amoxicillin", price: 20, qty: 1, total: 18, date: "Apr 14, 2025" },
+    // ];
 
     return (
-        // <div className="px-4 sm:px-8 py-8 space-y-10">
-        //     <div className="space-y-1">
-        //         <h1 className="text-3xl font-bold text-base-content">Welcome Back, Seller!</h1>
-        //         <p className="text-base-content/70">Here's a quick overview of your sales and performance.</p>
-        //     </div>
-
-        //     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        //         <div className="bg-primary/10 p-6 rounded-lg border-l-4 border-primary shadow-sm">
-        //             <div className="flex justify-between items-center">
-        //                 <div>
-        //                     <p className="text-primary font-medium">Total Revenue</p>
-        //                     <p className="text-3xl font-bold text-primary">${totalRevenue.toFixed(2)}</p>
-        //                 </div>
-        //                 <div className="bg-primary/20 p-3 rounded-full">
-        //                     <FaDollarSign className="text-primary text-xl" />
-        //                 </div>
-        //             </div>
-        //         </div>
-
-        //         <div className="bg-warning/10 p-6 rounded-lg border-l-4 border-warning shadow-sm">
-        //             <div className="flex justify-between items-center">
-        //                 <div>
-        //                     <p className="text-warning font-medium">Pending Payments</p>
-        //                     <p className="text-3xl font-bold text-warning">${pendingRevenue.toFixed(2)}</p>
-        //                 </div>
-        //                 <div className="bg-warning/20 p-3 rounded-full">
-        //                     <FaSpinner className="text-warning text-xl animate-spin" />
-        //                 </div>
-        //             </div>
-        //         </div>
-
-        //         <div className="bg-success/10 p-6 rounded-lg border-l-4 border-success shadow-sm">
-        //             <div className="flex justify-between items-center">
-        //                 <div>
-        //                     <p className="text-success font-medium">Total Orders</p>
-        //                     <p className="text-3xl font-bold text-success">{totalOrders}</p>
-        //                 </div>
-        //                 <div className="bg-success/20 p-3 rounded-full">
-        //                     <FaShoppingBag className="text-success text-xl" />
-        //                 </div>
-        //             </div>
-        //         </div>
-        //     </div>
-
-        //     <div className="bg-base-100 p-6 rounded-lg border border-base-300 shadow-md">
-        //         <h2 className="text-xl font-semibold text-base-content mb-4">Top Selling Medicines</h2>
-        //         <ul className="space-y-2">
-        //             {topSelling.map((med, index) => (
-        //                 <li key={index} className="flex justify-between text-base-content/80">
-        //                     <span>{index + 1}. {med.name}</span>
-        //                     <span>{med.qty} sold</span>
-        //                 </li>
-        //             ))}
-        //         </ul>
-        //     </div>
-        // </div>
         <>
             <div className=" space-y-8 ">
                 {/* Header */}
@@ -476,21 +422,25 @@ const DashboardHome = () => {
                         <table className="min-w-full text-sm">
                             <thead className="bg-base-200 text-base-content/70">
                                 <tr>
+                                    <th className="p-3 text-left">Image</th>
                                     <th className="p-3 text-left">Medicine</th>
                                     <th className="p-3 text-left">Qty</th>
-                                    <th className="p-3 text-left">Unit Price</th>
+                                    <th className="p-3 text-left truncate">Unit Price</th>
                                     <th className="p-3 text-left">Total</th>
-                                    <th className="p-3 text-left">Date</th>
+                                    <th className="p-3 text-left truncate">Date</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {recentSales.map((sale, index) => (
+                                {recentSales?.map((sale, index) => (
                                     <tr key={index} className="hover:bg-base-200 text-base-content">
+                                        <td className="p-3">
+                                            <img className='size-10 rounded-full' src={sale.image} alt="" />
+                                        </td>
                                         <td className="p-3">{sale.name}</td>
                                         <td className="p-3">{sale.qty}</td>
                                         <td className="p-3">${sale.price.toFixed(2)}</td>
                                         <td className="p-3">${sale.total.toFixed(2)}</td>
-                                        <td className="p-3">{sale.date}</td>
+                                        <td className="p-3 truncate">{sale.date}</td>
                                     </tr>
                                 ))}
                             </tbody>
