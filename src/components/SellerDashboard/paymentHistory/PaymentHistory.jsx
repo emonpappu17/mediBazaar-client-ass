@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useSellerPayments } from "../../../services/paymentService";
+import { useSellerPayments, useUserPayments } from "../../../services/paymentService";
+import { useRole } from "../../../services/userService";
 import PaymentHistoryStat from "./PaymentHistoryStat";
 import PaymentHistoryRow from "./PaymentHistoryRow";
 import PaymentHistoryModal from "./PaymentHistoryModal";
@@ -8,9 +9,17 @@ import TableSkeleton from "../../common/TableSkeleton";
 const PaymentHistory = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [payment, setPayment] = useState(null);
+    const [role] = useRole();
 
-    // API Call
-    const { data: payments = [], isLoading, isError } = useSellerPayments();
+    const isUser = role === 'user';
+
+    // API Calls
+    const sellerQuery = useSellerPayments();
+    const userQuery = useUserPayments();
+
+    const payments = isUser ? (userQuery.data || []) : (sellerQuery.data || []);
+    const isLoading = isUser ? userQuery.isLoading : sellerQuery.isLoading;
+    const isError = isUser ? userQuery.isError : sellerQuery.isError;
 
     // Opening the modal
     const handleViewDetails = (payment) => {
@@ -23,8 +32,10 @@ const PaymentHistory = () => {
             {/* Header Stat*/}
             <PaymentHistoryStat
                 payments={payments}
+                userDashboard={isUser}
                 isLoading={isLoading}
                 isError={isError} />
+
             {
                 isLoading ? (
                     <TableSkeleton />
@@ -77,6 +88,7 @@ const PaymentHistory = () => {
                 closeModal={() => setIsModalOpen(false)}
                 payment={payment}
                 setIsModalOpen={setIsModalOpen}
+                userDashboard={isUser}
             />
         </div >
     );

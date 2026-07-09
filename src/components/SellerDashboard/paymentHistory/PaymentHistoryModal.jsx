@@ -5,7 +5,7 @@ import { useSellerReceived } from "../../../services/paymentService";
 import toast from "react-hot-toast";
 import PropTypes from "prop-types";
 
-const PaymentHistoryModal = ({ isModalOpen, closeModal, payment, setIsModalOpen }) => {
+const PaymentHistoryModal = ({ isModalOpen, closeModal, payment, setIsModalOpen, userDashboard }) => {
 
     // API Call
     const { mutate } = useSellerReceived();
@@ -113,13 +113,15 @@ const PaymentHistoryModal = ({ isModalOpen, closeModal, payment, setIsModalOpen 
 
                     <div className="sticky bottom-0 bg-base-100  flex justify-end gap-3 z-20 pr-4 pb-4 ">
                         <button type="button" onClick={closeModal} className="btn">Close</button>
-                        <Button
-                            disabled={payment?.sellerReceived}
-                            onclick={() => handleSellerReceived(payment?._id)}
-                            type="button"
-                            text={payment?.sellerReceived ? 'Received' : 'Make as received'}
-                            className="px-4 py-2 rounded-md w-40"
-                        />
+                        {!userDashboard && (
+                            <Button
+                                disabled={payment?.sellerReceived}
+                                onclick={() => handleSellerReceived(payment?._id)}
+                                type="button"
+                                text={payment?.sellerReceived ? 'Received' : 'Make as received'}
+                                className="px-4 py-2 rounded-md w-40"
+                            />
+                        )}
                     </div>
                 </DialogPanel>
             </div>
@@ -131,7 +133,9 @@ PaymentHistoryModal.propTypes = {
     isModalOpen: PropTypes.bool.isRequired,
     closeModal: PropTypes.func.isRequired,
     setIsModalOpen: PropTypes.func.isRequired,
+    userDashboard: PropTypes.bool,
     payment: PropTypes.shape({
+
         _id: PropTypes.string,
         name: PropTypes.string,
         userEmail: PropTypes.string,

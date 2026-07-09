@@ -87,3 +87,18 @@ export const useAdminApproval = () => {
         }
     })
 }
+
+// Get payment history for user
+export const useUserPayments = () => {
+    const { user } = useAuth();
+    const axiosInstance = useAxiosInstance();
+
+    return useQuery({
+        queryKey: ['userPayments', user?.email],
+        queryFn: async () => {
+            const { data } = await axiosInstance(`/user-payment/${user?.email}`)
+            return data
+        },
+        enabled: !!user?.email
+    })
+}

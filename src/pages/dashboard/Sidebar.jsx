@@ -7,6 +7,7 @@ import { FaRegUser } from "react-icons/fa";
 import PropTypes from "prop-types";
 import { useRole } from "../../services/userService";
 import SellerDashboard from "./seller/SellerDashboard";
+import UserDashboard from "./user/UserDashboard";
 
 const Sidebar = ({ isActive }) => {
     const [role] = useRole();
@@ -27,8 +28,10 @@ const Sidebar = ({ isActive }) => {
                         {role === 'admin' && <AdminDashboard />}
                         {/* {role === 'admin' || role === 'user' && <AdminDashboard />} */}
                         {role === 'seller' && <SellerDashboard />}
+                        {role === 'user' && <UserDashboard />}
                     </nav>
                 </div>
+
 
                 <div>
                     <div className="divider"></div>

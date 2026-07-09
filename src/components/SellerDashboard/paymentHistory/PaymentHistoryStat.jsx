@@ -3,7 +3,7 @@ import { FaCheckCircle, FaClock, FaMoneyBillWave } from "react-icons/fa";
 import StatCard from "../../common/StatCard";
 import StatsSkeleton from "../../common/StatsSkeleton";
 
-const PaymentHistoryStat = ({ payments, adminPaymentManagement, isLoading, isError }) => {
+const PaymentHistoryStat = ({ payments, adminPaymentManagement, userDashboard, isLoading, isError }) => {
     // Total Revenue
     const totalPaid = payments.reduce((sum, payment) => sum + payment.totalAmount, 0).toFixed(2)
 
@@ -19,12 +19,14 @@ const PaymentHistoryStat = ({ payments, adminPaymentManagement, isLoading, isErr
                 {/* Header */}
                 <div className="mb-6">
                     <h1 className="text-2xl font-bold text-base-content mb-1">
-                        {adminPaymentManagement ? 'Payment Management' : 'Payment History'}
+                        {adminPaymentManagement ? 'Payment Management' : (userDashboard ? 'My Payment History' : 'Payment History')}
                     </h1>
                     <p className="text-sm text-base-content/70">
                         {adminPaymentManagement
                             ? 'Track and manage all the medicine sales payments'
-                            : 'Track and manage all your medicine sales payments'}
+                            : (userDashboard 
+                                ? 'Track and view all your medicine purchase payments'
+                                : 'Track and manage all your medicine sales payments')}
                     </p>
                 </div>
                 {isLoading ? (
@@ -35,7 +37,7 @@ const PaymentHistoryStat = ({ payments, adminPaymentManagement, isLoading, isErr
                 ) : (
                     isError ? (
                         <div className="bg-error/10 text-error p-4 rounded-lg mb-6 text-center">
-                            Failed to load statistics
+                             Failed to load statistics
                         </div>
                     ) : (
                         <>
@@ -43,7 +45,7 @@ const PaymentHistoryStat = ({ payments, adminPaymentManagement, isLoading, isErr
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                                 {/* Revenue Card */}
                                 <StatCard
-                                    title="Total Revenue Possible"
+                                    title={userDashboard ? "Total Spent Possible" : "Total Revenue Possible"}
                                     value={`$${totalPaid}`}
                                     icon={<FaMoneyBillWave className="text-primary" />}
                                     color="primary"
@@ -51,7 +53,7 @@ const PaymentHistoryStat = ({ payments, adminPaymentManagement, isLoading, isErr
 
                                 {/* Pending Card */}
                                 <StatCard
-                                    title="Total Pending"
+                                    title={userDashboard ? "Pending Payments" : "Total Pending"}
                                     value={`$${pendingTotal}`}
                                     icon={<FaClock className="text-warning" />}
                                     color="warning"
@@ -59,7 +61,7 @@ const PaymentHistoryStat = ({ payments, adminPaymentManagement, isLoading, isErr
 
                                 {/* Paid Card */}
                                 <StatCard
-                                    title=" Total Paid"
+                                    title={userDashboard ? "Paid Payments" : " Total Paid"}
                                     value={`$${paidTotal}`}
                                     icon={<FaCheckCircle className="text-success" />}
                                     color="success"
@@ -80,7 +82,8 @@ PaymentHistoryStat.propTypes = {
             paymentStatus: PropTypes.string.isRequired,
         })
     ).isRequired,
-    adminPaymentManagement: PropTypes.bool.isRequired,
+    adminPaymentManagement: PropTypes.bool,
+    userDashboard: PropTypes.bool,
     isLoading: PropTypes.bool.isRequired,
     isError: PropTypes.bool.isRequired
 };

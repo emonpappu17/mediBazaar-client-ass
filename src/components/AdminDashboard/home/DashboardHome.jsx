@@ -245,7 +245,7 @@
 
 //========================gtp
 
-import { FaClock, FaDollarSign } from 'react-icons/fa';
+import { FaCheckCircle, FaClock, FaDollarSign } from 'react-icons/fa';
 import {
     FaShoppingCart,
     FaStar,
@@ -255,16 +255,174 @@ import { MdInventory2 } from "react-icons/md";
 import { BiTrendingUp } from "react-icons/bi";
 import StatCard from '../../common/StatCard';
 import { useSellerStats } from '../../../services/dashboardStats';
+import { useUserPayments } from '../../../services/paymentService';
+import { useRole } from '../../../services/userService';
 import useAuth from '../../../hooks/useAuth';
 import { Area, AreaChart, Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { Legend } from '@headlessui/react';
 
 const DashboardHome = () => {
     const { user } = useAuth();
-    // API Calls
-    const { data: sellerStats } = useSellerStats();
+    const [role] = useRole();
 
-    // console.log('sellerStats', sellerStats);
+    const isUser = role === 'user';
+
+    // API Calls
+    const sellerQuery = useSellerStats();
+    const userQuery = useUserPayments();
+
+    const sellerStats = sellerQuery.data;
+    const userPayments = userQuery.data || [];
+
+    if (isUser) {
+        // Calculate user metrics
+        const totalPurchases = userPayments.length;
+        const totalSpent = userPayments.reduce((sum, payment) => sum + payment.totalAmount, 0).toFixed(2);
+        const pendingPayments = userPayments.filter(payment => payment.paymentStatus === 'Pending').length;
+        const paidPayments = userPayments.filter(payment => payment.paymentStatus !== 'Pending').length;
+
+        // Process recent purchases/transactions
+        const recentPurchases = [...userPayments]
+            .sort((a, b) => b.createdAt - a.createdAt)
+            .slice(0, 5)
+            .map(payment => {
+                const name = payment.items?.map(item => item.name).join(', ') || "No Items";
+                return {
+                    id: payment.transactionId,
+                    name,
+                    total: payment.totalAmount,
+                    status: payment.paymentStatus,
+                    date: new Date(payment.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
+                };
+            });
+
+        // Group spending by date for the area chart
+        const spendHistory = userPayments
+            .reduce((acc, payment) => {
+                const date = new Date(payment.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+                const existing = acc.find(item => item.date === date);
+                if (existing) {
+                    existing.spent = parseFloat((existing.spent + payment.totalAmount).toFixed(2));
+                } else {
+                    acc.push({ date, spent: payment.totalAmount });
+                }
+                return acc;
+            }, [])
+            .slice(-7);
+
+        return (
+            <div className="space-y-8 text-base-content">
+                {/* Header */}
+                <div>
+                    <h1 className="text-3xl font-bold text-base-content">{`👋 Welcome Back, ${user?.displayName}!`}</h1>
+                    <p className="text-base-content/70">Track your purchases and transactions at MediBazaar.</p>
+                </div>
+
+                {/* Analytics Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+                    <StatCard
+                        title="Total Spent"
+                        value={`$${totalSpent}`}
+                        icon={<FaDollarSign className="text-primary" />}
+                        color="primary"
+                    />
+                    <StatCard
+                        title="Pending Payments"
+                        value={pendingPayments}
+                        icon={<FaClock className="text-warning" />}
+                        color="warning"
+                    />
+                    <StatCard
+                        title="Paid Payments"
+                        value={paidPayments}
+                        icon={<FaCheckCircle className="text-success" />}
+                        color="success"
+                    />
+                    <StatCard
+                        title="Total Orders"
+                        value={totalPurchases}
+                        icon={<FaShoppingCart className="text-info" />}
+                        color="info"
+                    />
+                </div>
+
+                <div className="grid lg:grid-cols-2 gap-6">
+                    {/* Spending Overview */}
+                    <div className="bg-base-100 p-6 rounded-xl border border-base-300 shadow">
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-xl font-bold text-base-content">Purchase History (Recent Days)</h2>
+                            <div className="p-2 rounded-full bg-[#0D6FEC]/10 text-[#0D6FEC]">
+                                <FaChartBar className="text-xl animate-pulse" />
+                            </div>
+                        </div>
+                        <ResponsiveContainer width="100%" height={300}>
+                            <AreaChart data={spendHistory}>
+                                <defs>
+                                    <linearGradient id="colorSpent" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor="#0D6FEC" stopOpacity={0.8} />
+                                        <stop offset="95%" stopColor="#0D6FEC" stopOpacity={0} />
+                                    </linearGradient>
+                                </defs>
+                                <XAxis dataKey="date" className="text-xs fill-base-content" axisLine={{ stroke: '#d1d5db' }} />
+                                <YAxis className="text-xs fill-base-content" axisLine={{ stroke: '#d1d5db' }} />
+                                <Tooltip
+                                    contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '6px', color: 'white' }}
+                                    labelStyle={{ color: 'white' }}
+                                    itemStyle={{ color: 'white' }}
+                                />
+                                <Area type="monotone" dataKey="spent" name="Spent" stroke="none" fillOpacity={1} fill="url(#colorSpent)" />
+                            </AreaChart>
+                        </ResponsiveContainer>
+                    </div>
+
+                    {/* Recent Purchases */}
+                    <div className="bg-base-100 p-6 rounded-xl border border-base-300 shadow">
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-xl font-semibold text-base-content">Recent Purchases</h2>
+                            <FaStar className="text-xl text-yellow-500" />
+                        </div>
+                        <div className="overflow-x-auto">
+                            <table className="min-w-full text-sm">
+                                <thead className="bg-base-200 text-base-content/70">
+                                    <tr>
+                                        <th className="p-3 text-left">Items</th>
+                                        <th className="p-3 text-left">Transaction ID</th>
+                                        <th className="p-3 text-left">Total</th>
+                                        <th className="p-3 text-left">Status</th>
+                                        <th className="p-3 text-left">Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {recentPurchases.map((purchase, index) => (
+                                        <tr key={index} className="hover:bg-base-200 text-base-content">
+                                            <td className="p-3 font-medium truncate max-w-xs">{purchase.name}</td>
+                                            <td className="p-3 font-mono text-xs">{purchase.id}</td>
+                                            <td className="p-3">${purchase.total.toFixed(2)}</td>
+                                            <td className="p-3">
+                                                <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                                                    purchase.status === 'Pending' ? 'bg-amber-100 text-amber-800' : 'bg-green-100 text-green-800'
+                                                }`}>
+                                                    {purchase.status}
+                                                </span>
+                                            </td>
+                                            <td className="p-3">{purchase.date}</td>
+                                        </tr>
+                                    ))}
+                                    {recentPurchases.length === 0 && (
+                                        <tr>
+                                            <td colSpan="5" className="text-center p-4 text-base-content/50">
+                                                No purchases found.
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     const totalRevenue = sellerStats?.aggregatedData?.revenueSummary[0].totalRevenue;
     const pendingRevenue = sellerStats?.aggregatedData?.revenueSummary[0].pendingRevenue;
@@ -275,15 +433,10 @@ const DashboardHome = () => {
     const recentSales = sellerStats?.aggregatedData?.recentSales;
     console.log(recentSales);
 
-    // const recentSales = [
-    //     { name: "Heparin", price: 45, qty: 1, total: 45, date: "Apr 16, 2025" },
-    //     { name: "Cough Syrup", price: 8, qty: 2, total: 16, date: "Apr 15, 2025" },
-    //     { name: "Amoxicillin", price: 20, qty: 1, total: 18, date: "Apr 14, 2025" },
-    // ];
-
     return (
         <>
             <div className=" space-y-8 ">
+
                 {/* Header */}
                 <div>
                     <h1 className="text-3xl font-bold text-base-content">{`👋 Welcome Back, ${user?.displayName}!`}</h1>
