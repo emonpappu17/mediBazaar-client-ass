@@ -15,7 +15,7 @@ const DEMO_ACCOUNTS = [
         role: "Admin",
         email: import.meta.env.VITE_DEMO_ADMIN_EMAIL,
         password: import.meta.env.VITE_DEMO_ADMIN_PASSWORD,
-        redirect: "/dashboard",
+        redirect: "/",
         icon: "👑",
         accent: "#7C3AED",       // purple
         bg: "rgba(124,58,237,0.08)",
@@ -26,7 +26,7 @@ const DEMO_ACCOUNTS = [
         role: "Seller",
         email: import.meta.env.VITE_DEMO_SELLER_EMAIL,
         password: import.meta.env.VITE_DEMO_SELLER_PASSWORD,
-        redirect: "/dashboard",
+        redirect: "/",
         icon: "🏪",
         accent: "#0D6FEC",       // blue (brand)
         bg: "rgba(13,111,236,0.08)",
