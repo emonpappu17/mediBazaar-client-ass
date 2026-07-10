@@ -16,3 +16,17 @@ export const useSellerStats = () => {
         enabled: !!user?.email && tokenStored
     })
 }
+
+// Getting admin stats
+export const useAdminStats = () => {
+    const axiosSecure = useAxiosInstance();
+    const { user, tokenStored } = useAuth()
+    return useQuery({
+        queryKey: ['adminStats'],
+        queryFn: async () => {
+            const { data } = await axiosSecure(`/adminStats`)
+            return data
+        },
+        enabled: !!user?.email && tokenStored
+    })
+}

@@ -132,7 +132,7 @@ const Navbar = () => {
                             {dropdownOpen && (
                                 <div className="absolute right-0 mt-2 w-40 bg-base-100 text-base-content shadow-md rounded">
                                     <Link
-                                        to="/dashboard/user"
+                                        to="/dashboard/account"
                                         className="block px-4 py-2 hover:bg-base-200 hover:text-[#0D6FEC]"
                                     >
                                         Update Profile

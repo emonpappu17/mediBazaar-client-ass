@@ -59,3 +59,33 @@ export const useUsers = () => {
         }
     })
 }
+
+// Getting user profile
+export const useUserProfile = () => {
+    const { user, loading } = useAuth();
+    const axiosInstance = useAxiosInstance();
+    return useQuery({
+        queryKey: ['userProfile', user?.email],
+        enabled: !loading && !!user?.email,
+        queryFn: async () => {
+            const { data } = await axiosInstance(`/user/${user?.email}`)
+            return data
+        }
+    })
+}
+
+// Updating user profile in DB
+export const useUpdateUserProfile = () => {
+    const queryClient = useQueryClient();
+    const axiosInstance = useAxiosInstance();
+    return useMutation({
+        mutationFn: async ({ email, name, image }) => {
+            const { data } = await axiosInstance.patch(`/user-update/${email}`, { name, image })
+            return data
+        },
+        onSuccess: (data, variables) => {
+            queryClient.invalidateQueries(['userProfile', variables.email])
+            queryClient.invalidateQueries(['role', variables.email])
+        }
+    })
+}

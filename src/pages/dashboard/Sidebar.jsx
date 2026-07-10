@@ -8,11 +8,39 @@ import PropTypes from "prop-types";
 import { useRole } from "../../services/userService";
 import SellerDashboard from "./seller/SellerDashboard";
 import UserDashboard from "./user/UserDashboard";
+import Swal from "sweetalert2";
+import useAuth from "../../hooks/useAuth";
 
 const Sidebar = ({ isActive }) => {
-    const [role] = useRole();
-   
+    const { logOut } = useAuth();
 
+    const [role] = useRole();
+
+    // Logout user
+    const handleLogout = async () => {
+        try {
+            Swal.fire({
+                title: "Are you to Logout?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, logout now!"
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    await logOut()
+                    Swal.fire({
+                        title: "logged out!",
+                        text: "Your account has been logged out.",
+                        icon: "success"
+                    });
+                }
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    }
     return (
         <>
             {/* Sidebar */}
@@ -42,6 +70,8 @@ const Sidebar = ({ isActive }) => {
                     </DashboardNav>
                     <button
                         className='transition-all duration-300 text-base-content hover:text-white p-2 rounded-[10px] hover:bg-[#0D6FEC] flex items-center gap-2 cursor-pointer mt-2 w-full'
+                        onClick={handleLogout}
+
                     >
                         <LuLogOut />
                         Logout

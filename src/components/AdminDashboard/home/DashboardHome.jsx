@@ -254,7 +254,7 @@ import {
 import { MdInventory2 } from "react-icons/md";
 import { BiTrendingUp } from "react-icons/bi";
 import StatCard from '../../common/StatCard';
-import { useSellerStats } from '../../../services/dashboardStats';
+import { useSellerStats, useAdminStats } from '../../../services/dashboardStats';
 import { useUserPayments } from '../../../services/paymentService';
 import { useRole } from '../../../services/userService';
 import useAuth from '../../../hooks/useAuth';
@@ -266,13 +266,17 @@ const DashboardHome = () => {
     const [role] = useRole();
 
     const isUser = role === 'user';
+    const isAdmin = role === 'admin';
 
     // API Calls
     const sellerQuery = useSellerStats();
+    const adminQuery = useAdminStats();
     const userQuery = useUserPayments();
 
     const sellerStats = sellerQuery.data;
+    const adminStats = adminQuery.data;
     const userPayments = userQuery.data || [];
+
 
     if (isUser) {
         // Calculate user metrics
@@ -314,7 +318,7 @@ const DashboardHome = () => {
             <div className="space-y-8 text-base-content">
                 {/* Header */}
                 <div>
-                    <h1 className="text-3xl font-bold text-base-content">{`👋 Welcome Back, ${user?.displayName}!`}</h1>
+                    <h1 className="text-3xl font-bold text-base-content">{`Welcome Back, ${user?.displayName}!`}</h1>
                     <p className="text-base-content/70">Track your purchases and transactions at MediBazaar.</p>
                 </div>
 
@@ -424,14 +428,16 @@ const DashboardHome = () => {
         );
     }
 
-    const totalRevenue = sellerStats?.aggregatedData?.revenueSummary[0].totalRevenue;
-    const pendingRevenue = sellerStats?.aggregatedData?.revenueSummary[0].pendingRevenue;
-    const totalOrders = sellerStats?.aggregatedData?.revenueSummary[0].totalOrders
-    const stockCount = sellerStats?.stockCountResult?.stockCount;
-    const topSelling = sellerStats?.aggregatedData?.topSelling
-    const lastSevenDaysRevenue = sellerStats?.aggregatedData?.lastSevenDaysRevenue;
-    const recentSales = sellerStats?.aggregatedData?.recentSales;
-    console.log(recentSales);
+    const activeStats = isAdmin ? adminStats : sellerStats;
+
+    const totalRevenue = activeStats?.aggregatedData?.revenueSummary?.[0]?.totalRevenue || 0;
+    const pendingRevenue = activeStats?.aggregatedData?.revenueSummary?.[0]?.pendingRevenue || 0;
+    const totalOrders = activeStats?.aggregatedData?.revenueSummary?.[0]?.totalOrders || 0;
+    const stockCount = activeStats?.stockCountResult?.stockCount || 0;
+    const topSelling = activeStats?.aggregatedData?.topSelling || [];
+    const lastSevenDaysRevenue = activeStats?.aggregatedData?.lastSevenDaysRevenue || [];
+    const recentSales = activeStats?.aggregatedData?.recentSales || [];
+    // console.log(recentSales);
 
     return (
         <>
@@ -439,9 +445,14 @@ const DashboardHome = () => {
 
                 {/* Header */}
                 <div>
-                    <h1 className="text-3xl font-bold text-base-content">{`👋 Welcome Back, ${user?.displayName}!`}</h1>
-                    <p className="text-base-content/70">Track your sales, orders, and performance at MediBazaar.</p>
+                    <h1 className="text-3xl font-bold text-base-content">{`Welcome Back, ${user?.displayName}!`}</h1>
+                    <p className="text-base-content/70">
+                        {isAdmin 
+                            ? "Track overall platform sales, orders, and performance." 
+                            : "Track your sales, orders, and performance at MediBazaar."}
+                    </p>
                 </div>
+
 
                 {/* Analytics Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
@@ -591,8 +602,8 @@ const DashboardHome = () => {
                                         </td>
                                         <td className="p-3">{sale.name}</td>
                                         <td className="p-3">{sale.qty}</td>
-                                        <td className="p-3">${sale.price.toFixed(2)}</td>
-                                        <td className="p-3">${sale.total.toFixed(2)}</td>
+                                        <td className="p-3">${sale.price}</td>
+                                        <td className="p-3">${sale.total}</td>
                                         <td className="p-3 truncate">{sale.date}</td>
                                     </tr>
                                 ))}
